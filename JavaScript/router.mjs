@@ -4,7 +4,7 @@ import { showLoader, hideLoader } from '@components/loader.mjs';
 import { mensajeAlert } from '@components/mensajeAlert.mjs';
 
 
-const router = new Navigo('/');
+export const router = new Navigo('/',{ hash: false });
 
 router.on('/', () => {window.location.href = '/pizzeria'});
 router.on('/trabajadores', () => {window.location.href = '/trabajadores/login'});

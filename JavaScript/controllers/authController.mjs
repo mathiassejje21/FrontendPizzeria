@@ -1,9 +1,15 @@
 import { authApi } from "@/api/authApi.mjs";
 import { mensajeAlert } from "@components/mensajeAlert.mjs";
+import { renderLoginView } from "@views/login.mjs";
+import { renderRegisterView } from "@views/cliente/register.mjs";
 
 export class authController {
   constructor() {
     this.api = new authApi();
+  }
+
+  viewLogin(){
+    renderLoginView();
   }
 
   async processLogin(email, password) {
@@ -12,7 +18,7 @@ export class authController {
       if (res.status !== 200) return;
 
       const user = await this.api.getProfile();
-      sessionStorage.setItem("user", JSON.stringify(user));
+      await sessionStorage.setItem("user", JSON.stringify(user));
 
       const path = window.location.pathname.toLowerCase();
       let redirectUrl = null;
@@ -41,8 +47,14 @@ export class authController {
           title: "Acceso denegado",
           text: "Tu rol no tiene permiso para acceder a esta sección.",
           showConfirmButton: true
-        }).then(() => {
-          this.logout();
+        }).then(async () => {
+          await sessionStorage.removeItem("user");
+          if (user.rol === "cliente") {
+            location.href = "/pizzeria/login";
+          } else {
+            location.href = "/trabajadores/login";
+          }
+          await this.logout();
         })
         return null;
       }
@@ -66,6 +78,10 @@ export class authController {
         showConfirmButton: true
       });
     }
+  }
+
+  viewRegister(){
+    renderRegisterView();
   }
 
   async processRegister(nombre, email, password){
@@ -103,18 +119,33 @@ export class authController {
       });
     }
   }
+async logout() {
+  if (sessionStorage.getItem("user")) {
+    const result = await mensajeAlert({
+      icon: "warning",
+      title: "Cerrar sesión",
+      text: "¿Deseas cerrar sesión?",
+      showConfirmButton: true,
+      confirmButtonText: "Cerrar sesión",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar"
+    });
 
-  async logout() {
-    const res = await this.api.logout();
-    if (res.status !== 200) return;
+    if (!result.isConfirmed) return;
+
+    await this.api.logout();
     const userData = JSON.parse(sessionStorage.getItem("user"));
     const rol = userData?.rol;
-    if( rol === 'cliente'){
+    await sessionStorage.removeItem("user");
+
+    if (rol === "cliente") {
       location.href = "/pizzeria/login";
-    }else{
+    } else {
       location.href = "/trabajadores/login";
     }
-    sessionStorage.removeItem("user");
+  }else{
+    location.href = "/pizzeria";
   }
+}
 
 }

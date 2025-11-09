@@ -1,9 +1,11 @@
 import { html, render } from 'lit-html';
 import { authController } from '@/controllers/authController.mjs';
 
-const auth = new authController();
 
 export function renderRegisterView() {
+
+    const auth = new authController();
+
     const template = html`
         <section id="contenedor-register" style="background-color: #000;">
             <div>

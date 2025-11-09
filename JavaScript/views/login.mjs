@@ -1,10 +1,9 @@
 import { html, render } from 'lit-html';
 import { authController } from '@/controllers/authController.mjs';
 
-const path = window.location.pathname.toLowerCase();
-const auth = new authController();
-
 export function renderLoginView() {
+    const path = window.location.pathname.toLowerCase();
+
     let h2color;
     let btncolor;
     let bgcolor;
@@ -57,6 +56,7 @@ export function renderLoginView() {
 }
 
 async function hundleLogin(e){
+    const auth = new authController();
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
