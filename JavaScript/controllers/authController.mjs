@@ -1,15 +1,9 @@
 import { authApi } from "@/api/authApi.mjs";
 import { mensajeAlert } from "@components/mensajeAlert.mjs";
-import { renderLoginView } from "@views/login.mjs";
-import { renderRegisterView } from "@views/cliente/register.mjs";
 
 export class authController {
   constructor() {
     this.api = new authApi();
-  }
-
-  viewLogin(){
-    renderLoginView();
   }
 
   async processLogin(email, password) {
@@ -54,9 +48,8 @@ export class authController {
           } else {
             location.href = "/trabajadores/login";
           }
-          await this.logout();
         })
-        return null;
+        return;
       }
     } catch (err) {
       const errorTitle = err.response
@@ -79,11 +72,7 @@ export class authController {
       });
     }
   }
-
-  viewRegister(){
-    renderRegisterView();
-  }
-
+  
   async processRegister(nombre, email, password){
     try {
       const res = await this.api.register(nombre, email, password);
@@ -121,6 +110,9 @@ export class authController {
   }
 async logout() {
   if (sessionStorage.getItem("user")) {
+    const userData = await JSON.parse(sessionStorage.getItem("user"));
+    const rol = userData?.rol;
+
     const result = await mensajeAlert({
       icon: "warning",
       title: "Cerrar sesión",
@@ -130,12 +122,9 @@ async logout() {
       showCancelButton: true,
       cancelButtonText: "Cancelar"
     });
-
-    if (!result.isConfirmed) return;
+    if (!result.isConfirmed) return null;
 
     await this.api.logout();
-    const userData = JSON.parse(sessionStorage.getItem("user"));
-    const rol = userData?.rol;
     await sessionStorage.removeItem("user");
 
     if (rol === "cliente") {
@@ -143,8 +132,7 @@ async logout() {
     } else {
       location.href = "/trabajadores/login";
     }
-  }else{
-    location.href = "/pizzeria";
+    return;
   }
 }
 

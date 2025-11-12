@@ -3,9 +3,7 @@ import { authController } from '@/controllers/authController.mjs';
 
 
 export function renderRegisterView() {
-
-    const auth = new authController();
-
+    
     const template = html`
         <section id="contenedor-register" style="background-color: #000;">
             <div>
@@ -48,6 +46,7 @@ export function renderRegisterView() {
 
 async function handleRegister(e){
     e.preventDefault();
+    const auth = new authController();
     const nombre = document.getElementById('nombre').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;

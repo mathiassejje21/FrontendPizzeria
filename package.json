@@ -1,26 +1,33 @@
 {
   "name": "frontend-pizzeria",
   "version": "1.0.0",
-  "description": "Frontend de la Pizzería",
+  "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext .js,.mjs"
+    "lint": "eslint . --ext .js,.mjs --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mathiassejje21/FrontendPizzeria.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mathiassejje21/FrontendPizzeria/issues"
+  },
+  "homepage": "https://github.com/mathiassejje21/FrontendPizzeria#readme",
   "dependencies": {
     "axios": "^1.13.2",
     "bootstrap": "^5.3.8",
+    "eslint": "^9.39.1",
     "lit-html": "^3.3.1",
     "navigo": "^8.11.1",
-    "sweetalert2": "^11.26.3"
-  },
-  "devDependencies": {
-    "eslint": "^8.50.0",
+    "sweetalert2": "^11.26.3",
     "vite": "^7.2.2"
   }
 }

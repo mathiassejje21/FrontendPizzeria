@@ -1,22 +1,19 @@
 import { clienteRoutes } from './clienteRoutes.mjs';
 import { administradorRoutes } from './administrador.mjs';
 import { personalRoutes } from './personal.mjs';
-import { authController } from '@/controllers/authController.mjs';
-
+import { renderLoginView } from '@views/login.mjs';
+import { renderRegisterView } from '@views/cliente/register.mjs';
 
 
 export const authRoutes = (router) => {
-  const auth = new authController();
-
-  router.on('/pizzeria/login', () => { auth.viewLogin(); });
-  router.on('/pizzeria/register', () => { auth.viewRegister(); });
+  router.on('/pizzeria/login', renderLoginView);
+  router.on('/pizzeria/register', renderRegisterView);
 
   clienteRoutes(router)
 
-  router.on('/trabajadores/login', () => {auth.viewLogin(); });
+  router.on('/trabajadores/login', renderLoginView);
 
-  administradorRoutes(router)
+  administradorRoutes(router) 
   personalRoutes(router)
 
-  router.on('/logout', () => { auth.logout(); });
   };

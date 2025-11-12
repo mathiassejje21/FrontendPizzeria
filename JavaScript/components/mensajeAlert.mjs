@@ -97,6 +97,8 @@ export const mensajeAlert = ({
       rgba(0,0,0,0.45)
       blur(10px)
     `,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
     customClass: {
       popup: "swal-glass-popup fade-in",
       title: "swal-glass-title",

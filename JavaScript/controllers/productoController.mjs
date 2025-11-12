@@ -1,8 +1,19 @@
-import { productoApi } from "@/api/productoApi.mjs";
+import { productoApi } from "@api/productoApi.mjs";
 
-const api = new productoApi();
+export class productoController{
+  constructor(){
+    this.api = new productoApi();
+  }
 
-export async function getProductos() {
-    const res = await api.getProductos();
-    return res;
+  async getProductosClientes() {
+    const productos = await this.api.getProductosClientes();
+    return productos;
+  }
+   
+  async searchProductosClientes($id) {
+    const productos = await this.api.searchProductosClientes($id);
+    return productos;
+  }
 }
+
+

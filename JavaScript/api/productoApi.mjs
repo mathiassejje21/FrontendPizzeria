@@ -10,8 +10,15 @@ export class productoApi {
         })
     }
 
-    async getProductos() {
-        const res = await this.api.get('/').then(response => response.data);
-        return res;
-    }       
+    async getProductosClientes() {
+        const res = await this.api.get('?&activo=true');
+        return res.data;
+    } 
+    
+    async searchProductosClientes($id) {
+        const res = await this.api.get(`?&activo=true&id_categoria=${$id}`);
+        return res.data;
+    }
+
+
 }
