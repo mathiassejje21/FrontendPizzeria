@@ -4,12 +4,22 @@ import path from 'path';
 export default defineConfig({
   root: '.',
   server: {
+    host: true,
     port: 5173,
-    open: true,
+    strictPort: true,
+
+    allowedHosts: [
+      'all',
+      'nikita-unelemental-nonconjugally.ngrok-free.dev'
+    ],
+
+    cors: true
   },
+
   build: { 
     outDir: 'dist' 
-},
+  },
+
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './JavaScript'),

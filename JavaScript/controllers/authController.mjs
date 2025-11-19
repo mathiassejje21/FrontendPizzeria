@@ -18,7 +18,11 @@ export class authController {
       let redirectUrl = null;
 
       if (path === "/pizzeria/login" && user.rol === "cliente") {
-        redirectUrl = "/pizzeria/dashboard";
+        if(JSON.parse(sessionStorage.getItem("carrito")).length > 0){
+          redirectUrl = "/pizzeria/carrito";
+        }else{
+          redirectUrl = "/pizzeria";
+        }
       } else if (path === "/trabajadores/login" && user.rol === "administrador") {
         redirectUrl = "/administrador/dashboard";
       } else if (path === "/trabajadores/login" && user.rol === "personal") {

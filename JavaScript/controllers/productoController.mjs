@@ -5,13 +5,13 @@ export class productoController{
     this.api = new productoApi();
   }
 
-  async getProductosClientes() {
-    const productos = await this.api.getProductosClientes();
+  async getProductos() {
+    const productos = await this.api.getProductos();
     return productos;
   }
    
-  async searchProductosClientes($id) {
-    const productos = await this.api.searchProductosClientes($id);
+  async getProductosporCategoria($id) {
+    const productos = await this.api.getProductosporCategoria($id);
     return productos;
   }
 }

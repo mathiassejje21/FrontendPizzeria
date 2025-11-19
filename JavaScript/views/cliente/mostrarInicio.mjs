@@ -1,21 +1,10 @@
 import { html, render } from "lit-html";
 import { renderCarrousel } from "@components/carrousel.mjs";
-import { productoController } from "@controllers/productoController.mjs";
+import { categoriaController } from "@controllers/categoriaController.mjs";
 
 export async function mostrarInicio() {
-    const api = new productoController();
-    const productos = await api.getProductosClientes();
-    const categorias = []
-    if (!productos || productos.length === 0) return;
-
-    productos.forEach(producto => {
-      const existe = categorias.some(cat => cat.nombre === producto.categoria.nombre);
-      if (!existe) {
-        categorias.push(producto.categoria);
-      }
-    });
-
-
+    const api = new categoriaController();
+    const categorias = await api.getCategorias();
     return html`
     <style>
         .subtitle {
@@ -114,7 +103,7 @@ export async function mostrarInicio() {
               <div class="card-body">
                 <h5 class="card-title fw-bold" style=" text-align: center;" >${categoria.nombre}</h5>
               </div>
-              <img src="/public/images/producto${categoria.id}.jpg" class="card-img-top" alt="...">
+              <img src="" class="card-img-top" alt="...">
               <div class="card-footer " style=" text-align: center;" >
                 <small class="text-body-primary font-weight-bold" >${categoria.descripcion}</small>
               </div>

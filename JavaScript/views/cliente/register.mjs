@@ -27,7 +27,7 @@ export function renderRegisterView() {
                     <form @submit="${handleRegister}">
                         <input type="text" id="nombre" placeholder="Juan Perez" class="form-control" required>
                         <input type="email" id="email" placeholder="example@gmail.com" class="form-control" required>
-                        <input type="password" id="password" placeholder="********" class="form-control" required>
+                        <input type="password" id="password" placeholder="********" class="form-control" autocomplete="new-password" required>
                         <button type="submit" class="btn btn-danger" style="
                         width: 70%;
                         padding: 0.6rem;

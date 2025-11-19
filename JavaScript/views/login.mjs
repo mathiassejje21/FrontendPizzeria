@@ -40,7 +40,7 @@ export function renderLoginView() {
                     <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="example@gmail.com" required>
                 </div>
                 <div class="mb-3">
-                    <input type="password" class="form-control" id="password" placeholder="********" required>
+                    <input type="password" class="form-control" id="password" placeholder="********" autocomplete="current-password" required>
                 </div>
                 <button class="btn ${btncolor}">Iniciar Sesion</button>
             </form>
