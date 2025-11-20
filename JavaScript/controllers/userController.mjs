@@ -8,4 +8,10 @@ export class userController {
         const res = await this.api.getUser();
         return res;
     }
+
+    async updateProfile(user) {
+        const res = await this.api.updateProfile(user);
+        return res;
+    }
+    
 }

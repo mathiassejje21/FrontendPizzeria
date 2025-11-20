@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api/usuario';
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/usuario`;
 
 export class userApi {
     constructor() {
@@ -12,6 +12,11 @@ export class userApi {
 
     async getUser() {
         const res = await this.api.get('/');
+        return res.data;
+    }
+
+    async updateProfile(user) {
+        const res = await this.api.put('/me', user);
         return res.data;
     }
 }

@@ -10,7 +10,7 @@ export class pedidoController {
         return res;
     }
 
-    async postPedidos(pedido) {
+    async crearPedido(pedido) {
         try {
             const res = await this.api.postPedidos(pedido);
             return res;

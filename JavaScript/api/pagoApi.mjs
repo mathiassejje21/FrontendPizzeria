@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "http://localhost:8000/api/pago";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/pago`;
 
 export class pagoApi {
     constructor() {

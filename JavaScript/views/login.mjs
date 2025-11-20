@@ -1,7 +1,8 @@
 import { html, render } from 'lit-html';
 import { authController } from '@/controllers/authController.mjs';
 
-export function renderLoginView() {
+export async function renderLoginView() {
+    await sessionStorage.removeItem("user");
     const path = window.location.pathname.toLowerCase();
 
     let h2color;

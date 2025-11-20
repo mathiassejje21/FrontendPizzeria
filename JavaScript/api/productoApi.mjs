@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api/producto';
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/producto`;
 
 export class productoApi {
     constructor() {
