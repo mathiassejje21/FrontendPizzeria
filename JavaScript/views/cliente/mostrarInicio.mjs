@@ -103,7 +103,7 @@ export async function mostrarInicio() {
               <div class="card-body">
                 <h5 class="card-title fw-bold" style=" text-align: center;" >${categoria.nombre}</h5>
               </div>
-              <img src="" class="card-img-top" alt="...">
+              <img src="${categoria.imagen_url}" class="card-img-top" alt="...">
               <div class="card-footer " style=" text-align: center;" >
                 <small class="text-body-primary font-weight-bold" >${categoria.descripcion}</small>
               </div>

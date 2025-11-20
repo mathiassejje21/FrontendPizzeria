@@ -61,6 +61,9 @@ export async function renderDashboardView() {
     </style>
 
     <div class="dashboard-container">
+      <div>
+      
+      </div>
       <nav class="dashboard-nav">
         <a href="#info-personal"><span>👤</span> Información Personal</a>
         <a href="#editar-datos"><span>✏️</span> Editar Datos</a>
@@ -69,6 +72,7 @@ export async function renderDashboardView() {
       </nav>
 
       <div style="width:100%;">
+
         <section id="info-personal" class="dashboard-section">
           <h2>👤 Información Personal</h2>
           <p><strong>Nombre:</strong> ${user.nombre}</p>
