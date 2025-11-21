@@ -42,18 +42,23 @@ export async function mostrarDetalleProducto(idProducto) {
   }
 
   const recalcularPrecio = () => {
-    let precioBase = Number(producto.precioReal);
-
-    if (tamanioSeleccionado) {
-      precioBase = precioBase * Number(tamanioSeleccionado.factor_precio);
-    }
+    let precioBase = Number(producto.precio);
 
     const extraIng = ingredientesSeleccionados.reduce(
       (acc, ing) => acc + Number(ing.costo_extra),
       0
     );
 
-    const total = (precioBase + extraIng) * cantidadSeleccionada;
+    if( ingredientesSeleccionados ){
+      precioBase = precioBase + extraIng;
+    }
+
+    if (tamanioSeleccionado) {
+      precioBase = precioBase * Number(tamanioSeleccionado.factor_precio);
+    }
+
+
+    const total = (precioBase) * cantidadSeleccionada;
 
     const pfinal = document.getElementById("detalle-precio-final");
     if (pfinal) pfinal.innerHTML = `S/. ${total.toFixed(2)}`;
@@ -156,7 +161,7 @@ export async function mostrarDetalleProducto(idProducto) {
       </div>
 
       <div class="precio-final" id="detalle-precio-final">
-        S/. ${Number(producto.precioReal).toFixed(2)}
+        S/. ${Number(producto.precio).toFixed(2)}
       </div>
 
       <div class="actions mt-3">

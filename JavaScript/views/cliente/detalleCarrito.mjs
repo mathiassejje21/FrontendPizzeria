@@ -43,7 +43,7 @@ export async function mostrarDetalleCarrito () {
       const metodo = Number(document.getElementById('select-pago')?.value)
       const repartidorId =
         metodo === 1
-          ? null
+          ? ''
           : parseInt(document.getElementById('select-repartidor')?.value, 10) || null
 
       const pedido = {
@@ -80,7 +80,12 @@ export async function mostrarDetalleCarrito () {
       }
 
       const res = await pedidoApi.crearPedido(pedido)
-      console.log(res)
+
+      if (res.status === 201) {
+        sessionStorage.removeItem('carrito')
+        sessionStorage.removeItem('carrito_total')
+        window.location.href = res.url_pago
+      }
     } else {
       mensajeAlert({
         icon: 'warning',

@@ -18,7 +18,8 @@ export class authController {
       let redirectUrl = null;
 
       if (path === "/pizzeria/login" && user.rol === "cliente") {
-        if(JSON.parse(sessionStorage.getItem("carrito")).length > 0){
+        const carrito = JSON.parse(sessionStorage.getItem("carrito") || "[]");
+        if(carrito.length > 0){
           redirectUrl = "/pizzeria/carrito";
         }else{
           redirectUrl = "/pizzeria";

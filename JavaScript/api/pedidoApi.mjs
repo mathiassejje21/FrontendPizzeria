@@ -16,6 +16,7 @@ export class pedidoApi {
     }
 
     async postPedidos(pedido) {
+        console.log(pedido);
         const response = await this.api.post("/", pedido);
         return {
             status: response.status,

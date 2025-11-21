@@ -104,8 +104,7 @@ export const renderCarrito = () => {
       .reduce((acc, ing) => acc + Number(ing.costo_extra), 0);
 
     const precioUnitario =
-      (Number(item.precioReal) * (item.tamanio?.factor_precio ?? 1)) +
-      totalIngredientesExtra;
+      (Number(item.precio) + totalIngredientesExtra) * (item.tamanio?.factor_precio ?? 1); 
 
     div.innerHTML = `
       <div style="width:100%;">

@@ -2,7 +2,6 @@ import { html, render } from 'lit-html';
 import { authController } from '@/controllers/authController.mjs';
 
 export async function renderLoginView() {
-    await sessionStorage.removeItem("user");
     const path = window.location.pathname.toLowerCase();
 
     let h2color;
@@ -38,10 +37,10 @@ export async function renderLoginView() {
             <h7 style="color: #686868ff;">Ingrese su Correo y Contraseña</h7>
             <form @submit=${hundleLogin} id="loginForm">
                 <div class="mb-3">
-                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="example@gmail.com" required>
+                    <input type="email" class="form-control" id="email" placeholder="example@gmail.com" required>
                 </div>
                 <div class="mb-3">
-                    <input type="password" class="form-control" id="password" placeholder="********" autocomplete="current-password" required>
+                    <input type="password" class="form-control" id="password" placeholder="********" required>
                 </div>
                 <button class="btn ${btncolor}">Iniciar Sesion</button>
             </form>
