@@ -13,10 +13,10 @@ export const updateCarritoCount = () => {
 export const calcularTotal = () => {
   const carrito = getCarrito();
   return carrito.reduce((acc, p) => {
-    const base = Number(p.precioReal);
+    const base = Number(p.precio);
     const factor = Number(p.tamanio?.factor_precio ?? 1);
     const extras = (p.ingredientes || []).reduce((s, i) => s + Number(i.costo_extra), 0);
-    const unit = base * factor + extras;
+    const unit = ( base + extras) * factor;
     return acc + unit * p.cantidad;
   }, 0);
 };
