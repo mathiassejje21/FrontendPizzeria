@@ -10,4 +10,5 @@ export const clienteRoutes = (router) => {
     mostrarDetalleProducto(data.id);
   });
   router.on("/pizzeria/carrito", () => {renderHomeView('carrito')});
+  router.on("/pizzeria/pedidos", () => {renderHomeView('pedidos')});
 }

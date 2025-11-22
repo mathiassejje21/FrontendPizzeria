@@ -359,6 +359,18 @@
             <li><a href="/pizzeria" data-route>Inicio</a></li>
             <li><a href="/pizzeria/productos" data-route>Productos</a></li>
             <li><a href="/pizzeria/carrito" data-route>Carrito</a></li>
+            ${sessionStorage.getItem("user")
+              ? (() => {
+                  const u = JSON.parse(sessionStorage.getItem("user"));
+                  if (u.rol === 'cliente') {
+                    return html`
+                      <li>
+                        <a href="/pizzeria/pedidos" data-route>Mis Pedidos</a>
+                      </li>
+                    `;
+                  }
+                })()
+              : ''}
           </ul>
         </section>
 
