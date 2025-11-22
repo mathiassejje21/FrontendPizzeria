@@ -1,3 +1,5 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './router.mjs';
 import './updateHeader.mjs'
 import { router } from './router.mjs';  
