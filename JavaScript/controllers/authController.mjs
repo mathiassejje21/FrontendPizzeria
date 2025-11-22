@@ -12,18 +12,13 @@ export class authController {
       if (res.status !== 200) return;
 
       const user = await this.api.getProfile();
-      await sessionStorage.setItem("user", JSON.stringify(user));
 
       const path = window.location.pathname.toLowerCase();
       let redirectUrl = null;
 
       if (path === "/pizzeria/login" && user.rol === "cliente") {
         const carrito = JSON.parse(sessionStorage.getItem("carrito") || "[]");
-        if(carrito.length > 0){
-          redirectUrl = "/pizzeria/carrito";
-        }else{
-          redirectUrl = "/pizzeria";
-        }
+        redirectUrl = carrito.length > 0 ? "/pizzeria/carrito" : "/pizzeria";
       } else if (path === "/trabajadores/login" && user.rol === "administrador") {
         redirectUrl = "/administrador/dashboard";
       } else if (path === "/trabajadores/login" && user.rol === "personal") {
@@ -31,6 +26,7 @@ export class authController {
       }
 
       if (redirectUrl) {
+        sessionStorage.setItem("user", JSON.stringify(user));
         mensajeAlert({
           icon: "success",
           title: "¡Bienvenido!",
@@ -40,22 +36,21 @@ export class authController {
           location.href = redirectUrl;
         });
         return user;
-      }else{
-        mensajeAlert({
-          icon: "error",
-          title: "Acceso denegado",
-          text: "Tu rol no tiene permiso para acceder a esta sección.",
-          showConfirmButton: true
-        }).then(async () => {
-          await sessionStorage.removeItem("user");
-          if (user.rol === "cliente") {
-            location.href = "/pizzeria/login";
-          } else {
-            location.href = "/trabajadores/login";
-          }
-        })
-        return;
       }
+
+      mensajeAlert({
+        icon: "error",
+        title: "Acceso denegado",
+        text: "Tu rol no tiene permiso para acceder a esta sección.",
+        showConfirmButton: true
+      }).then(async () => {
+        sessionStorage.removeItem("user");
+        if (user.rol === "cliente") {
+          location.href = "/pizzeria/login";
+        } else {
+          location.href = "/trabajadores/login";
+        }
+      });
     } catch (err) {
       const errorTitle = err.response
         ? "Error " + err.response.status
@@ -77,11 +72,12 @@ export class authController {
       });
     }
   }
-  
-  async processRegister(nombre, email, password){
+
+  async processRegister(nombre, email, password) {
     try {
       const res = await this.api.register(nombre, email, password);
-      if(res.status !== 201) return;
+      if (res.status !== 201) return;
+
       mensajeAlert({
         icon: "success",
         title: "¡Registro exitoso!",
@@ -91,7 +87,7 @@ export class authController {
       }).then(() => {
         location.href = "/pizzeria/login";
       });
-    }catch (error) {
+    } catch (error) {
       const errorTitle = error.response
         ? "Error " + error.response.status
         : error.request
@@ -113,32 +109,32 @@ export class authController {
       });
     }
   }
-async logout() {
-  if (sessionStorage.getItem("user")) {
-    const userData = await JSON.parse(sessionStorage.getItem("user"));
-    const rol = userData?.rol;
 
-    const result = await mensajeAlert({
-      icon: "warning",
-      title: "Cerrar sesión",
-      text: "¿Deseas cerrar sesión?",
-      showConfirmButton: true,
-      confirmButtonText: "Cerrar sesión",
-      showCancelButton: true,
-      cancelButtonText: "Cancelar"
-    });
-    if (!result.isConfirmed) return null;
+  async logout() {
+    if (sessionStorage.getItem("user")) {
+      const userData = JSON.parse(sessionStorage.getItem("user"));
+      const rol = userData?.rol;
 
-    await this.api.logout();
-    await sessionStorage.removeItem("user");
+      const result = await mensajeAlert({
+        icon: "warning",
+        title: "Cerrar sesión",
+        text: "¿Deseas cerrar sesión?",
+        showConfirmButton: true,
+        confirmButtonText: "Cerrar sesión",
+        showCancelButton: true,
+        cancelButtonText: "Cancelar"
+      });
 
-    if (rol === "cliente") {
-      location.href = "/pizzeria/login";
-    } else {
-      location.href = "/trabajadores/login";
+      if (!result.isConfirmed) return null;
+
+      await this.api.logout();
+      sessionStorage.removeItem("user");
+
+      if (rol === "cliente") {
+        location.href = "/pizzeria/login";
+      } else {
+        location.href = "/trabajadores/login";
+      }
     }
-    return;
   }
-}
-
 }
