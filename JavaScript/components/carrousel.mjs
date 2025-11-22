@@ -15,7 +15,7 @@ export function renderCarrousel() {
 
       <div class="carousel-inner">
         <div class="carousel-item active" data-bs-interval="3000">
-          <img src="https://media.istockphoto.com/id/1442417585/photo/person-getting-a-piece-of-cheesy-pepperoni-pizza.jpg?s=2048x2048&w=is&k=20&c=5qfqYi5DEhhVjJ-DIYB4MxUq31EmkvyEnNgNLm5LVpY="
+          <img src="https://cdn.pixabay.com/photo/2017/09/18/20/46/pizza-2763172_1280.jpg"
             class="d-block w-100"
             style="height: 60vh; object-fit: cover;"
             alt="Pizza artesanal">
@@ -26,7 +26,7 @@ export function renderCarrousel() {
         </div>
 
         <div class="carousel-item" data-bs-interval="3000">
-          <img src="https://media.istockphoto.com/id/943449226/photo/concept-promotional-flyer-and-poster-for-restaurants-or-pizzerias-template-with-delicious.jpg?s=2048x2048&w=is&k=20&c=trEQAX4_SPQmtVl_alnnqq2XKLw3RcR8YggmKEyRGuk="
+          <img src="https://cdn.pixabay.com/photo/2024/04/23/09/32/ai-generated-8714512_1280.jpg"
             class="d-block w-100"
             style="height: 60vh; object-fit: cover;"
             alt="Ambiente familiar">
@@ -37,8 +37,7 @@ export function renderCarrousel() {
         </div>
 
         <div class="carousel-item" data-bs-interval="3000">
-          <img src="https://media.istockphoto.com/id/1284672458/vector/order-delivery-online.jpg?s=2048x2048&w=is&k=20&c=ND5mp1K4oYY_IAe6ppbhj9tumATYgwBopflyFCyK5L0="
-            class="d-block w-100"
+          <img src="https://cdn.pixabay.com/photo/2022/01/26/22/43/delivery-6970072_1280.png"
             style="height: 60vh; object-fit: cover;"
             alt="Promociones exclusivas">
           <div class="carousel-caption d-none d-md-block">
