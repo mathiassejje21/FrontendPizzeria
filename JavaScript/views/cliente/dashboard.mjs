@@ -12,63 +12,147 @@ export async function renderDashboardView() {
 
   const template = html`
     <style>
-      .dashboard-container {
-        max-width: 1100px;
-        margin: 2rem auto;
-        display: flex;
-        gap: 2rem;
+      body {
+        background: #f6f8fa;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
-      .dashboard-nav {
-        width: 260px;
-        background: #ffffff;
-        padding: 1.5rem;
-        border-radius: 1rem;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        height: fit-content;
+
+      .dashboard-container {
+        max-width: 1250px;
+        margin: 3rem auto;
+        display: flex;
+        gap: 2.5rem;
+        position: relative;
+        padding: 0 1rem;
+      }
+
+      .btn-volver {
+        width: 60px;
+        height: 50px;
+        background: #b30000;
+        border-radius: 50%;
         position: sticky;
         top: 90px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 5px 20px rgba(18,18,18,0.15);
+        color: white;
+        font-size: 22px;
+        cursor: pointer;
+        transition: .25s;
+      }
+      .btn-volver:hover {
+        transform: scale(1.08);
+        background: #8c0000;
+      }
+
+
+      .dashboard-nav {
+        width: 270px;
+        background: #ffffff;
+        padding: 2rem 1.5rem;
+        border-radius: 1.2rem;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        height: fit-content;
+        position: sticky;
+        top: 95px;
       }
       .dashboard-nav a {
         display: flex;
         align-items: center;
-        gap: .7rem;
-        padding: .7rem 1rem;
-        border-radius: .5rem;
-        margin-bottom: .5rem;
+        gap: .9rem;
+        padding: .9rem 1.1rem;
+        border-radius: .7rem;
+        margin-bottom: .6rem;
         cursor: pointer;
         font-weight: 600;
+        font-size: 1rem;
         color: #0a3a17;
         text-decoration: none;
+        background: #ffffff;
         transition: 0.25s;
       }
       .dashboard-nav a:hover {
-        background: #0a3a1718;
+        background: #0a3a1710;
+        transform: translateX(3px);
       }
+
+      #logout {
+        color: #b30000 !important;
+      }
+
       .dashboard-section {
-        background: #fff;
-        padding: 2rem;
-        border-radius: 1rem;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        background: #ffffff;
+        padding: 2.2rem;
+        border-radius: 1.2rem;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.07);
         margin-bottom: 2rem;
+        animation: fadeIn .4s ease-out;
       }
+
       .dashboard-section h2 {
-        margin-bottom: 1rem;
+        margin-bottom: 1.6rem;
         display: flex;
         align-items: center;
-        gap: .6rem;
+        gap: .8rem;
         color: #0a3a17;
+        font-size: 1.4rem;
+      }
+
+      .dashboard-section p {
+        font-size: 1.05rem;
+        margin-bottom: .7rem;
+        color: #333;
+      }
+
+      form label {
+        font-weight: 600;
+        margin-bottom: .4rem;
+        color: #0a3a17;
+      }
+
+      .form-control {
+        border-radius: .7rem;
+        border: 1px solid #ced4da;
+        padding: .75rem;
+        transition: .25s;
+      }
+      .form-control:focus {
+        border-color: #0a3a17;
+        box-shadow: 0 0 6px #0a3a1733;
+      }
+
+      button.btn-danger {
+        font-size: 1rem;
+        padding: .7rem 1.4rem;
+        border-radius: .7rem;
+        font-weight: 600;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
     </style>
 
     <div class="dashboard-container">
-      <div>
-      
+
+      <div class="btn-volver" @click=${() => location.href = "/pizzeria"}>
+        ←
       </div>
+
       <nav class="dashboard-nav">
         <a href="#info-personal"><span>👤</span> Información Personal</a>
         <a href="#editar-datos"><span>✏️</span> Editar Datos</a>
         <a href="#cambiar-password"><span>🔒</span> Cambiar Contraseña</a>
-        <a href="#logout" @click=${logout} style="color:#b30000;"><span>🚪</span> Cerrar Sesión</a>
+        <a id="logout" href="#logout" @click=${logout}><span>🚪</span> Cerrar Sesión</a>
       </nav>
 
       <div style="width:100%;">
@@ -96,9 +180,7 @@ export async function renderDashboardView() {
             <label>Dirección</label>
             <input class="form-control mb-3" type="text" value="${user.direccion || ''}" id="edit-direccion">
 
-            <button type="button" class="btn btn-danger mt-2" @click=${actualizarPerfil}>
-              Guardar Cambios
-            </button>
+            <button type="button" class="btn btn-danger mt-2" @click=${actualizarPerfil}>Guardar Cambios</button>
           </form>
         </section>
 
@@ -112,11 +194,10 @@ export async function renderDashboardView() {
             <label>Repetir nueva contraseña</label>
             <input class="form-control mb-2" type="password" id="repeat-password">
 
-            <button type="button" class="btn btn-danger mt-2" @click=${cambiarPassword}>
-              Cambiar contraseña
-            </button>
+            <button type="button" class="btn btn-danger mt-2" @click=${cambiarPassword}>Cambiar contraseña</button>
           </form>
         </section>
+
       </div>
     </div>
   `;
@@ -141,7 +222,10 @@ async function actualizarPerfil() {
 
   await userApi.updateProfile(data);
 
-  sessionStorage.setItem("user", JSON.stringify({ ...JSON.parse(sessionStorage.getItem("user")), ...data }));
+  sessionStorage.setItem("user", JSON.stringify({ 
+    ...JSON.parse(sessionStorage.getItem("user")), 
+    ...data 
+  }));
 
   mensajeAlert({
     icon: "success",

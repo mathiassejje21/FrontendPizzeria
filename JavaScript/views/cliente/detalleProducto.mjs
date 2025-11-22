@@ -204,6 +204,18 @@ export async function mostrarDetalleProducto(idProducto) {
   `;
 
   const agregar = () => {
+    const pendingUrl = sessionStorage.getItem("last_payment_url");
+    if (pendingUrl) {
+      return mensajeAlert({
+        icon: "warning",
+        title: "Pago pendiente",
+        text: "Tienes un pago pendiente.",
+        showConfirmButton: true
+      }).then(() => {
+        location.href = "/pizzeria/pedidos";
+      });
+    }
+    
     const cantidad = Number(cantidadSeleccionada);
 
     if (cantidad <= 0) {

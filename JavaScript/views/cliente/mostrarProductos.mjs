@@ -90,6 +90,19 @@ export async function mostrarProductos() {
                 <button 
                   class="add-btn"
                   @click=${async () => {
+                    const pendingUrl = sessionStorage.getItem("last_payment_url");
+
+                    if (pendingUrl) {
+                      return mensajeAlert({
+                        icon: "warning",
+                        title: "Pago pendiente",
+                        text: "Tienes un pago pendiente.",
+                        showConfirmButton: true
+                      }).then(() => {
+                        location.href = "/pizzeria/pedidos";
+                      });
+                    }
+
                     const cantidad = Number(document.getElementById(`cantidad-${p.id}`).value);
 
                     if (isNaN(cantidad) || cantidad <= 0) {

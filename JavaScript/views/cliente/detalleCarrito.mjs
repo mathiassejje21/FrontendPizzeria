@@ -1,7 +1,6 @@
 import { html, render } from 'lit-html'
 import { mensajeAlert } from '@components/mensajeAlert.mjs'
 import { userController } from '@controllers/userController.mjs'
-import { pagoController } from '@controllers/pagoController.mjs'
 import { pedidoController } from '@controllers/pedidoController.mjs'
 
 export async function mostrarDetalleCarrito () {
@@ -24,75 +23,72 @@ export async function mostrarDetalleCarrito () {
   }
 
   let repartidores = []
-  let metodoPago = []
 
   if (userSession) {
     const u = JSON.parse(userSession)
     if (u.rol === 'cliente' || u.rol?.nombre === 'cliente') {
       const userApi = new userController()
-      const pagoApi = new pagoController()
       repartidores = await userApi.getUser()
-      metodoPago = await pagoApi.getPago()
     }
   }
 
   async function hundleCheckout () {
-    if (userSession) {
-      const pedidoApi = new pedidoController()
-      const userId = JSON.parse(userSession).id
-      const metodo = Number(document.getElementById('select-pago')?.value)
-      const repartidorId =
-        metodo === 1
-          ? ''
-          : parseInt(document.getElementById('select-repartidor')?.value, 10) || null
-
-      const pedido = {
-        id_cliente: userId,
-        id_repartidor: repartidorId,
-        id_metodo_pago: metodo,
-        detalles: carrito.map(p => {
-          if (!p.personalizable) {
-            return {
-              id_producto: p.id,
-              cantidad: p.cantidad
-            }
-          }
-
-          const personalizaciones = {}
-
-          if (p.tamanio?.id) {
-            personalizaciones.id_tamano = p.tamanio.id
-          }
-
-          if (Array.isArray(p.ingredientes) && p.ingredientes.length > 0) {
-            personalizaciones.ingredientes = p.ingredientes.map(ing => ({
-              id_ingrediente: ing.id,
-              cantidad: 1
-            }))
-          }
-
-          return {
-            id_producto: p.id,
-            cantidad: p.cantidad,
-            personalizaciones
-          }
-        })
-      }
-
-      const res = await pedidoApi.crearPedido(pedido)
-
-      if (res.status === 201) {
-        sessionStorage.removeItem('carrito')
-        sessionStorage.removeItem('carrito_total')
-        window.location.href = res.url_pago
-      }
-    } else {
-      mensajeAlert({
+    if (!userSession) {
+      return mensajeAlert({
         icon: 'warning',
         title: 'Acceso denegado',
-        text: 'Es necesario iniciar sesión para realizar la compra.',
+        text: 'Debes iniciar sesión para continuar.',
         showConfirmButton: true
       }).then(() => (location.href = '/pizzeria/login'))
+    }
+
+    const pedidoApi = new pedidoController()
+    const userId = JSON.parse(userSession).id
+
+    const repartidorId = repartidores.length
+      ? repartidores[0].id
+      : null
+
+    const pedido = {
+      id_cliente: userId,
+      id_repartidor: repartidorId,
+      id_metodo_pago: 2,
+      detalles: carrito.map(p => {
+        if (!p.personalizable) {
+          return {
+            id_producto: p.id,
+            cantidad: p.cantidad
+          }
+        }
+
+        const personalizaciones = {}
+
+        if (p.tamanio?.id) {
+          personalizaciones.id_tamano = p.tamanio.id
+        }
+
+        if (Array.isArray(p.ingredientes) && p.ingredientes.length > 0) {
+          personalizaciones.ingredientes = p.ingredientes.map(ing => ({
+            id_ingrediente: ing.id,
+            cantidad: 1
+          }))
+        }
+
+        return {
+          id_producto: p.id,
+          cantidad: p.cantidad,
+          personalizaciones
+        }
+      })
+    }
+
+    const res = await pedidoApi.crearPedido(pedido)
+
+    if (res.status === 201) {
+      sessionStorage.setItem("last_payment_url", res.url_pago);
+      sessionStorage.removeItem('carrito')
+      sessionStorage.removeItem('carrito_total')
+      window.location.href = res.url_pago
     }
   }
 
@@ -103,69 +99,86 @@ export async function mostrarDetalleCarrito () {
         margin: 2rem auto;
         display: flex;
         gap: 2rem;
+        animation: fade .3s ease-in-out;
       }
-      .carrito-box {
-        flex: 2.3;
+
+      @keyframes fade {
+        from { opacity: 0; transform: translateY(6px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      .carrito-box, .carrito-side {
         background: #fff;
         padding: 2rem;
         border-radius: 1rem;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 5px 22px rgba(0,0,0,0.10);
         height: fit-content;
       }
+
+      .carrito-box {
+        flex: 2.5;
+      }
+
       .carrito-side {
-        flex: 0.7;
-        background: #fff;
-        padding: 2rem;
-        border-radius: 1rem;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        flex: 0.8;
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
-        height: fit-content;
+        gap: 1.2rem;
       }
-      .hidden {
-        display: none !important;
-      }
+
       table img {
         width: 70px;
         height: 70px;
         object-fit: cover;
-        border-radius: 0.5rem;
+        border-radius: .5rem;
       }
+
       .side-title {
         font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 0.7rem;
+        font-weight: 700;
+        color: #0a3a17;
       }
-      .side-section label {
+
+      .pago-box {
+        background: #f3f7f4;
+        border-radius: .8rem;
+        padding: 1rem;
+        border-left: 5px solid #0a3a17;
+      }
+
+      .pago-label {
+        font-size: 18px;
         font-weight: 600;
+        color: #0a3a17;
       }
-      .side-section select {
-        margin-top: 0.4rem;
+
+      .total-final {
+        font-size: 26px;
+        font-weight: bold;
+        color: #d40000;
+        text-align: center;
       }
-      .table-total {
-        margin-top: 1rem;
-        text-align: right;
-        background-color: transparent !important;
-      }
-      .table-total.hidden {
-        display: none;
+
+      .finalizar-btn {
+        padding: 1rem;
+        font-size: 18px;
+        font-weight: 600;
       }
     </style>
 
     <div class="carrito-main">
       <div class="carrito-box">
-        <h2>Detalle del Carrito</h2>
+        <h2 style="color:#0a3a17; font-weight:800;">Detalle del Carrito</h2>
 
-        <table class="table table-striped mt-3">
-          <thead>
+        <table class="table mt-3">
+          <thead style="background:#0a3a17; color:white;">
             <tr>
               <th>Imagen</th>
               <th>Producto</th>
               <th>Tamaño</th>
-              <th>Ingredientes extra</th>
-              <th>Cantidad</th>
-              <th>Precio Unit.</th>
+              <th>Ingredientes</th>
+              <th>Cant.</th>
+              <th>Unit.</th>
               <th>Total</th>
             </tr>
           </thead>
@@ -182,20 +195,15 @@ export async function mostrarDetalleCarrito () {
                 <tr>
                   <td><img src="${p.imagen_url}" alt="${p.nombre}" /></td>
 
-                  <td>
-                    <strong>${p.nombre}</strong><br />
-                    ${p.descripcion ?? ''}
-                  </td>
+                  <td><strong>${p.nombre}</strong><br /><small>${p.descripcion ?? ''}</small></td>
 
                   <td>${p.tamanio ? p.tamanio.nombre : '-'}</td>
 
                   <td>
                     ${(p.ingredientes?.length ?? 0) > 0
-                      ? html`
-                          <ul style="padding-left: 1.2rem; margin: 0;">
-                            ${p.ingredientes.map(i => html`<li>${i.nombre}</li>`)}
-                          </ul>
-                        `
+                      ? html`<ul style="padding-left:1rem; margin:0;">
+                          ${p.ingredientes.map(i => html`<li>${i.nombre}</li>`)}
+                        </ul>`
                       : '-'}
                   </td>
 
@@ -205,79 +213,30 @@ export async function mostrarDetalleCarrito () {
                 </tr>
               `
             })}
-
-            <tr class="table-total ${userSession ? 'hidden' : ''}">
-              <td colspan="6">TOTAL FINAL:</td>
-              <td><strong>S/. ${total.toFixed(2)}</strong></td>
-            </tr>
-
-            <tr class="table-total ${userSession ? 'hidden' : ''}">
-              <td colspan="7">
-                <button class="btn btn-danger" @click=${hundleCheckout}>
-                  Realizar Pedido
-                </button>
-              </td>
-            </tr>
           </tbody>
         </table>
       </div>
 
-      <div class="carrito-side ${!userSession ? 'hidden' : ''}">
-        <div class="side-section">
-          <div class="side-title">Método de Pago</div>
-          <select
-            class="form-select"
-            id="select-pago"
-            @change=${() => {
-              const metodo = Number(
-                document.getElementById('select-pago').value
-              )
-              document
-                .getElementById('box-repartidor')
-                .classList.toggle('hidden', metodo === 1)
-            }}
-          >
-            ${metodoPago.map(
-              m => html`<option value="${m.id}">${m.tipo}</option>`
-            )}
-          </select>
+      <div class="carrito-side">
+
+        <div class="side-title">Pago</div>
+
+        <div class="pago-box">
+          <div class="pago-label">Pasarela de Pago</div>
+          <p style="margin:0; color:#444;">Tu compra será completada mediante una pasarela segura.</p>
         </div>
 
-        <div id="box-repartidor" class="side-section">
-          <div class="side-title">Repartidor</div>
-          <select class="form-select" id="select-repartidor">
-            ${repartidores.length > 0
-              ? repartidores.map(
-                  r => html`
-                    <option value="${r.id}">
-                      ${r.nombre} — ${r.telefono}
-                    </option>
-                  `
-                )
-              : html`<option disabled>No hay repartidores</option>`}
-          </select>
-        </div>
-
-        <div class="side-section">
+        <div>
           <div class="side-title">Total a pagar</div>
-          <p style="font-size: 22px; font-weight: bold; color: #d40000;">
-            S/. ${total.toFixed(2)}
-          </p>
+          <div class="total-final">S/. ${total.toFixed(2)}</div>
         </div>
 
-        <div class="side-section" style="display: flex; flex-direction: column;">
-          <button class="btn btn-danger" @click=${hundleCheckout}>
-            Finalizar compra
-          </button>
-        </div>
+        <button class="btn btn-danger finalizar-btn" @click=${hundleCheckout}>
+          Ir a pagar
+        </button>
       </div>
     </div>
   `
 
   render(template, contenedor)
-
-  const metodoInicial = Number(document.getElementById('select-pago')?.value)
-  document
-    .getElementById('box-repartidor')
-    ?.classList.toggle('hidden', metodoInicial === 1)
 }
