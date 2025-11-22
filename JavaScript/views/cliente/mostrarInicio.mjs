@@ -153,7 +153,7 @@ export async function mostrarInicio() {
       <section class="about-section container my-5">
         <div class="row align-items-center">
           <div class="col-md-6">
-            <img src="https://media.istockphoto.com/id/1446806057/photo/young-happy-woman-student-using-laptop-watching-webinar-writing-at-home.jpg?s=2048x2048&w=is&k=20&c=cJi6VhUnXMYkka0ktIcrH3uh1Ls90M5FnfYYtCcqSi0=" alt="Sobre nosotros" class="img-fluid">
+            <img src="https://cdn.pixabay.com/photo/2025/02/18/21/14/sea-onion-9416402_1280.jpg" alt="Sobre nosotros" class="img-fluid">
           </div>
           <div class="col-md-6">  
             <h2>Sobre Nosotros</h2>
