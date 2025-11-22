@@ -103,7 +103,7 @@ export async function mostrarInicio() {
               <div class="card-body">
                 <h5 class="card-title fw-bold" style=" text-align: center;" >${categoria.nombre}</h5>
               </div>
-              <img src="${categoria.imagen_url}" class="card-img-top" alt="...">
+              <img src="${categoria.imagen_url}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="...">
               <div class="card-footer " style=" text-align: center;" >
                 <small class="text-body-primary font-weight-bold" >${categoria.descripcion}</small>
               </div>
@@ -153,7 +153,7 @@ export async function mostrarInicio() {
       <section class="about-section container my-5">
         <div class="row align-items-center">
           <div class="col-md-6">
-            <img src="/public/images/carrousel1.jpg" alt="Sobre nosotros" class="img-fluid">
+            <img src="https://media.istockphoto.com/id/1446806057/photo/young-happy-woman-student-using-laptop-watching-webinar-writing-at-home.jpg?s=2048x2048&w=is&k=20&c=cJi6VhUnXMYkka0ktIcrH3uh1Ls90M5FnfYYtCcqSi0=" alt="Sobre nosotros" class="img-fluid">
           </div>
           <div class="col-md-6">  
             <h2>Sobre Nosotros</h2>
