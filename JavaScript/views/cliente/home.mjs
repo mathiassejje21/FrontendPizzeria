@@ -8,7 +8,6 @@ import { mostrarDetalleCarrito } from "./detalleCarrito.mjs";
 import { mostrarPedidos } from "./mostrarPedidos.mjs";
 
 export async function renderHomeView(selection = null, user = null) {
-
   await renderNavbarClientes(user);
 
   let template;
@@ -31,6 +30,7 @@ export async function renderHomeView(selection = null, user = null) {
     await mostrarPedidos();
   }
 
-  renderCarrito();
   updateTotal();
+  renderCarrito();
+
 }

@@ -4,6 +4,8 @@ import './router.mjs';
 import './updateHeader.mjs'
 import { router } from './router.mjs';  
 
+router.resolve();
+
 if (!window.__dataRouteDelegated) {
   window.__dataRouteDelegated = true;
 
@@ -19,7 +21,7 @@ if (!window.__dataRouteDelegated) {
       }
       attempts++;
       if (attempts < maxAttempts) setTimeout(tick, interval);
-      };
+    };
     tick();
   };
 
@@ -53,8 +55,10 @@ if (!window.__dataRouteDelegated) {
   });
 
   window.addEventListener("popstate", () => {
+    router.resolve({ force: true }); 
     const hash = window.location.hash;
     if (hash) tryScrollTo(hash);
+
     if (window.updateActiveLinkGlobal) window.updateActiveLinkGlobal();
   });
 

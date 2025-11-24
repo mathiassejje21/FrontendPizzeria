@@ -12,8 +12,14 @@ export class authController {
       const res = await this.api.login(email, password);
       if (res.status !== 200) return null;
 
-      const user = await this.api.getProfile();
-      return user;
+      try {
+        const user = await this.api.getProfile();
+        sessionStorage.setItem("user", JSON.stringify(user));
+        sessionStorage.setItem("session_exp", Date.now() + 1000 * 60 * 60 * 1 ); // 1 hora
+        return user;
+      } catch {
+        sessionStorage.removeItem("user");
+      }
 
     } catch (err) {
       const errorTitle = err.response

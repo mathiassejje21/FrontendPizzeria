@@ -3,6 +3,7 @@ import { authController } from "@/controllers/authController.mjs";
 import { mensajeAlert } from "@components/mensajeAlert.mjs";
 
 export async function renderLoginView() {
+  const user = sessionStorage.getItem("user");
   const path = window.location.pathname.toLowerCase();
 
   let h2color;
