@@ -40,16 +40,23 @@ export async function mostrarProductos() {
           cursor: pointer;
           transition: 0.25s ease;
           border-radius: 1rem;
+          overflow: hidden;
+          background: #fff;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.1);
         }
         .product-card:hover {
-          transform: scale(1.03);
-          background-color: #f5f5f5;
+          transform: translateY(-5px);
+        }
+        .product-img {
+          width: 100%;
+          height: 190px;
+          object-fit: cover;
         }
         .add-btn {
           background:#b30000;
           color:white;
-          width:35px;
-          height:35px;
+          width:45px;
+          height:45px;
           border:none;
           border-radius:50%;
           display:flex;
@@ -62,87 +69,65 @@ export async function mostrarProductos() {
         .add-btn:hover {
           background:#8d0000;
         }
+        .price-tag {
+          font-size:20px;
+          font-weight:700;
+          color:#b30000;
+        }
       </style>
 
       <div class="row g-4 mt-3">
         ${filtrados.map(p => html`
           <div class="col-md-4 col-sm-6 col-lg-3">
-            <div class="card h-100 shadow-sm product-card p-3" data-id="${p.id}">
+            <div class="card product-card" data-id="${p.id}">
               
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h5>${p.nombre}</h5>
-                ${p.categoria.id === 1 ? html`<span style="font-size:14px; color:#0a3a17;"><b>Mediano</b></span>` : ""}
-              </div>
+              <img src="${p.imagen_url}" class="product-img" alt="${p.nombre}">
 
-              <p style="min-height:45px;">${p.descripcion}</p>
-              <p class="fw-bold" style="font-size:18px;">S/.${p.precioReal}</p>
+              <div class="p-3">
 
-              <div style="display:flex; align-items:center; justify-content:space-between; width:100%; gap:1rem;">
-                <input 
-                  id="cantidad-${p.id}"
-                  type="number" 
-                  min="1" 
-                  value="1"
-                  style="width:50%; text-align:center;"
-                  class="form-control mb-2"
-                >
+                <h5 style="font-weight:700;">${p.nombre}</h5>
+                <p style="min-height:50px; color:#555;">${p.descripcion}</p>
 
-                <button 
-                  class="add-btn"
-                  @click=${async () => {
-                    const pendingUrl = sessionStorage.getItem("last_payment_url");
+                <p class="price-tag">S/. ${p.precioReal}</p>
 
-                    if (pendingUrl) {
-                      return mensajeAlert({
-                        icon: "warning",
-                        title: "Pago pendiente",
-                        text: "Tienes un pago pendiente.",
-                        showConfirmButton: true
-                      }).then(() => {
-                        location.href = "/pizzeria/pedidos";
-                      });
-                    }
+                <div style="display:flex; justify-content:flex-end;">
+                  <button 
+                    class="add-btn"
+                    @click=${async (e) => {
+                      e.stopPropagation();
 
-                    const cantidad = Number(document.getElementById(`cantidad-${p.id}`).value);
-
-                    if (isNaN(cantidad) || cantidad <= 0) {
-                      return mensajeAlert({
-                        icon: "warning",
-                        title: "Cantidad inválida",
-                        text: "Ingresa una cantidad válida.",
-                        showConfirmButton: true
-                      });
-                    }
-
-                    let tamanio = null;
-
-                    if (p.categoria?.id === 1) {
-                      const apiTamanio = new tamanioController();
-                      const tamanios = await apiTamanio.getTamanios();
-                      tamanio = tamanios.find(t => t.id === 2) || null;
-
-                      if (!tamanio) {
+                      const pendingUrl = sessionStorage.getItem("last_payment_url");
+                      if (pendingUrl) {
                         return mensajeAlert({
-                          icon: "error",
-                          title: "Error",
-                          text: "No se encontró el tamaño Mediano.",
+                          icon: "warning",
+                          title: "Pago pendiente",
+                          text: "Tienes un pago pendiente.",
                           showConfirmButton: true
-                        });
+                        }).then(() => { location.href = "/pizzeria/pedidos"; });
                       }
-                    }
 
-                    const ingredientes = Array.isArray(p.ingredientes) ? p.ingredientes : [];
-                    
-                    agregarAlCarrito(p, cantidad, tamanio, ingredientes);
+                      let tamanio = null;
 
-                    mensajeAlert({
-                      icon: "success",
-                      title: "Producto agregado",
-                      text: "Se agregó correctamente.",
-                      timer: 1000
-                    });
-                  }}
-                >+</button>
+                      if (p.categoria?.id === 1) {
+                        const apiTamanio = new tamanioController();
+                        const tamanios = await apiTamanio.getTamanios();
+                        tamanio = tamanios.find(t => t.id === 2) || null;
+                      }
+
+                      const ingredientes = Array.isArray(p.ingredientes) ? p.ingredientes : [];
+
+                      agregarAlCarrito(p, 1, tamanio, ingredientes);
+
+                      mensajeAlert({
+                        icon: "success",
+                        title: "Producto agregado",
+                        text: "Se agregó correctamente.",
+                        timer: 1000
+                      });
+                    }}
+                  >+</button>
+                </div>
+
               </div>
             </div>
           </div>
