@@ -9,7 +9,7 @@ export async function mostrarPedidos() {
     let currentPage = 1;
     const rowsPerPage = 7;
     let selectedPedido = null;
-    let sortDirection = "asc";
+    let sortDirection = "desc";
 
     function filterPedidos(fecha) {
         return pedidos.filter(p => {
@@ -45,9 +45,9 @@ export async function mostrarPedidos() {
         selectedPedido = null;
         renderView();
     }
-    console.log(sessionStorage.getItem("last_payment"));
+
     function pagarPedido() {
-        const raw = sessionStorage.getItem("last_payment");
+        const raw = sessionStorage.getItem("last_payment_url");
         if (!raw) return;
 
         const data = JSON.parse(raw);
@@ -220,7 +220,7 @@ export async function mostrarPedidos() {
                             <h3>Pedido #${selectedPedido.id}</h3>
                             <div style="display:flex; gap:.5rem; align-items:center; flex-direction:row;">
                                 ${(() => {
-                                    const raw = sessionStorage.getItem("last_payment");
+                                    const raw = sessionStorage.getItem("last_payment_url");
                                     if (!raw) return "";
 
                                     const data = JSON.parse(raw);

@@ -89,7 +89,7 @@ export async function mostrarDetalleCarrito (user) {
         url_pago: res.url_pago
       };
 
-      sessionStorage.setItem("last_payment", JSON.stringify(data));
+      sessionStorage.setItem("last_payment_url", JSON.stringify(data));
       sessionStorage.removeItem('carrito')
       sessionStorage.removeItem('carrito_total')
       window.location.href = res.url_pago

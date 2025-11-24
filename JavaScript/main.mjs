@@ -55,7 +55,7 @@ if (!window.__dataRouteDelegated) {
   });
 
   window.addEventListener("popstate", () => {
-    router.resolve({ force: true }); 
+    router.resolve(); 
     const hash = window.location.hash;
     if (hash) tryScrollTo(hash);
 

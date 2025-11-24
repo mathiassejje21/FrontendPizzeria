@@ -132,7 +132,7 @@ export async function mostrarProductos() {
                     }
 
                     const ingredientes = Array.isArray(p.ingredientes) ? p.ingredientes : [];
-
+                    
                     agregarAlCarrito(p, cantidad, tamanio, ingredientes);
 
                     mensajeAlert({

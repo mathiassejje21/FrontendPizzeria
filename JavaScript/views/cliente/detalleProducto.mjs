@@ -176,25 +176,36 @@ export async function mostrarDetalleProducto(idProducto) {
       <div class="detalle-ingredientes">
         <h4>Ingredientes</h4>
 
-        ${ingredientes.map(i => html`
-          <div class="ingrediente-item">
-            <label>
-              <input type="checkbox"
-                value='${JSON.stringify(i)}'
-                @change=${e => {
-                  const ing = JSON.parse(e.target.value);
-                  if (e.target.checked) {
-                    ingredientesSeleccionados.push(ing);
-                  } else {
-                    ingredientesSeleccionados = ingredientesSeleccionados.filter(x => x.id !== ing.id);
-                  }
-                  recalcularPrecio();
-                }}
-              >
-              ${i.nombre} (+ S/.${Number(i.costo_extra).toFixed(2)})
-            </label>
-          </div>
-        `)}
+        ${ingredientes.map(i => {
+          
+          const yaIncluido = producto.ingredientes?.some(pIng => pIng.id === i.id);
+
+          if (yaIncluido && !ingredientesSeleccionados.some(x => x.id === i.id)) {
+            ingredientesSeleccionados.push(i);
+          }
+
+          return html`
+            <div class="ingrediente-item">
+              <label>
+                <input
+                  type="checkbox"
+                  value='${JSON.stringify(i)}'
+                  ?checked=${yaIncluido}
+                  @change=${e => {
+                    const ing = JSON.parse(e.target.value);
+                    if (e.target.checked) {
+                      ingredientesSeleccionados.push(ing);
+                    } else {
+                      ingredientesSeleccionados = ingredientesSeleccionados.filter(x => x.id !== ing.id);
+                    }
+                    recalcularPrecio();
+                  }}
+                >
+                ${i.nombre} (+ S/.${Number(i.costo_extra).toFixed(2)})
+              </label>
+            </div>
+          `;
+        })}
       </div>
     ` : ""}
   </section>
