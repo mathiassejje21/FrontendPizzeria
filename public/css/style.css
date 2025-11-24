@@ -90,3 +90,12 @@
     display:none;
     visibility: hidden;
 }
+
+.swal2-container {
+  z-index: 9999999 !important;
+}
+
+.swal2-backdrop-show,
+.swal2-backdrop {
+  z-index: 9999998 !important;
+}

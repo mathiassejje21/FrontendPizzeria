@@ -3,12 +3,12 @@ import { mensajeAlert } from '@components/mensajeAlert.mjs'
 import { userController } from '@controllers/userController.mjs'
 import { pedidoController } from '@controllers/pedidoController.mjs'
 
-export async function mostrarDetalleCarrito () {
+export async function mostrarDetalleCarrito (user) {
   const contenedor = document.getElementById('contenedor')
 
   const carrito = JSON.parse(sessionStorage.getItem('carrito')) || []
   const total = Number(sessionStorage.getItem('carrito_total')) || 0
-  const userSession = sessionStorage.getItem('user')
+  const userSession = user
 
   if (carrito.length === 0) {
     const empty = html`
@@ -25,8 +25,7 @@ export async function mostrarDetalleCarrito () {
   let repartidores = []
 
   if (userSession) {
-    const u = JSON.parse(userSession)
-    if (u.rol === 'cliente' || u.rol?.nombre === 'cliente') {
+    if (userSession.rol === 'cliente' || userSession.rol?.nombre === 'cliente') {
       const userApi = new userController()
       repartidores = await userApi.getUser()
     }
@@ -43,7 +42,7 @@ export async function mostrarDetalleCarrito () {
     }
 
     const pedidoApi = new pedidoController()
-    const userId = JSON.parse(userSession).id
+    const userId = userSession.id
 
     const repartidorId = repartidores.length
       ? repartidores[0].id
@@ -85,7 +84,11 @@ export async function mostrarDetalleCarrito () {
     const res = await pedidoApi.crearPedido(pedido)
 
     if (res.status === 201) {
-      sessionStorage.setItem("last_payment_url", res.url_pago);
+      const data = {
+        id_pedido: res.pedido.id,
+        url_pago: res.url_pago
+      };
+      sessionStorage.setItem("last_payment", JSON.stringify(data));
       sessionStorage.removeItem('carrito')
       sessionStorage.removeItem('carrito_total')
       window.location.href = res.url_pago

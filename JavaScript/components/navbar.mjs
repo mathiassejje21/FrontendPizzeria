@@ -1,13 +1,11 @@
   import { html, render } from "lit-html";
   import { authController } from "../controllers/authController.mjs";
-  import { mensajeAlert } from "./mensajeAlert.mjs";
+  import { menuClienteNoLogeado, menuClienteLogeado } from "./rutasUsers.mjs";
 
-  export function renderNavbar() {
+  export function renderNavbarClientes(user) {
     const main = document.getElementById("main");
 
-    const hundleLogin = () => {
-      window.location.href = "/pizzeria/login";
-    };
+    const menu = user ? menuClienteLogeado : menuClienteNoLogeado;
 
     const hundleSiguiente = () => {
       const carrito = JSON.parse(sessionStorage.getItem("carrito") || "[]");
@@ -313,20 +311,9 @@
             </a>
           </section>
 
-          ${sessionStorage.getItem("user")
+          ${user
             ? (() => {
-                const u = JSON.parse(sessionStorage.getItem("user"));
-                if (u.rol !== 'cliente') {
-                  mensajeAlert({
-                    icon: 'warning',
-                    title: 'Acceso denegado',
-                    text: 'No tienes permiso para acceder a esta vista.',
-                    showConfirmButton: true
-                  }).then(async () => {
-                    await sessionStorage.removeItem('user');
-                    return location.href = '/trabajadores/login';
-                  });  
-                }
+                const u = user;
                 const authApi = new authController();
                 return html`
                   <div class="contacto" id="caja-btn">
@@ -356,29 +343,14 @@
 
         <section id="menu">
           <ul>
-            <li><a href="/pizzeria" data-route>Inicio</a></li>
-            <li><a href="/pizzeria/productos" data-route>Productos</a></li>
-            <li><a href="/pizzeria/carrito" data-route>Carrito</a></li>
-            ${sessionStorage.getItem("user")
-              ? (() => {
-                  const u = JSON.parse(sessionStorage.getItem("user"));
-                  if (u.rol === 'cliente') {
-                    return html`
-                      <li>
-                        <a href="/pizzeria/pedidos" data-route>Mis Pedidos</a>
-                      </li>
-                    `;
-                  }
-                })()
-              : ''}
+            ${menu.map(op => html`
+              <li><a href="${op.ruta}" data-route>${op.texto}</a></li>
+            `)}
           </ul>
         </section>
 
         <section id="banner">
-          <span>
-            Delivery <strong>GRATIS</strong> de Lunes a Miércoles
-            <strong>desde s/23.90.</strong> EXCLUSIVO POR WEB
-          </span>
+          <span>Delivery <strong>GRATIS</strong> de Lunes a Miércoles <strong>desde s/23.90.</strong> EXCLUSIVO POR WEB</span>
         </section>
       </nav>
       <section id="main">

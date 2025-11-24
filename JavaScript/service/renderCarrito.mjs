@@ -1,9 +1,9 @@
 import { getCarrito, setCarrito, guardarTotal, updateTotal, updateCarritoCount } from "@/service/carrito.mjs";
 import { mostrarDetalleCarrito } from "@views/cliente/detalleCarrito.mjs";
 
-const refrescarVistaCarrito = () => {
+const refrescarVistaCarrito = (user) => {
   if (window.location.pathname === "/pizzeria/carrito") {
-    mostrarDetalleCarrito();
+    mostrarDetalleCarrito(user);
   }
 };
 

@@ -1,0 +1,26 @@
+export const menuClienteNoLogeado = [
+  { ruta: "/pizzeria", texto: "Home" },
+  { ruta: "/pizzeria/productos", texto: "Productos" },
+  { ruta: "/pizzeria/carrito", texto: "Carrito" }
+];
+
+export const menuClienteLogeado = [
+  { ruta: "/pizzeria", texto: "Home" },
+  { ruta: "/pizzeria/productos", texto: "Productos" },
+  { ruta: "/pizzeria/carrito", texto: "Carrito" },
+  { ruta: "/pizzeria/pedidos", texto: "Mis Pedidos" },
+];
+
+export const menuAdmin = [
+  { ruta: "/administrador/dashboard", texto: "Dashboard" },
+  { ruta: "/administrador/pedidos", texto: "Pedidos" },
+  { ruta: "/administrador/productos", texto: "Productos" },
+  { ruta: "/administrador/usuarios", texto: "Usuarios" }
+];
+
+
+export const menuPersonal = [
+  { ruta: "/personal/dashboard", texto: "Dashboard" },
+  { ruta: "/personal/pedidos", texto: "Pedidos" }
+];
+  

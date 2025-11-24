@@ -10,14 +10,8 @@ export const mensajeAlert = ({
   cancelButtonText = "Cancelar",
   timer = 0,
 } = {}) => {
-  if (icon === "success" && !showConfirmButton && timer === 0) {
-    timer = 1800;
-  }
 
-  if (timer > 0 && !showConfirmButton) {
-    showConfirmButton = false;
-    showCancelButton = false;
-  }
+  if (icon === "success" && !showConfirmButton && timer === 0) timer = 1800;
 
   let htmlIcon = "";
   let btnColor = "";
@@ -37,10 +31,11 @@ export const mensajeAlert = ({
           stroke-linecap="round" stroke-linejoin="round">
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
-      </div>
-    `;
+      </div>`;
     btnColor = "rgba(0, 200, 0, 0.9)";
-  } else if (icon === "error") {
+  }
+
+  if (icon === "error") {
     htmlIcon = `
       <div style="
         width: 70px; height: 70px;
@@ -56,10 +51,11 @@ export const mensajeAlert = ({
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
-      </div>
-    `;
+      </div>`;
     btnColor = "rgba(255, 0, 0, 0.9)";
-  } else if (icon === "warning") {
+  }
+
+  if (icon === "warning") {
     htmlIcon = `
       <div style="
         width: 70px; height: 70px;
@@ -76,8 +72,7 @@ export const mensajeAlert = ({
           <line x1="12" y1="8" x2="12" y2="13"></line>
           <circle cx="12" cy="17" r="1"></circle>
         </svg>
-      </div>
-    `;
+      </div>`;
     btnColor = "rgba(255, 193, 7, 0.95)";
   }
 
@@ -85,7 +80,7 @@ export const mensajeAlert = ({
     title: title ? `<span style="color:#fff;">${title}</span>` : "",
     html: `${htmlIcon}${text ? `<p style="margin-top:8px; color:#fff;">${text}</p>` : ""}`,
     icon: undefined,
-    background: "rgba(255, 255, 255, 0.18)",
+    background: "rgba(20, 20, 20, 0.35)",
     color: "#ffffff",
     showConfirmButton,
     confirmButtonText,
@@ -93,32 +88,24 @@ export const mensajeAlert = ({
     cancelButtonText,
     timer: timer > 0 ? timer : undefined,
     reverseButtons: true,
-    backdrop: `
-      rgba(0,0,0,0.45)
-      blur(10px)
-    `,
     allowOutsideClick: false,
     allowEscapeKey: false,
+    backdrop: `
+      rgba(0,0,0,0.55)
+      blur(18px)
+    `,
     customClass: {
-      popup: "swal-glass-popup fade-in",
+      popup: "swal-glass-popup",
       title: "swal-glass-title",
       htmlContainer: "swal-glass-text"
     },
     didOpen: (popup) => {
-      popup.style.border = "1px solid rgba(255, 255, 255, 0.25)";
+      popup.style.border = "1px solid rgba(255,255,255,0.35)";
       popup.style.borderRadius = "18px";
-      popup.style.boxShadow = "0 8px 25px rgba(0, 0, 0, 0.25)";
+      popup.style.background = "rgba(40,40,40,0.55)";
       popup.style.backdropFilter = "blur(15px)";
-      popup.style.transition = "all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1)";
-      popup.style.opacity = "0";
-      popup.style.transform = "scale(0.93) translateY(10px)";
-      popup.style.willChange = "transform, opacity";
-
-      requestAnimationFrame(() => {
-        popup.style.opacity = "1";
-        popup.style.transform = "scale(1) translateY(0)";
-      });
-
+      popup.style.boxShadow = "0 10px 40px rgba(0,0,0,0.4)";
+      popup.style.zIndex = "999999999";
       const confirmBtn = popup.querySelector(".swal2-confirm");
       const cancelBtn = popup.querySelector(".swal2-cancel");
 
@@ -129,11 +116,7 @@ export const mensajeAlert = ({
         confirmBtn.style.fontWeight = "600";
         confirmBtn.style.borderRadius = "10px";
         confirmBtn.style.padding = "8px 20px";
-        confirmBtn.style.transition = "all 0.35s ease";
         confirmBtn.style.cursor = "pointer";
-        confirmBtn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.25)";
-        confirmBtn.onmouseenter = () => confirmBtn.style.filter = "brightness(1.15)";
-        confirmBtn.onmouseleave = () => confirmBtn.style.filter = "none";
       }
 
       if (cancelBtn) {
@@ -142,16 +125,8 @@ export const mensajeAlert = ({
         cancelBtn.style.border = "none";
         cancelBtn.style.borderRadius = "10px";
         cancelBtn.style.padding = "8px 20px";
-        cancelBtn.style.transition = "all 0.35s ease";
         cancelBtn.style.cursor = "pointer";
-        cancelBtn.onmouseenter = () => cancelBtn.style.filter = "brightness(1.15)";
-        cancelBtn.onmouseleave = () => cancelBtn.style.filter = "none";
       }
-    },
-    willClose: (popup) => {
-      popup.style.transition = "all 0.55s cubic-bezier(0.4, 0, 0.2, 1)";
-      popup.style.opacity = "0";
-      popup.style.transform = "scale(0.95) translateY(10px)";
     },
   });
 };

@@ -1,19 +1,11 @@
-export function redirectByRole() {
-  const user = JSON.parse(sessionStorage.getItem("user") || "{}");
+export function redirectByRole(rol, path = window.location.pathname.toLowerCase()) {
 
-  const rol = user?.rol?.nombre || user?.rol;
+  if (rol === "cliente") return "/pizzeria";
+  if (rol === "personal") return "/personal/dashboard";
+  if (rol === "administrador") return "/administrador/home";
 
-  if (rol === "cliente") {
+  if (path.startsWith("/pizzeria")) 
     return "/pizzeria/login";
-  }
 
-  if (rol === "personal") {
-    return "/trabajadores/login";
-  }
-
-  if (rol === "administrador") {
-    return "/trabajadores/login";
-  }
-
-  return "/pizzeria/login";
+  return "/trabajadores/login";
 }

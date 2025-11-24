@@ -1,15 +1,10 @@
 import { html, render } from "lit-html";
 import { authController } from "@controllers/authController.mjs";
 import { mensajeAlert } from "@components/mensajeAlert.mjs";
-import { renderNavbar } from "@/components/navbar.mjs";
 import { userController } from "@controllers/userController.mjs";
 
-export async function renderDashboardView() {
-  await renderNavbar();
-
-  const user = JSON.parse(sessionStorage.getItem("user"));
-  if (!user) return (location.href = "/trabajadores/login");
-
+export async function renderDashboardView(user) {
+  if(!user) return location.href = '/pizzeria/login';
   const template = html`
     <style>
       body {
@@ -220,21 +215,21 @@ async function actualizarPerfil() {
     direccion: document.getElementById("edit-direccion").value
   };
 
-  await userApi.updateProfile(data);
-
-  sessionStorage.setItem("user", JSON.stringify({ 
-    ...JSON.parse(sessionStorage.getItem("user")), 
-    ...data 
-  }));
-
+  const res = await userApi.updateProfile(data);
+  const newUser = res.usuario;
   mensajeAlert({
     icon: "success",
     title: "Perfil actualizado",
     timer: 1200
   });
 
-  setTimeout(() => renderDashboardView(), 500);
+
+
+  setTimeout(() => {
+    renderDashboardView(newUser);  
+  }, 500);
 }
+
 
 async function cambiarPassword() {
   const userApi = new userController();

@@ -1,14 +1,11 @@
 import { html, render } from "lit-html";
-import { renderNavbar } from "@components/navbar.mjs";
 import { productoController } from "@controllers/productoController.mjs";
 import { tamanioController } from "@controllers/tamanioController.mjs";
 import { ingredienteController } from "@controllers/ingredienteController.mjs";
-import { agregarAlCarrito } from "@views/cliente/carrito.mjs";
+import { agregarAlCarrito } from "@/service/renderCarrito.mjs";
 import { mensajeAlert } from "@components/mensajeAlert.mjs";
 
 export async function mostrarDetalleProducto(idProducto) {
-  await renderNavbar();
-
   const apiProducto = new productoController();
   const listaProductos = await apiProducto.getProductos();
   const producto = listaProductos.find(p => p.id == idProducto);

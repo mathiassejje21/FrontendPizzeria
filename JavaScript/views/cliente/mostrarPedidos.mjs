@@ -2,8 +2,6 @@ import { html, render } from "lit-html";
 import { pedidoController } from "@controllers/pedidoController.mjs";
 
 export async function mostrarPedidos() {
-    if (!sessionStorage.getItem("user"))
-        return location.href = "/pizzeria/login";
 
     const apiPedido = new pedidoController();
     const pedidos = await apiPedido.getPedidos();
@@ -47,11 +45,15 @@ export async function mostrarPedidos() {
         selectedPedido = null;
         renderView();
     }
-
+    console.log(sessionStorage.getItem("last_payment"));
     function pagarPedido() {
-        const url = sessionStorage.getItem("last_payment_url");
-        location.href = url;
+        const raw = sessionStorage.getItem("last_payment");
+        if (!raw) return;
+
+        const data = JSON.parse(raw);
+        location.href = data.url_pago;
     }
+
     function cambiarOrden() {
         sortDirection = sortDirection === "asc" ? "desc" : "asc";
         renderView();
@@ -217,9 +219,15 @@ export async function mostrarPedidos() {
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <h3>Pedido #${selectedPedido.id}</h3>
                             <div style="display:flex; gap:.5rem; align-items:center; flex-direction:row;">
-                                ${sessionStorage.getItem("last_payment_url") ? 
-                                    html`<button class="btn btn-warning btn-sm" @click=${pagarPedido}>Pagar</button>` 
-                                    : ''}
+                                ${(() => {
+                                    const raw = sessionStorage.getItem("last_payment");
+                                    if (!raw) return "";
+
+                                    const data = JSON.parse(raw);
+                                    return data.id_pedido === selectedPedido.id
+                                        ? html`<button class="btn btn-warning btn-sm" @click=${pagarPedido}>Pagar</button>`
+                                        : "";
+                                })()}
                                 <button class="btn btn-danger btn-sm" @click=${cerrarDetalle}>Cerrar</button>
                             </div>
                         </div>

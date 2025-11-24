@@ -1,6 +1,6 @@
 import { html, render } from 'lit-html';
 import { authController } from '@/controllers/authController.mjs';
-
+import { mensajeAlert } from '@components/mensajeAlert.mjs';
 
 export function renderRegisterView() {
     
@@ -50,5 +50,14 @@ async function handleRegister(e){
     const nombre = document.getElementById('nombre').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    await auth.processRegister(nombre, email, password);
+    const res = await auth.processRegister(nombre, email, password);
+    if (res === true) {
+      mensajeAlert({
+        icon: "success",
+        title: "¡Registro exitoso!",
+        text: "Tu cuenta fue creada correctamente.",
+        showConfirmButton: true,
+        confirmButtonText: "Ir al login"
+      }).then(() => location.href = "/pizzeria/login");
+    }
 }

@@ -1,5 +1,6 @@
 import { authApi } from "@/api/authApi.mjs";
 import { mensajeAlert } from "@components/mensajeAlert.mjs";
+import { redirectByRole } from "@/service/redirectByRole.mjs";
 
 export class authController {
   constructor() {
@@ -9,48 +10,11 @@ export class authController {
   async processLogin(email, password) {
     try {
       const res = await this.api.login(email, password);
-      if (res.status !== 200) return;
+      if (res.status !== 200) return null;
 
       const user = await this.api.getProfile();
+      return user;
 
-      const path = window.location.pathname.toLowerCase();
-      let redirectUrl = null;
-
-      if (path === "/pizzeria/login" && user.rol === "cliente") {
-        const carrito = JSON.parse(sessionStorage.getItem("carrito") || "[]");
-        redirectUrl = carrito.length > 0 ? "/pizzeria/carrito" : "/pizzeria";
-      } else if (path === "/trabajadores/login" && user.rol === "administrador") {
-        redirectUrl = "/administrador/dashboard";
-      } else if (path === "/trabajadores/login" && user.rol === "personal") {
-        redirectUrl = "/personal/dashboard";
-      }
-
-      if (redirectUrl) {
-        sessionStorage.setItem("user", JSON.stringify(user));
-        mensajeAlert({
-          icon: "success",
-          title: "¡Bienvenido!",
-          text: res.mensaje,
-          timer: 1800
-        }).then(() => {
-          location.href = redirectUrl;
-        });
-        return user;
-      }
-
-      mensajeAlert({
-        icon: "error",
-        title: "Acceso denegado",
-        text: "Tu rol no tiene permiso para acceder a esta sección.",
-        showConfirmButton: true
-      }).then(async () => {
-        sessionStorage.removeItem("user");
-        if (user.rol === "cliente") {
-          location.href = "/pizzeria/login";
-        } else {
-          location.href = "/trabajadores/login";
-        }
-      });
     } catch (err) {
       const errorTitle = err.response
         ? "Error " + err.response.status
@@ -70,23 +34,17 @@ export class authController {
         text: errorText,
         showConfirmButton: true
       });
+
+      return null;
     }
   }
 
   async processRegister(nombre, email, password) {
     try {
       const res = await this.api.register(nombre, email, password);
-      if (res.status !== 201) return;
+      if (res.status !== 201) return null;
+      return true;
 
-      mensajeAlert({
-        icon: "success",
-        title: "¡Registro exitoso!",
-        text: "Tu cuenta fue creada correctamente.",
-        showConfirmButton: true,
-        confirmButtonText: "Ir al login"
-      }).then(() => {
-        location.href = "/pizzeria/login";
-      });
     } catch (error) {
       const errorTitle = error.response
         ? "Error " + error.response.status
@@ -107,34 +65,30 @@ export class authController {
         showConfirmButton: true,
         confirmButtonText: "Intentar nuevamente"
       });
+
+      return false;
     }
   }
 
   async logout() {
-    if (sessionStorage.getItem("user")) {
-      const userData = JSON.parse(sessionStorage.getItem("user"));
-      const rol = userData?.rol;
+    const result = await mensajeAlert({
+      icon: "warning",
+      title: "Cerrar sesión",
+      text: "¿Deseas cerrar sesión?",
+      showConfirmButton: true,
+      confirmButtonText: "Cerrar sesión",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar"
+    });
 
-      const result = await mensajeAlert({
-        icon: "warning",
-        title: "Cerrar sesión",
-        text: "¿Deseas cerrar sesión?",
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar sesión",
-        showCancelButton: true,
-        cancelButtonText: "Cancelar"
-      });
+    if (!result.isConfirmed) return null;
 
-      if (!result.isConfirmed) return null;
-
+    try {
       await this.api.logout();
-      sessionStorage.removeItem("user");
-
-      if (rol === "cliente") {
-        location.href = "/pizzeria/login";
-      } else {
-        location.href = "/trabajadores/login";
-      }
+    } finally {
+      sessionStorage.clear();
+      const url = redirectByRole();
+      location.href = url;
     }
   }
 }

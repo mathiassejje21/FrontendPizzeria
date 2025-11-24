@@ -2,7 +2,7 @@ import { html, render } from 'lit-html';
 import { productoController } from '@controllers/productoController.mjs';
 import { categoriaController } from '@controllers/categoriaController.mjs';
 import { tamanioController } from '@/controllers/tamanioController.mjs';
-import { agregarAlCarrito, renderCarrito } from './carrito.mjs';
+import { agregarAlCarrito, renderCarrito } from '@/service/renderCarrito.mjs';
 import { updateTotal } from '@/service/carrito.mjs';
 import { mensajeAlert } from '@components/mensajeAlert.mjs';
 import { router } from '@/router.mjs';

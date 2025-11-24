@@ -1,6 +1,6 @@
 import { clienteRoutes } from './clienteRoutes.mjs';
-import { administradorRoutes } from './administrador.mjs';
-import { personalRoutes } from './personal.mjs';
+import { administradorRoutes } from './administradorRoutes.mjs';
+import { personalRoutes } from './personalRoutes.mjs';
 import { renderLoginView } from '@views/login.mjs';
 import { renderRegisterView } from '@views/cliente/register.mjs';
 
