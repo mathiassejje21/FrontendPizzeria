@@ -396,7 +396,8 @@
     });
 
     const loginBtn = document.getElementById("login-btn");
-    if (loginBtn) loginBtn.addEventListener("click", hundleLogin);
+    if (loginBtn) loginBtn.addEventListener("click", () => (
+      window.location.href = "/pizzeria/login"));
 
     const userInfoBtn = document.getElementById("user-info-btn");
     if (userInfoBtn) {
