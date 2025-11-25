@@ -5,6 +5,15 @@
     font-family: 'Gill Sans MT', Calibri, 'Trebuchet MS';
 }
 
+.swal2-container {
+  z-index: 9999999 !important;
+}
+
+.swal2-backdrop-show,
+.swal2-backdrop {
+  z-index: 9999998 !important;
+}
+
 .loader-overlay {
   position: fixed;
   top: 0;
@@ -31,71 +40,137 @@
   to { transform: rotate(360deg); }
 }
 
-#contenedor-login, #contenedor-register {
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
-    width: 100%;
+#contenedor-login{ 
+  position: relative;
+  width: 100%;
+  height: 100vh;
 }
 
-#contenedor-login > div:first-child, #contenedor-register > div:last-child {
-    flex: 1.2;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap:1rem;
-}
-
-
-#contenedor-login > div:last-child, #contenedor-register > div:first-child {
-    flex: 1;
+#contenedor-login .contenido{
+  position: absolute;
+  background-color: #fff;
+  width: 430px;
+  height: auto;
+  padding: 2.5rem 3rem;
+  box-shadow: -5px 5px 15px 3px rgba(124, 124, 124, 0.75);
+  top: 25%;
+  left: 18%;
+  z-index: 1;
 }
 
 #contenedor-login img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-bottom-left-radius: 1.5rem;
-    border-top-left-radius: 1.5rem;
-    box-shadow: -2px 3px 10px 15px rgba(218, 213, 213, 0.75);
+  position: absolute;
+  width: 630px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  box-shadow: 5px 0px 15px 3px rgba(95, 95, 95, 0.75);
+  top: 10%;
+  right: 15%;
+}
+
+.contenido-form{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contenido-form input{
+  width: 100%;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #8a8a8a;
+  padding: 0.5rem;
+}
+
+#contenedor-login .contenido-form button{
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0px 3px 6px 1px rgba(95, 95, 95, 0.75);
+}
+
+.contenido a{
+  text-decoration: none;
+  color: #ff0000;
+}
+
+#contenedor-register {
+  position: relative;
+  width: 100%;
+  height: 100vh;
 }
 
 #contenedor-register img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-bottom-right-radius: 1.5rem;
-    border-top-right-radius: 1.5rem;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  top: 0
 }
 
-#contenedor-login form{
-    padding: 1rem;;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 50%;
-
+#contenedor-register .contenido {
+  position: absolute;
+  width: 400px;
+  padding: 2.5rem;
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12),
+              0 4px 10px rgba(0, 0, 0, 0.08);
+  top: 20%;
+  right: 35%;
+  z-index: 1;
 }
 
-#contenedor-register section form{
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-    padding: 0  1rem;
-    width: 100%;
+#contenedor-register .contenido-form input{
+  width: 100%;
+  border-bottom-right-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(12px);
+  outline: none;
+  font-size: 0.95rem;
+  transition: 0.2s ease;
+  color: #333;
 }
 
-#contenedor-register section .ocultar {
-    display:none;
-    visibility: hidden;
+#contenedor-register .contenido-form label{
+  padding: 0 0.5rem;
+  text-align: center;
+  align-content: center;
+  color: #000;
+  font-weight: 600;
+  width: 6rem;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.25);
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+#contenedor-register .contenido-form input::placeholder{
+  color: rgba(0, 0, 0, 0.35);
 }
 
-.swal2-container {
-  z-index: 9999999 !important;
+#contenedor-register .contenido-form input:focus{
+  background: rgba(255, 255, 255, 0.35);
 }
 
-.swal2-backdrop-show,
-.swal2-backdrop {
-  z-index: 9999998 !important;
+
+#contenedor-register .contenido-form button{
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  color: #fff;
+  background-color: #062c08;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0px 3px 6px 1px rgba(55, 55, 55, 0.75);
+}
+
+#contenedor-register .contenido-form button:hover{
+  background-color: #0e130e;
+  transform: scale(1.01);
 }

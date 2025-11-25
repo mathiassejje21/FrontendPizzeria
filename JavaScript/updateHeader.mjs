@@ -4,10 +4,10 @@ let urlimg;
 let text;
 
 if (path.startsWith('/pizzeria')) {
-  urlimg = '/public/images/logo-pizza.png';
+  urlimg = 'https://img.icons8.com/?size=100&id=503mbwCBW8xP&format=png&color=000000';
   text = 'Pizzería Don Luigi';
 } else {
-  urlimg = '/public/images/logo-admin.png';
+  urlimg = 'https://img.icons8.com/?size=100&id=97615&format=png&color=000000';
   text = 'Personal';
 }
 

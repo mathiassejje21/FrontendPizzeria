@@ -6,6 +6,6 @@ export class pagoController {
     }
 
     async getPago() {
-        return await this.api.getPago(); // <--- YA VIENE res.data
+        return await this.api.getPago(); 
     }
 }

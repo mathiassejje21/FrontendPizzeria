@@ -3,10 +3,7 @@ import { authController } from "@/controllers/authController.mjs";
 import { mensajeAlert } from "@components/mensajeAlert.mjs";
 
 export async function renderLoginView() {
-  const user = sessionStorage.getItem("user");
   const path = window.location.pathname.toLowerCase();
-
-  let h2color;
   let btncolor;
   let bgcolor;
   let text;
@@ -14,23 +11,21 @@ export async function renderLoginView() {
   let divExtra;
 
   if (path === "/pizzeria/login") {
-    h2color = "red";
-    btncolor = "btn-danger";
-    bgcolor = "rgb(254, 246, 235)";
-    text = "Pizzeria Don Luigi";
-    img = "https://media.istockphoto.com/id/1211285087/vector/ordering-service-concept-pizza-button-isometric.jpg?s=2048x2048&w=is&k=20&c=9Z4Qg7glrXZLegY2l2KeojPqFWDtZt0UHk_NVMzbrW0=";
+    btncolor = "#ff0000";
+    bgcolor = "linear-gradient(135deg, rgba(234,158,53,1) 0%, rgba(255,180,90,1) 100%)";
+    text = "Pizzeria Don Mario !";
+    img = "https://images.pexels.com/photos/2233348/pexels-photo-2233348.jpeg";
     divExtra = html`
       <div style="margin-top:.5rem;text-align:center;">
-        <p style="color:#686868ff;margin-bottom:2rem;">¿No tienes una cuenta?</p>
-        <a href="/pizzeria/register" class="btn btn-outline-danger">Crear cuenta</a>
+        <p style="color:#686868ff;margin:1rem 0;">¿No tienes una cuenta?</p>
+        <a href="/pizzeria/register">Crear cuenta</a>
       </div>
     `;
   } else {
-    h2color = "#c95f09ff";
-    btncolor = "btn-dark";
-    bgcolor = "#fff";
+    btncolor = "#381e65ff";
+bgcolor = "linear-gradient(135deg, #6d3feaff 0%, #c8aaffff 100%)";
     text = "Panel de Trabajadores";
-    img = "https://cdn.pixabay.com/photo/2020/06/09/12/04/pet-5278139_1280.jpg";
+    img = "https://img.freepik.com/vector-gratis/empresario-red-datos_24908-57814.jpg?t=st=1764086985~exp=1764090585~hmac=f186e4ffb07155df75be4f2d1de0f53e7c0a92c6443defcfd805e282c12ea855&w=1480";
     divExtra = "";
   }
 
@@ -82,27 +77,26 @@ export async function renderLoginView() {
   }
 
   const template = html`
-    <section id="contenedor-login" style="background-color:${bgcolor};">
-      <div>
-        <h2 style="color:${h2color};">${text}</h2>
-        <h7 style="color:#686868ff;">Ingrese su Correo y Contraseña</h7>
-
-        <form @submit=${handleLogin} id="loginForm">
-          <div class="mb-3">
-            <input type="email" class="form-control" id="email" placeholder="example@gmail.com" required>
-          </div>
-          <div class="mb-3">
-            <input type="password" class="form-control" id="password" placeholder="********" required>
-          </div>
-          <button class="btn ${btncolor}">Iniciar Sesión</button>
+    <style>
+      button {
+        background-color: ${btncolor};
+      }
+      button:hover {
+        background-color: color-mix(in srgb, ${btncolor} 75%, #000 35%);
+        transform: scale(1.02);
+      }
+    </style>
+    <section id="contenedor-login" style="background:${bgcolor};">
+      <div class="contenido">
+        <form @submit=${handleLogin} class="contenido-form">
+          <h2 style="color:#000; font-weight: 600; border-bottom: 0.15rem solid #dbc609ff; width: 100%; margin:0">${text}</h2>
+          <input type="email" id="email" placeholder="E-mail" required>
+          <input type="password" id="password" placeholder="Contraseña" required>
+          <button>Iniciar Sesión</button>
         </form>
-
         ${divExtra}
       </div>
-
-      <div>
-        <img src="${img}" alt="imagen de Login">
-      </div>
+      <img src="${img}" alt="imagen de Login">
     </section>
   `;
 

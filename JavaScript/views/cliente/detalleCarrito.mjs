@@ -1,6 +1,5 @@
 import { html, render } from 'lit-html'
 import { mensajeAlert } from '@components/mensajeAlert.mjs'
-import { userController } from '@controllers/userController.mjs'
 import { pedidoController } from '@controllers/pedidoController.mjs'
 
 export async function mostrarDetalleCarrito (user) {
@@ -22,15 +21,6 @@ export async function mostrarDetalleCarrito (user) {
     return render(empty, contenedor)
   }
 
-  let repartidores = []
-
-  if (userSession) {
-    if (userSession.rol === 'cliente' || userSession.rol?.nombre === 'cliente') {
-      const userApi = new userController()
-      repartidores = await userApi.getUser()
-    }
-  }
-
   async function hundleCheckout () {
     if (!userSession) {
       return mensajeAlert({
@@ -44,13 +34,8 @@ export async function mostrarDetalleCarrito (user) {
     const pedidoApi = new pedidoController()
     const userId = userSession.id
 
-    const repartidorId = repartidores.length
-      ? repartidores[0].id
-      : null
-
     const pedido = {
       id_cliente: userId,
-      id_repartidor: repartidorId,
       id_metodo_pago: 2,
       detalles: carrito.map(p => {
         if (!p.personalizable) {
