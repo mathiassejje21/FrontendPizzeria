@@ -297,7 +297,7 @@
             </div>
 
             <div class="contacto">
-              <img src="/public/images/facebook.png" alt="" />
+              <img src="https://img.icons8.com/?size=100&id=uLWV5A9vXIPu&format=png&color=000000" alt="" />
               <div>
                 <p>Encuéntranos</p>
                 <p><strong style="color: #415de7;">Facebook</strong></p>

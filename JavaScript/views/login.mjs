@@ -18,7 +18,7 @@ export async function renderLoginView() {
     btncolor = "btn-danger";
     bgcolor = "rgb(254, 246, 235)";
     text = "Pizzeria Don Luigi";
-    img = "https://images.pexels.com/photos/34817337/pexels-photo-34817337.jpeg";
+    img = "https://media.istockphoto.com/id/1211285087/vector/ordering-service-concept-pizza-button-isometric.jpg?s=2048x2048&w=is&k=20&c=9Z4Qg7glrXZLegY2l2KeojPqFWDtZt0UHk_NVMzbrW0=";
     divExtra = html`
       <div style="margin-top:.5rem;text-align:center;">
         <p style="color:#686868ff;margin-bottom:2rem;">¿No tienes una cuenta?</p>
@@ -30,7 +30,7 @@ export async function renderLoginView() {
     btncolor = "btn-dark";
     bgcolor = "#fff";
     text = "Panel de Trabajadores";
-    img = "/public/images/login-trabajadores.jpg";
+    img = "https://cdn.pixabay.com/photo/2020/06/09/12/04/pet-5278139_1280.jpg";
     divExtra = "";
   }
 
