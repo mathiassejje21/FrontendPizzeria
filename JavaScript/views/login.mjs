@@ -18,7 +18,7 @@ export async function renderLoginView() {
     btncolor = "btn-danger";
     bgcolor = "rgb(254, 246, 235)";
     text = "Pizzeria Don Luigi";
-    img = "/public/images/login-cliente.jpg";
+    img = "https://images.pexels.com/photos/34817337/pexels-photo-34817337.jpeg";
     divExtra = html`
       <div style="margin-top:.5rem;text-align:center;">
         <p style="color:#686868ff;margin-bottom:2rem;">¿No tienes una cuenta?</p>
