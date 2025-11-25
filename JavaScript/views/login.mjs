@@ -17,7 +17,7 @@ export async function renderLoginView() {
     img = "https://images.pexels.com/photos/2233348/pexels-photo-2233348.jpeg";
     divExtra = html`
       <div style="margin-top:.5rem;text-align:center;">
-        <p style="color:#686868ff;margin:1rem 0;">¿No tienes una cuenta?</p>
+        <p style="color: #686868ff ;margin:1rem 0;">¿No tienes una cuenta?</p>
         <a href="/pizzeria/register">Crear cuenta</a>
       </div>
     `;
