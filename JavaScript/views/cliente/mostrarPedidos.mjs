@@ -49,7 +49,6 @@ export async function mostrarPedidos() {
     function pagarPedido() {
         const raw = sessionStorage.getItem("last_payment_url");
         if (!raw) return;
-
         const data = JSON.parse(raw);
         location.href = data.url_pago;
     }
@@ -71,12 +70,7 @@ export async function mostrarPedidos() {
         const template = html`
         <style>
             body { background:#f4f6f9; }
-            .layout {
-                display:grid;
-                grid-template-columns: 2fr 1fr;
-                gap:1.5rem;
-                padding:2rem;
-            }
+            .layout { padding:2rem; }
             .card {
                 background:#fff;
                 padding:1.8rem;
@@ -93,23 +87,15 @@ export async function mostrarPedidos() {
                 background:#123c25;
                 color:white;
             }
-            tr {
-                cursor:pointer;
-                transition:.2s;
-            }
-            tr:hover {
-                background: #e7f1eb !important;
-            }
+            tr { cursor:pointer; transition:.2s; }
+            tr:hover { background:#e7f1eb !important; }
             .filters {
                 display:flex;
                 gap:1.2rem;
                 align-items:end;
                 margin-bottom:1rem;
             }
-            label {
-                font-weight:600;
-                color:#123c25;
-            }
+            label { font-weight:600; color:#123c25; }
             .sort-btn {
                 background:#123c25;
                 color:white;
@@ -120,38 +106,41 @@ export async function mostrarPedidos() {
                 cursor:pointer;
                 transition:.2s;
             }
-            .sort-btn:hover {
-                background:#0e2f1c;
-            }
+            .sort-btn:hover { background:#0e2f1c; }
             .paginate button {
                 border-radius:.5rem;
                 font-weight:600;
                 padding:.45rem .9rem;
             }
-            .details-box {
-                background:#fff;
-                padding:1.6rem;
-                border-radius:1.2rem;
-                box-shadow:0 6px 22px rgba(0,0,0,0.08);
-                animation:fade .3s ease-out;
-            }
-            .details-box h3 {
-                font-size:1.4rem;
-                font-weight:700;
-                color:#123c25;
-            }
-            .placeholder {
-                text-align:center;
-                padding:2rem;
-                color:#777;
-                font-size:1.1rem;
-            }
-            hr {
-                border-top:1px solid #ddd;
-            }
             @keyframes fade {
                 from { opacity:0; transform:translateY(6px); }
                 to { opacity:1; transform:translateY(0); }
+            }
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.6);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 2000;
+                animation: fade .25s ease-out;
+            }
+            .modal-box {
+                background: #fff;
+                width: 90%;
+                max-width: 480px;
+                padding: 2rem;
+                border-radius: 1rem;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+                animation: popup .25s ease-out;
+            }
+            @keyframes popup {
+                from { transform: scale(.9); opacity: 0; }
+                to   { transform: scale(1); opacity: 1; }
             }
         </style>
 
@@ -215,45 +204,44 @@ export async function mostrarPedidos() {
 
             <section>
                 ${selectedPedido ? html`
-                    <div class="details-box">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <h3>Pedido #${selectedPedido.id}</h3>
-                            <div style="display:flex; gap:.5rem; align-items:center; flex-direction:row;">
-                                ${(() => {
-                                    const raw = sessionStorage.getItem("last_payment_url");
-                                    if (!raw) return "";
+                    <div class="overlay">
+                        <div class="modal-box">
 
-                                    const data = JSON.parse(raw);
-                                    return data.id_pedido === selectedPedido.id
-                                        ? html`<button class="btn btn-warning btn-sm" @click=${pagarPedido}>Pagar</button>`
-                                        : "";
-                                })()}
-                                <button class="btn btn-danger btn-sm" @click=${cerrarDetalle}>Cerrar</button>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <h3 style="margin:0;">Pedido #${selectedPedido.id}</h3>
+                                <button class="btn btn-danger btn-sm" @click=${cerrarDetalle}>X</button>
                             </div>
+
+                            <hr>
+
+                            <p><strong>Método de pago:</strong> ${selectedPedido.metodoPago.tipo}</p>
+                            <p><strong>Fecha:</strong> ${selectedPedido.fecha_pedido.split("T")[0]}</p>
+                            <p><strong>Hora:</strong> ${selectedPedido.fecha_pedido.split("T")[1].slice(0,8)}</p>
+                            <p><strong>Estado:</strong> ${selectedPedido.estadoPedido.nombre}</p>
+                            <p><strong>Total:</strong> S/ ${selectedPedido.total}</p>
+
+                            <hr>
+
+                            <h5>Productos</h5>
+                            <ul>
+                                ${selectedPedido.detalles?.map(d => html`
+                                    <li>${d.producto.nombre} x${d.cantidad} — S/ ${d.subtotal}</li>
+                                `)}
+                            </ul>
+
+                            ${(() => {
+                                if(selectedPedido.estadoPedido.id !== 1) return;
+                                const raw = sessionStorage.getItem("last_payment_url");
+                                if (!raw) return "";
+                                const data = JSON.parse(raw);
+                                return data.id_pedido === selectedPedido.id
+                                    ? html`<button class="btn btn-warning mt-3" @click=${pagarPedido}>Pagar ahora</button>`
+                                    : "";
+                            })()}
+
                         </div>
-
-                        <hr>
-
-                        <p><strong>Método de pago:</strong> ${selectedPedido.metodoPago.tipo}</p>
-                        <p><strong>Fecha:</strong> ${selectedPedido.fecha_pedido.split("T")[0]}</p>
-                        <p><strong>Hora:</strong> ${selectedPedido.fecha_pedido.split("T")[1].slice(0,8)}</p>
-                        <p><strong>Estado:</strong> ${selectedPedido.estadoPedido.nombre}</p>
-                        <p><strong>Total:</strong> S/ ${selectedPedido.total}</p>
-
-                        <hr>
-
-                        <h5>Productos</h5>
-                        <ul>
-                            ${selectedPedido.detalles?.map(d => html`
-                                <li>${d.producto.nombre} x${d.cantidad} — S/ ${d.subtotal}</li>
-                            `)}
-                        </ul>
                     </div>
-                ` : html`
-                    <div class="placeholder card">
-                        Selecciona un pedido para ver los detalles
-                    </div>
-                `}
+                ` : ""}
             </section>
 
         </main>

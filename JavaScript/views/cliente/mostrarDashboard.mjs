@@ -4,7 +4,8 @@ import { mensajeAlert } from "@components/mensajeAlert.mjs";
 import { userController } from "@controllers/userController.mjs";
 
 export async function renderDashboardView(user) {
-  if(!user) return location.href = '/pizzeria/login';
+  if (!user) return location.href = '/pizzeria/login';
+
   const template = html`
     <style>
       body {
@@ -14,67 +15,45 @@ export async function renderDashboardView(user) {
 
       .dashboard-container {
         max-width: 1250px;
-        margin: 3rem auto;
-        display: flex;
-        gap: 2.5rem;
-        position: relative;
+        margin: 0 auto;
         padding: 0 1rem;
       }
 
-      .btn-volver {
-        width: 60px;
-        height: 50px;
-        background: #b30000;
-        border-radius: 50%;
+      .dashboard-topnav {
         position: sticky;
-        top: 90px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 5px 20px rgba(18,18,18,0.15);
-        color: white;
-        font-size: 22px;
-        cursor: pointer;
-        transition: .25s;
-      }
-      .btn-volver:hover {
-        transform: scale(1.08);
-        background: #8c0000;
-      }
-
-
-      .dashboard-nav {
-        width: 270px;
+        top: 150px;
+        z-index: 1000;
         background: #ffffff;
-        padding: 2rem 1.5rem;
-        border-radius: 1.2rem;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-        height: fit-content;
-        position: sticky;
-        top: 95px;
-      }
-      .dashboard-nav a {
+        padding: 1rem 2rem;
         display: flex;
-        align-items: center;
-        gap: .9rem;
-        padding: .9rem 1.1rem;
-        border-radius: .7rem;
-        margin-bottom: .6rem;
-        cursor: pointer;
+        gap: 2rem;
+        justify-content: center;
+        border-bottom: 1px solid rgba(0,0,0,0.07);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        margin-bottom: 2.5rem;
+        border-radius: 0 0 12px 12px;
+      }
+
+      .dashboard-topnav a {
         font-weight: 600;
         font-size: 1rem;
         color: #0a3a17;
         text-decoration: none;
-        background: #ffffff;
-        transition: 0.25s;
+        padding-bottom: .3rem;
+        transition: .2s;
       }
-      .dashboard-nav a:hover {
-        background: #0a3a1710;
-        transform: translateX(3px);
+
+      .dashboard-topnav a:hover {
+        color: #085f24;
+        border-bottom: 2px solid #0a3a17;
       }
 
       #logout {
         color: #b30000 !important;
+      }
+
+      #logout:hover {
+        border-bottom: 2px solid #b30000 !important;
       }
 
       .dashboard-section {
@@ -113,6 +92,7 @@ export async function renderDashboardView(user) {
         padding: .75rem;
         transition: .25s;
       }
+
       .form-control:focus {
         border-color: #0a3a17;
         box-shadow: 0 0 6px #0a3a1733;
@@ -139,65 +119,58 @@ export async function renderDashboardView(user) {
 
     <div class="dashboard-container">
 
-      <div class="btn-volver" @click=${() => location.href = "/pizzeria"}>
-        ←
-      </div>
-
-      <nav class="dashboard-nav">
-        <a href="#info-personal"><span>👤</span> Información Personal</a>
-        <a href="#editar-datos"><span>✏️</span> Editar Datos</a>
-        <a href="#cambiar-password"><span>🔒</span> Cambiar Contraseña</a>
-        <a id="logout" href="#logout" @click=${logout}><span>🚪</span> Cerrar Sesión</a>
+      <nav class="dashboard-topnav">
+        <a href="#info-personal">Información Personal</a>
+        <a href="#editar-datos">Editar Datos</a>
+        <a href="#cambiar-password">Cambiar Contraseña</a>
+        <a id="logout" href="#logout" @click=${logout}>Cerrar Sesión</a>
       </nav>
 
-      <div style="width:100%;">
+      <section id="info-personal" class="dashboard-section">
+        <h2>Información Personal</h2>
+        <p><strong>Nombre:</strong> ${user.nombre}</p>
+        <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>Rol:</strong> ${user.rol?.nombre || user.rol}</p>
+      </section>
 
-        <section id="info-personal" class="dashboard-section">
-          <h2>👤 Información Personal</h2>
-          <p><strong>Nombre:</strong> ${user.nombre}</p>
-          <p><strong>Email:</strong> ${user.email}</p>
-          <p><strong>Rol:</strong> ${user.rol?.nombre || user.rol}</p>
-        </section>
+      <section id="editar-datos" class="dashboard-section">
+        <h2>Editar Datos</h2>
 
-        <section id="editar-datos" class="dashboard-section">
-          <h2>✏️ Editar Datos</h2>
+        <form id="edit-form">
+          <label>Nombre</label>
+          <input class="form-control mb-3" type="text" value="${user.nombre}" id="edit-nombre">
 
-          <form id="edit-form">
-            <label>Nombre</label>
-            <input class="form-control mb-3" type="text" value="${user.nombre}" id="edit-nombre">
+          <label>Email</label>
+          <input class="form-control mb-3" type="email" value="${user.email}" id="edit-email">
 
-            <label>Email</label>
-            <input class="form-control mb-3" type="email" value="${user.email}" id="edit-email">
+          <label>Teléfono</label>
+          <input class="form-control mb-3" type="text" value="${user.telefono || ''}" id="edit-telefono">
 
-            <label>Teléfono</label>
-            <input class="form-control mb-3" type="text" value="${user.telefono || ''}" id="edit-telefono">
+          <label>Dirección</label>
+          <input class="form-control mb-3" type="text" value="${user.direccion || ''}" id="edit-direccion">
 
-            <label>Dirección</label>
-            <input class="form-control mb-3" type="text" value="${user.direccion || ''}" id="edit-direccion">
+          <button type="button" class="btn btn-danger mt-2" @click=${actualizarPerfil}>Guardar Cambios</button>
+        </form>
+      </section>
 
-            <button type="button" class="btn btn-danger mt-2" @click=${actualizarPerfil}>Guardar Cambios</button>
-          </form>
-        </section>
+      <section id="cambiar-password" class="dashboard-section">
+        <h2>Cambiar Contraseña</h2>
 
-        <section id="cambiar-password" class="dashboard-section">
-          <h2>🔒 Cambiar Contraseña</h2>
+        <form id="pass-form">
+          <label>Nueva contraseña</label>
+          <input class="form-control mb-2" type="password" id="new-password">
 
-          <form id="pass-form">
-            <label>Nueva contraseña</label>
-            <input class="form-control mb-2" type="password" id="new-password">
+          <label>Repetir nueva contraseña</label>
+          <input class="form-control mb-2" type="password" id="repeat-password">
 
-            <label>Repetir nueva contraseña</label>
-            <input class="form-control mb-2" type="password" id="repeat-password">
+          <button type="button" class="btn btn-danger mt-2" @click=${cambiarPassword}>Cambiar contraseña</button>
+        </form>
+      </section>
 
-            <button type="button" class="btn btn-danger mt-2" @click=${cambiarPassword}>Cambiar contraseña</button>
-          </form>
-        </section>
-
-      </div>
     </div>
   `;
 
-  render(template, document.getElementById("main"));
+  render(template, document.getElementById("contenedor"));
 }
 
 async function logout() {
@@ -217,19 +190,16 @@ async function actualizarPerfil() {
 
   const res = await userApi.updateProfile(data);
   const newUser = res.usuario;
+
   mensajeAlert({
     icon: "success",
     title: "Perfil actualizado",
     timer: 1200
+  }).then(() => {
+    sessionStorage.setItem("user", JSON.stringify(newUser));
+    location.reload();
   });
-
-
-
-  setTimeout(() => {
-    renderDashboardView(newUser);  
-  }, 500);
 }
-
 
 async function cambiarPassword() {
   const userApi = new userController();

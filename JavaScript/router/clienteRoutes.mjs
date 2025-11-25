@@ -1,6 +1,5 @@
 import { renderHomeView } from "@views/cliente/home.mjs";
 import { mostrarDetalleProducto } from "@views/cliente/detalleProducto.mjs";
-import { renderDashboardView } from "@views/cliente/mostrarDashboard.mjs";
 import { validateSession } from "@/service/validateSession.mjs";
 import { handleUnauthorized } from "@components/handleUnauthorized.mjs";
 
@@ -39,7 +38,7 @@ export const clienteRoutes = (router) => {
   router.on("/pizzeria/dashboard", () => {
     const session = validateSession(["cliente"]);
     if (!session.ok) return handleUnauthorized(session);
-    renderDashboardView(session.user);
+    renderHomeView("dashboard",session.user);
   });
 
 };

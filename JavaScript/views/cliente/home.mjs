@@ -6,6 +6,7 @@ import { renderCarrito } from "@/service/renderCarrito.mjs";
 import { updateTotal } from "@/service/carrito.mjs";
 import { mostrarDetalleCarrito } from "./detalleCarrito.mjs";
 import { mostrarPedidos } from "./mostrarPedidos.mjs";
+import { renderDashboardView } from "./mostrarDashboard.mjs";
 
 export async function renderHomeView(selection = null, user = null) {
   await renderNavbarClientes(user);
@@ -13,7 +14,7 @@ export async function renderHomeView(selection = null, user = null) {
   let template;
 
   if (selection === "home" || selection === null) {
-    const inicioTemplate = await mostrarInicio();
+    const inicioTemplate = await mostrarInicio(user);
     template = html`${inicioTemplate}`;
     render(template, document.getElementById("contenedor"));
   } 
@@ -28,6 +29,10 @@ export async function renderHomeView(selection = null, user = null) {
 
   else if (selection === "pedidos") {
     await mostrarPedidos();
+  }
+
+  else if (selection === "dashboard") {
+    await renderDashboardView(user);
   }
 
   updateTotal();

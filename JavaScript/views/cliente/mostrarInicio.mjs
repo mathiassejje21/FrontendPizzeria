@@ -1,10 +1,17 @@
 import { html, render } from "lit-html";
 import { renderCarrousel } from "@components/carrousel.mjs";
+import { renderSugerencia } from "@components/sugerencia.mjs";
 import { categoriaController } from "@controllers/categoriaController.mjs";
 
-export async function mostrarInicio() {
+export async function mostrarInicio( user = null ) {
     const api = new categoriaController();
     const categorias = await api.getCategorias();
+
+    let sugerencias = html``;
+    if (user) {
+        sugerencias = await renderSugerencia();
+    }
+
     return html`
     <style>
         .subtitle {
@@ -80,7 +87,7 @@ export async function mostrarInicio() {
           letter-spacing: 1px;
         }
       </style>
-
+      ${sugerencias} 
       ${renderCarrousel()}
 
       <h1 class="subtitle">🍕 ¡Bienvenido a Pizzería Don Warrion!</h1>
