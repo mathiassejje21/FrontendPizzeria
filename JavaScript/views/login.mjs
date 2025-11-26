@@ -25,7 +25,7 @@ export async function renderLoginView() {
     btncolor = "#381e65ff";
 bgcolor = "linear-gradient(135deg, #6d3feaff 0%, #c8aaffff 100%)";
     text = "Panel de Trabajadores";
-    img = "https://img.freepik.com/vector-gratis/empresario-red-datos_24908-57814.jpg?t=st=1764086985~exp=1764090585~hmac=f186e4ffb07155df75be4f2d1de0f53e7c0a92c6443defcfd805e282c12ea855&w=1480";
+    img = "https://images.pexels.com/photos/5715849/pexels-photo-5715849.jpeg";
     divExtra = "";
   }
 
@@ -89,7 +89,7 @@ bgcolor = "linear-gradient(135deg, #6d3feaff 0%, #c8aaffff 100%)";
     <section id="contenedor-login" style="background:${bgcolor};">
       <div class="contenido">
         <form @submit=${handleLogin} class="contenido-form">
-          <h2 style="color:#000; font-weight: 600; border-bottom: 0.15rem solid #dbc609ff; width: 100%; margin:0">${text}</h2>
+          <h2 style="color:#000; font-weight: 600; border-bottom: 0.15rem solid #dbc609ff; width: 100%; margin:0;padding-bottom: 0.5rem;">${text}</h2>
           <input type="email" id="email" placeholder="E-mail" required>
           <input type="password" id="password" placeholder="Contraseña" required>
           <button>Iniciar Sesión</button>

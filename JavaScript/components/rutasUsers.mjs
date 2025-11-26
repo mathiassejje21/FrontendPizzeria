@@ -1,7 +1,7 @@
 export const menuClienteNoLogeado = [
   { ruta: "/pizzeria", texto: "Home" },
   { ruta: "/pizzeria/productos", texto: "Productos" },
-  { ruta: "/pizzeria/carrito", texto: "Carrito" }
+  { ruta: "/pizzeria/carrito", texto: "Carrito" },
 ];
 
 export const menuClienteLogeado = [

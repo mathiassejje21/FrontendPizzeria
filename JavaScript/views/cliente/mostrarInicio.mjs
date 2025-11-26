@@ -87,9 +87,21 @@ export async function mostrarInicio( user = null ) {
           letter-spacing: 1px;
         }
       </style>
+      <section id="nav-slogan">
+        <p>Las mejores pizzas de la ciudad</p>
+        <div>
+            <img src="https://cdn-icons-png.flaticon.com/512/854/854853.png" alt="icono de pizza" />
+            <p>¡Comienza tu pedido!</p>
+            <strong>Elige tu dirección</strong>
+        </div>
+      </section>
+      <div id="nav-separator">
+        <p>Delivery <strong>GRATIS</strong> de Lunes a Miércoles desde <strong>s/.20</strong> EXCLUSIVO POR WEB</p>
+      </div>
+
+      </div>
       ${sugerencias} 
       ${renderCarrousel()}
-
       <h1 class="subtitle">🍕 ¡Bienvenido a Pizzería Don Warrion!</h1>
       <p class="description">
         La tradición italiana llega a tu mesa con el sabor único de nuestras pizzas artesanales.  
