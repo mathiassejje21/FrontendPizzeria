@@ -1,6 +1,6 @@
 export const getCarrito = () => JSON.parse(sessionStorage.getItem('carrito')) || [];
 export const setCarrito = (carrito) =>
-  sessionStorage.setItem('carrito', JSON.stringify(carrito));
+sessionStorage.setItem('carrito', JSON.stringify(carrito));
 
 export const updateCarritoCount = () => {
   const carrito = getCarrito();

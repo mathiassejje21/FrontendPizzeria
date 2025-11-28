@@ -9,4 +9,9 @@ export class categoriaController {
         const res = await this.api.getCategorias();
         return res;
     }
+
+    async getCategoriasActivo() {
+        const res = await this.api.getCategoriasActivo();
+        return res;
+    }
 }

@@ -14,4 +14,9 @@ export class categoriaApi {
         const res = await this.api.get('/');
         return res.data;
     }
+
+    async getCategoriasActivo() {
+        const res = await this.api.get('?activo=true');
+        return res.data;
+    }
 }

@@ -2,12 +2,9 @@ import { html, render } from 'lit-html'
 import { mensajeAlert } from '@components/mensajeAlert.mjs'
 import { pedidoController } from '@controllers/pedidoController.mjs'
 
-export async function mostrarDetalleCarrito (user) {
-  const contenedor = document.getElementById('contenedor')
-
+export async function renderCarritoView(user, contenedor = document.getElementById('contenedor')) {
   const carrito = JSON.parse(sessionStorage.getItem('carrito')) || []
   const total = Number(sessionStorage.getItem('carrito_total')) || 0
-  const userSession = user
 
   if (carrito.length === 0) {
     const empty = html`
@@ -22,34 +19,33 @@ export async function mostrarDetalleCarrito (user) {
   }
 
   async function hundleCheckout () {
-    if (!userSession) {
+    if (!user) {
       return mensajeAlert({
         icon: 'warning',
         title: 'Acceso denegado',
         text: 'Debes iniciar sesión para continuar.',
         showConfirmButton: true
-      }).then(() => (location.href = '/pizzeria/login'))
+      }).then(() => location.href = '/pizzeria/login')
     }
 
     const pedidoApi = new pedidoController()
-    const userId = userSession.id
+    const isCliente = user.rol === 'cliente'
+    const isPersonal = user.rol === 'personal'
+
+    const userId = isCliente ? user.id : 1
+    const metodoPagoID = isCliente ? 2 : 1
 
     const pedido = {
       id_cliente: userId,
-      id_metodo_pago: 2,
+      id_metodo_pago: metodoPagoID,
       detalles: carrito.map(p => {
         if (!p.personalizable) {
-          return {
-            id_producto: p.id,
-            cantidad: p.cantidad
-          }
+          return { id_producto: p.id, cantidad: p.cantidad }
         }
 
         const personalizaciones = {}
 
-        if (p.tamanio?.id) {
-          personalizaciones.id_tamano = p.tamanio.id
-        }
+        if (p.tamanio?.id) personalizaciones.id_tamano = p.tamanio.id
 
         if (Array.isArray(p.ingredientes) && p.ingredientes.length > 0) {
           personalizaciones.ingredientes = p.ingredientes.map(ing => ({
@@ -69,15 +65,28 @@ export async function mostrarDetalleCarrito (user) {
     const res = await pedidoApi.crearPedido(pedido)
 
     if (res.status === 201) {
-      const data = {
-        id_pedido: res.pedido.id,
-        url_pago: res.url_pago
-      };
+      await mensajeAlert({
+        icon: 'success',
+        title: 'Pedido creado',
+        text: 'El pedido se ha creado correctamente.',
+        showConfirmButton: true
+      })
 
-      sessionStorage.setItem("last_payment_url", JSON.stringify(data));
       sessionStorage.removeItem('carrito')
       sessionStorage.removeItem('carrito_total')
-      window.location.href = res.url_pago
+
+      if (isPersonal) {
+        location.href = '/personal/pedidos'
+        return
+      }
+
+      const data = {
+        id_pedido: res.pedido.id,
+        url_pago: res.pedido.pedido_url
+      }
+
+      sessionStorage.setItem("last_payment_url", JSON.stringify(data))
+      location.href = res.pedido.pedido_url
     }
   }
 
@@ -207,7 +216,6 @@ export async function mostrarDetalleCarrito (user) {
       </div>
 
       <div class="carrito-side">
-
         <div class="side-title">Pago</div>
 
         <div class="pago-box">

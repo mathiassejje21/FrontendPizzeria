@@ -1,9 +1,11 @@
 import { getCarrito, setCarrito, guardarTotal, updateTotal, updateCarritoCount } from "@/service/carrito.mjs";
-import { mostrarDetalleCarrito } from "@views/cliente/detalleCarrito.mjs";
+import { renderCarritoView } from "@components/renderCarritoView.mjs";
 
 const refrescarVistaCarrito = (user) => {
   if (window.location.pathname === "/pizzeria/carrito") {
-    mostrarDetalleCarrito(user);
+    renderCarritoView(user);
+  }else if (window.location.pathname === "/personal/productos") {
+    renderPedidosView(user);
   }
 };
 

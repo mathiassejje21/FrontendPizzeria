@@ -5,10 +5,9 @@ import { ingredienteController } from "@controllers/ingredienteController.mjs";
 import { agregarAlCarrito } from "@/service/renderCarrito.mjs";
 import { mensajeAlert } from "@components/mensajeAlert.mjs";
 
-export async function mostrarDetalleProducto(idProducto) {
+export async function renderDetalleProductoView(idProducto) {
   const apiProducto = new productoController();
-  const listaProductos = await apiProducto.getProductos();
-  const producto = listaProductos.find(p => p.id == idProducto);
+  const producto = await apiProducto.getProductoById(idProducto);
 
   const contenedor = document.getElementById("contenedor");
 
@@ -109,10 +108,7 @@ export async function mostrarDetalleProducto(idProducto) {
     margin-bottom: 8px;
   }
 </style>
-
-
   <section class="detalle-wrapper">
-
     <div class="detalle-img">
       <img src="${producto.imagen_url}" alt="${producto.nombre}">
     </div>

@@ -21,6 +21,8 @@ export const menuAdmin = [
 
 export const menuPersonal = [
   { ruta: "/personal/dashboard", texto: "Dashboard" },
-  { ruta: "/personal/pedidos", texto: "Pedidos" }
+  { ruta: "/personal/inventario", texto: "Inventario" },
+  { ruta: "/personal/productos", texto: "Productos" },
+  { ruta: "/personal/pedidos", texto: "Pedidos" },
 ];
   

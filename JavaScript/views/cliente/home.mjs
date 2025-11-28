@@ -1,12 +1,12 @@
 import { html, render } from "lit-html";
 import { renderNavbarClientes } from "@components/navbar.mjs";
 import { mostrarInicio } from "./mostrarInicio.mjs";
-import { mostrarProductos } from "./mostrarProductos.mjs";
+import { renderProductosView } from "@components/renderProductosView.mjs";
 import { renderCarrito } from "@/service/renderCarrito.mjs";
 import { updateTotal } from "@/service/carrito.mjs";
-import { mostrarDetalleCarrito } from "./detalleCarrito.mjs";
 import { mostrarPedidos } from "./mostrarPedidos.mjs";
 import { renderDashboardView } from "./mostrarDashboard.mjs";
+import { renderCarritoView } from "@components/renderCarritoView.mjs";
 
 export async function renderHomeView(selection = null, user = null) {
   await renderNavbarClientes(user);
@@ -20,18 +20,18 @@ export async function renderHomeView(selection = null, user = null) {
   } 
 
   else if (selection === "productos") {
-    await mostrarProductos();
+    await renderProductosView({ detalleRouteBase: "/pizzeria/productos" });
   } 
 
   else if (selection === "carrito") {
-    await mostrarDetalleCarrito(user);
+    await renderCarritoView(user);
   } 
 
   else if (selection === "pedidos") {
     await mostrarPedidos();
   }
 
-  else if (selection === "dashboard") {
+  else if (selection === "perfil") {
     await renderDashboardView(user);
   }
 

@@ -1,3 +1,4 @@
+import { redirectByRole } from "@/service/redirectByRole.mjs";
 import Navigo from "navigo";
 import { authRoutes } from "@router/authRoutes.mjs";
 import { showLoader, hideLoader } from "@components/loader.mjs";
@@ -31,7 +32,7 @@ router.notFound(async () => {
     text: "La página que intentas acceder no existe.",
     showConfirmButton: true
   }).then(() => {
-    window.location.href = "/pizzeria";
+    window.location.href = redirectByRole();
   });
 });
 

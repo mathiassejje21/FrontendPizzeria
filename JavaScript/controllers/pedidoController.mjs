@@ -10,6 +10,11 @@ export class pedidoController {
         return res;
     }
 
+    async getPedidoById(id) {
+        const res = await this.api.getPedidoById(id);
+        return res;
+    }
+
     async crearPedido(pedido) {
         try {
             const res = await this.api.postPedidos(pedido);
@@ -18,4 +23,13 @@ export class pedidoController {
             alert(error);
         }
     }
+
+    async updateEstadoPedido(id, id_estado) {
+        try {
+            return await this.api.updateEstadoPedido(id, id_estado);
+        } catch {
+            alert("Error actualizando estado");
+        }
+    }
+
 }

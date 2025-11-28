@@ -264,8 +264,6 @@
   right: 0;
 }
 
-
-
 #panel-carrito header {
   background-color: #0a3a17;
   color: white;
@@ -303,7 +301,7 @@
 }
 
 #panel-carrito footer button {
-  background-color: #ffd366;
+  background-color: #cfeb0c;
   color: #0a3a17;
   border: none;
   border-radius: 8px;

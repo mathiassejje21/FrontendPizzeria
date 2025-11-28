@@ -15,8 +15,12 @@ export class pedidoApi {
         return response.data;
     }
 
+    async getPedidoById(id) {
+        const response = await this.api.get(`/${id}`);
+        return response.data;
+    }
+
     async postPedidos(pedido) {
-        console.log(pedido);
         const response = await this.api.post("/", pedido);
         return {
             status: response.status,
@@ -24,5 +28,10 @@ export class pedidoApi {
         };
     }
 
+    async updateEstadoPedido(id, id_estado) {
+        const body = { id_estado };
+        const res = await this.api.put(`/${id}/estado`, body);
+        return res.data.pedido;
+    }
     
 }

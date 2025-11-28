@@ -1,5 +1,5 @@
 import { renderHomeView } from "@views/cliente/home.mjs";
-import { mostrarDetalleProducto } from "@views/cliente/detalleProducto.mjs";
+import { renderDetalleProductoView } from "@components/renderDetalleProductoView.mjs";
 import { validateSession } from "@/service/validateSession.mjs";
 import { handleUnauthorized } from "@components/handleUnauthorized.mjs";
 
@@ -20,7 +20,7 @@ export const clienteRoutes = (router) => {
   router.on("/pizzeria/productos/:id", ({ data }) => {
     const session = validateSession(["cliente"]); 
     const user = session.ok ? session.user : null;
-    mostrarDetalleProducto(data.id, user);
+    renderDetalleProductoView(data.id, user);
   });
 
   router.on("/pizzeria/carrito", () => {
@@ -35,10 +35,10 @@ export const clienteRoutes = (router) => {
     renderHomeView("pedidos", session.user);
   });
 
-  router.on("/pizzeria/dashboard", () => {
+  router.on("/pizzeria/perfil", () => {
     const session = validateSession(["cliente"]);
     if (!session.ok) return handleUnauthorized(session);
-    renderHomeView("dashboard",session.user);
+    renderHomeView("perfil",session.user);
   });
 
 };
