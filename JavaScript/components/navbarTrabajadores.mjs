@@ -107,12 +107,12 @@ export async function renderNavbarTrabajadores(user) {
 
     <aside class="sidebar">
       <h2 class="sidebar-title">Panel</h2>
-
-      <div class="user-box">
+  
+      <a style="text-decoration: none; color: inherit; cursor: pointer;" href="/${rol.toLowerCase()}/perfil" data-route class="user-box">
         Usuario:
         <strong>${user.nombre}</strong>
         <span style="opacity: 0.7; font-size: 0.85rem;">${rol}</span>
-      </div>
+      </a>
 
       <nav class="menu">
         ${menu.map(

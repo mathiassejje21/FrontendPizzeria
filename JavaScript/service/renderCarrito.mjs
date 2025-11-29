@@ -1,13 +1,19 @@
 import { getCarrito, setCarrito, guardarTotal, updateTotal, updateCarritoCount } from "@/service/carrito.mjs";
 import { renderCarritoView } from "@components/renderCarritoView.mjs";
+import { renderProductos } from "@views/personal/mostrarProductos.mjs";
 
 const refrescarVistaCarrito = (user) => {
   if (window.location.pathname === "/pizzeria/carrito") {
     renderCarritoView(user);
-  }else if (window.location.pathname === "/personal/productos") {
-    renderPedidosView(user);
+
+  } else if (
+    window.location.pathname === "/personal/productos" &&
+    window.location.hash === "#carrito"
+  ) {
+    renderProductos(user);
   }
 };
+
 
 export const eliminarTodo = (id, tamanio = null, ingredientes = []) => {
   let carrito = getCarrito();

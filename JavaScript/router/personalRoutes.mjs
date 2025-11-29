@@ -5,41 +5,46 @@ import { renderDetallePedidosView } from "@views/personal/detallePedidos.mjs";
 import { renderDetalleProductoView } from "@components/renderDetalleProductoView.mjs";
 
 export function personalRoutes(router) {
-    router.on('/personal/dashboard', () => { 
+
+    router.on('/personal/dashboard', async () => { 
         const session = validateSession(["personal"]);
         if (!session.ok) return handleUnauthorized(session);
-        renderHomeView("dashboard", session.user); 
+        await renderHomeView("dashboard", session.user); 
     });
 
-    router.on('/personal/inventario', () => {
+    router.on('/personal/inventario', async () => {
         const session = validateSession(["personal"]);
         if (!session.ok) return handleUnauthorized(session);
-        renderHomeView("inventario", session.user);
+        await renderHomeView("inventario", session.user);
     });
 
-    router.on('/personal/productos', () => {
+    router.on('/personal/productos', async () => {
         const session = validateSession(["personal"]);
         if (!session.ok) return handleUnauthorized(session);
-        renderHomeView("productos", session.user);
+        await renderHomeView("productos", session.user);
     });
 
-    router.on('/personal/productos/:id', ({ data }) => {
+    router.on('/personal/productos/:id', async ({ data }) => {
         const session = validateSession(["personal"]);
         if (!session.ok) return handleUnauthorized(session);
-        renderDetalleProductoView(data.id, session.user);
+        await renderDetalleProductoView(data.id, session.user);
     });
 
-    router.on('/personal/pedidos', () => {
+    router.on('/personal/pedidos', async () => {
         const session = validateSession(["personal"]);
         if (!session.ok) return handleUnauthorized(session);
-        renderHomeView("pedidos", session.user);
+        await renderHomeView("pedidos", session.user);
     });
 
-    router.on('/personal/pedidos/:id', ({ data }) => {
+    router.on('/personal/pedidos/:id', async ({ data }) => {
         const session = validateSession(["personal"]);
         if (!session.ok) return handleUnauthorized(session);
-        renderDetallePedidosView(data.id, session.user);
+        await renderDetallePedidosView(data.id, session.user);
     });
 
-    
+    router.on('/personal/perfil', async () => {
+        const session = validateSession(["personal"]);
+        if (!session.ok) return handleUnauthorized(session);
+        await renderHomeView("perfil", session.user);
+    });
 }

@@ -76,8 +76,7 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
       sessionStorage.removeItem('carrito_total')
 
       if (isPersonal) {
-        location.href = '/personal/pedidos'
-        return
+        return location.href = '/personal/pedidos'
       }
 
       const data = {

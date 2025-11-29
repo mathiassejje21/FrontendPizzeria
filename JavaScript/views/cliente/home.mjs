@@ -5,10 +5,15 @@ import { renderProductosView } from "@components/renderProductosView.mjs";
 import { renderCarrito } from "@/service/renderCarrito.mjs";
 import { updateTotal } from "@/service/carrito.mjs";
 import { mostrarPedidos } from "./mostrarPedidos.mjs";
-import { renderDashboardView } from "./mostrarDashboard.mjs";
+import { renderPerfilView } from "@components/renderPerfilView.mjs";
 import { renderCarritoView } from "@components/renderCarritoView.mjs";
 
 export async function renderHomeView(selection = null, user = null) {
+  if (!user) {
+    const stored = sessionStorage.getItem("user");
+    user = stored ? JSON.parse(stored) : null;
+  }
+
   await renderNavbarClientes(user);
 
   let template;
@@ -32,7 +37,7 @@ export async function renderHomeView(selection = null, user = null) {
   }
 
   else if (selection === "perfil") {
-    await renderDashboardView(user);
+    await renderPerfilView(user);
   }
 
   updateTotal();

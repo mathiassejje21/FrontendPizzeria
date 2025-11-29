@@ -38,13 +38,13 @@
               <button  @click=${() => authApi.logout()} id="logout-btn">
                 Cerrar Sesión
               </button>
-              <div class="btn-user" id="user-info-btn">
+              <a style="cursor: pointer; text-decoration: none; color: inherit;" class="btn-user" href="/pizzeria/perfil" data-route id="user-info-btn">
                 <img src="https://cdn-icons-png.flaticon.com/512/18851/18851106.png" alt="icono de usuario" />
                 <div style="text-align: left; margin:0; display: flex; flex-direction: column; line-height: 1; padding:0">
                   <h6 style="margin:0; padding:0; font-size: 0.7rem; font-family: 'Libre Franklin', sans-serif">Bienvenido,</h6>
                   <p style="margin:0; padding:0"; font-size: 1rem>${u.nombre}</p>
                 </div>
-              </div>
+              </a>
             `;
             })()
           : html`
@@ -101,11 +101,4 @@
     const loginBtn = document.getElementById("login-btn");
     if (loginBtn) loginBtn.addEventListener("click", () => (
       window.location.href = "/pizzeria/login"));
-
-    const userInfoBtn = document.getElementById("user-info-btn");
-    if (userInfoBtn) {
-      userInfoBtn.addEventListener("click", () => {
-        window.location.href = "/pizzeria/dashboard";
-      });
-    }
 }
