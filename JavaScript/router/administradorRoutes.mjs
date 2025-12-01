@@ -1,17 +1,30 @@
-import { renderDashboardView } from "@views/administrador/dashboard.mjs";
 import { renderHomeView } from '@views/administrador/home.mjs'
 import { validateSession } from "@/service/validateSession.mjs";
 import { handleUnauthorized } from "@components/handleUnauthorized.mjs";
 
 export const administradorRoutes = (router) => {
-  router.on("/administrador/home", async() => {
-    const session = await validateSession(["administrador"]);
+
+  router.on('/administrador/dashboard', async() => { 
+    const session = validateSession(["administrador"]);
     if (!session.ok) return handleUnauthorized(session);
-    renderHomeView(session.user);
+    await renderHomeView("dashboard", session.user);
+   });
+
+  router.on('/administrador/pedidos', async() => {
+    const session = validateSession(["administrador"]);
+    if (!session.ok) return handleUnauthorized(session);
+    await renderHomeView("pedidos", session.user);
   });
-  router.on('/administrador/dashboard', () => { renderDashboardView(); });
 
-  router.on('/administrador/pedidos', () => {});
+  router.on('/administrador/inventario/productos', async() => {
+    const session = validateSession(["administrador"]);
+    if (!session.ok) return handleUnauthorized(session);
+    await renderHomeView("productos", session.user);
+  });
 
-  router.on('/administrador/gestion', () => {});
+  router.on('/administrador/perfil', async() => {
+    const session = validateSession(["administrador"]);
+    if (!session.ok) return handleUnauthorized(session);
+    await renderHomeView("perfil", session.user);
+  });
 };

@@ -172,6 +172,7 @@ export async function mostrarPedidos() {
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Estado</th>
+                                <th>Estado pedido
                                 <th>Total</th>
                             </tr>
                         </thead>
@@ -183,6 +184,7 @@ export async function mostrarPedidos() {
                                     <td>${p.fecha_pedido.split("T")[0]}</td>
                                     <td>${p.fecha_pedido.split("T")[1].slice(0,8)}</td>
                                     <td>${p.estadoPedido.nombre}</td>
+                                    <td>${p.activo ? "Activo" : "Cancelado"}</td>
                                     <td>S/ ${p.total}</td>
                                 </tr>
                             `)}

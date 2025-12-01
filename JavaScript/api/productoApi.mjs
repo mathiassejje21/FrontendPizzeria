@@ -34,4 +34,29 @@ export class productoApi {
         const res = await this.api.get(`?activo=true&id_categoria=${$id}`);
         return res.data;
     }
+
+    async createProducto(producto) {
+        const res = await this.api.post('/', producto);
+        return { status: res.status, ...res.data};
+    }
+
+    async updateProducto($id, producto) {
+        const res = await this.api.put(`/${$id}`, producto);
+        return { status: res.status, ...res.data};
+    }
+
+    async deleteProducto($id) {
+        const res = await this.api.delete(`/${$id}`);
+        return { status: res.status, ...res.data};
+    }
+
+    async assingIngredienteToProducto($id, ingrediente) {
+        const res = await this.api.post(`/${$id}/ingrediente`, ingrediente);
+        return { status: res.status, ...res.data};
+    }
+
+    async deleteIngredienteFromProducto($id, idIngrediente) {
+        const res = await this.api.delete(`/${$id}/ingrediente/${idIngrediente}`);
+        return { status: res.status, ...res.data};
+    }
 }

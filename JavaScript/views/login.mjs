@@ -54,7 +54,7 @@ bgcolor = "linear-gradient(135deg, #6d3feaff 0%, #c8aaffff 100%)";
 
     if (path === "/trabajadores/login") {
       if (rol === "personal") redirectUrl = "/personal/dashboard";
-      if (rol === "administrador") redirectUrl = "/administrador/home";
+      if (rol === "administrador") redirectUrl = "/administrador/dashboard";
 
       if (!redirectUrl) {
         return mensajeAlert({

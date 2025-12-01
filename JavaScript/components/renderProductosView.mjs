@@ -9,8 +9,8 @@ import { router } from '@/router.mjs';
 
 export async function renderProductosView(
   { detalleRouteBase = "/pizzeria/productos" },
-  contenedor = document.getElementById("contenedor")
-) {
+    contenedor = document.getElementById("contenedor")
+  ) {
   const apiProducto = new productoController();
   const apiCategoria = new categoriaController();
   const categorias = await apiCategoria.getCategoriasActivo();
@@ -63,7 +63,7 @@ export async function renderProductosView(
       <div class="row g-4 mt-4 px-2">
         ${filtrados.map(p => html`
           <div class="col-md-4 col-sm-6 col-lg-3 p-2">
-            <div class="card product-card" data-id="${p.id}">
+            <div class="card product-card" @click=${() => router.navigate(`${detalleRouteBase}/${p.id}`)} style="cursor:pointer;">
               <img src="${p.imagen_url}" class="product-img" alt="${p.nombre}">
               <div class="p-3">
                 <h5 style="font-weight:700;">${p.nombre}</h5>
@@ -188,15 +188,4 @@ export async function renderProductosView(
     renderCarrito(contenedor);
     updateTotal();
   });
-
-  setTimeout(() => {
-    const cards = contenedor.querySelectorAll(".product-card");
-    cards.forEach(card => {
-      card.addEventListener("click", (e) => {
-        if (["BUTTON", "INPUT", "SELECT"].includes(e.target.tagName)) return;
-        const id = card.getAttribute("data-id");
-        router.navigate(`${detalleRouteBase}/${id}`);
-      });
-    });
-  }, 50);
 }

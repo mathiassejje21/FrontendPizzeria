@@ -16,9 +16,11 @@ export class authController {
         const user = await this.api.getProfile();
         sessionStorage.setItem("user", JSON.stringify(user));
         sessionStorage.setItem("session_exp", Date.now() + 1000 * 60 * 60 * 1 );
+
         return user;
       } catch {
-        sessionStorage.removeItem("user");
+        sessionStorage.clear();
+        return null;
       }
 
     } catch (err) {

@@ -1,4 +1,5 @@
 import { ingredienteApi } from "../api/ingredienteApi.mjs";
+import { mensajeAlert } from "@components/mensajeAlert.mjs";
 
 export class ingredienteController {
     constructor() {
@@ -6,7 +7,16 @@ export class ingredienteController {
     }
 
     async getIngredientes() {
-        const res = await this.api.getIngredientes();
-        return res;
+        try {
+            const res = await this.api.getIngredientes();
+            return res;
+        }catch(error) {
+            mensajeAlert({ 
+                icon: "error", 
+                title: "Error", 
+                text: err.response?.data?.mensaje || "Error al obtener los ingredientes"
+            });
+            return null;
+        }
     }
 }

@@ -14,8 +14,9 @@ export const menuClienteLogeado = [
 export const menuAdmin = [
   { ruta: "/administrador/dashboard", texto: "Dashboard" },
   { ruta: "/administrador/pedidos", texto: "Pedidos" },
-  { ruta: "/administrador/productos", texto: "Productos" },
-  { ruta: "/administrador/usuarios", texto: "Usuarios" }
+  { ruta: "/administrador/inventario", texto: "Inventario" },
+  { ruta: "/administrador/usuarios", texto: "Usuarios" },
+  { ruta: "/administrador/reportes", texto: "Reportes" }
 ];
 
 

@@ -12,9 +12,30 @@ export async function renderNavbarTrabajadores(user) {
     await auth.logout();
   };
 
+  const hundleInventario = (e) => {
+    e.preventDefault();
+    document.querySelectorAll(".menu-item").forEach(el => {
+      el.classList.remove("active");
+    });
+    const cont = document.getElementById("submenuinventario");
+    cont.classList.toggle("active");
+  };
+
+  const hundleReportes = (e) => {
+    e.preventDefault();
+    document.querySelectorAll(".menu-item").forEach(el => {
+      el.classList.remove("active");
+    });
+    const cont = document.getElementById("submenureportes");
+    cont.classList.toggle("active");
+  };
+
   const template = html`
     <style>
       .sidebar {
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;
         position: fixed;
         top: 0;
         left: 0;
@@ -29,6 +50,11 @@ export async function renderNavbarTrabajadores(user) {
         font-family: "Inter", sans-serif;
         z-index: 1500;
         box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
       }
 
       .sidebar-title {
@@ -65,10 +91,9 @@ export async function renderNavbarTrabajadores(user) {
         font-weight: 500;
         font-size: 0.98rem;
         color: #333;
-        text-decoration: none;
-        display: block;
         cursor: pointer;
         transition: 0.25s ease;
+        display: block;
       }
 
       .menu-item:hover {
@@ -76,7 +101,9 @@ export async function renderNavbarTrabajadores(user) {
         transform: translateX(4px);
       }
 
-      .menu-item.active {
+      .menu-item.active,
+      #btnInventario.active,
+      #btnReportes.active {
         background: #0a3a17;
         color: #ffffff;
         font-weight: 600;
@@ -103,34 +130,76 @@ export async function renderNavbarTrabajadores(user) {
         width: calc(100% - 18%);
         height: 100%;
       }
+
+      .submenuinventario,
+      .submenureportes {
+        display: none;
+        flex-direction: column;
+        gap: 0.4rem;
+        margin-left: 1rem;
+        padding-left: 0.5rem;
+        border-left: 3px solid #0a3a17;
+      }
+
+      .submenuinventario.active,
+      .submenureportes.active {
+        display: flex;
+      }
+
+      .menu-inventario.active,
+      .menu-reporte.active {
+        background: #0a3a17;
+        color: #ffffff;
+        font-weight: 600;
+      }
     </style>
 
     <aside class="sidebar">
       <h2 class="sidebar-title">Panel</h2>
-  
-      <a style="text-decoration: none; color: inherit; cursor: pointer;" href="/${rol.toLowerCase()}/perfil" data-route class="user-box">
+
+      <a href="/${rol.toLowerCase()}/perfil" data-route class="user-box">
         Usuario:
         <strong>${user.nombre}</strong>
         <span style="opacity: 0.7; font-size: 0.85rem;">${rol}</span>
       </a>
 
       <nav class="menu">
-        ${menu.map(
-          op => html`
-            <a 
-              href="${op.ruta}" 
-              class="menu-item"
-              data-route
-            >
-              ${op.texto}
-            </a>
-          `
+        ${menu.map(op =>
+          op.texto === "Inventario" && rol.toLowerCase() === "administrador"
+            ? html`
+                <div class="menu-item" id="btnInventario" @click=${hundleInventario}>
+                  Inventario ▾
+                </div>
+
+                <div id="submenuinventario" class="submenuinventario">
+                  <a href="/administrador/inventario/productos" data-route class="menu-item menu-inventario">Productos</a>
+                  <a href="/administrador/inventario/categorias" data-route class="menu-item menu-inventario">Categorías</a>
+                  <a href="/administrador/inventario/tamanios" data-route class="menu-item menu-inventario">Tamaños</a>
+                  <a href="/administrador/inventario/ingredientes" data-route class="menu-item menu-inventario">Ingredientes</a>
+                </div>
+              `
+            : op.texto === "Reportes" && rol.toLowerCase() === "administrador"
+            ? html`
+                <div class="menu-item" id="btnReportes" @click=${hundleReportes}>
+                  Reportes ▾
+                </div>
+
+                <div id="submenureportes" class="submenureportes">
+                  <a href="/administrador/reportes/pedidos" data-route class="menu-item menu-reporte">Pedidos</a>
+                  <a href="/administrador/reportes/ventas" data-route class="menu-item menu-reporte">Ventas</a>
+                  <a href="/administrador/reportes/productos" data-route class="menu-item menu-reporte">Productos</a>
+                  <a href="/administrador/reportes/categorias" data-route class="menu-item menu-reporte">Categorías</a>
+                  <a href="/administrador/reportes/ingredientes" data-route class="menu-item menu-reporte">Ingredientes</a>
+                  <a href="/administrador/reportes/clientes" data-route class="menu-item menu-reporte">Clientes</a>
+                </div>
+              `
+            : html`
+                <a href="${op.ruta}" class="menu-item" data-route>${op.texto}</a>
+              `
         )}
       </nav>
 
-      <div class="logout" @click=${hundleLogout}>
-        Cerrar sesión
-      </div>
+      <div class="logout" @click=${hundleLogout}>Cerrar sesión</div>
     </aside>
 
     <div id="contenedor"></div>

@@ -1,7 +1,7 @@
 import { html, render } from "lit-html";
 import { renderNavbarTrabajadores } from "@components/navbarTrabajadores.mjs";
 import { renderPerfilView } from "@components/renderPerfilView.mjs";
-import { renderInventarioView } from "@views/personal/mostrarInventario.mjs";
+import { renderInventarioView } from "@components/renderInventarioView.mjs";
 import { renderPedidosView } from "@views/personal/mostrarPedidos.mjs";
 import { renderProductos } from "@views/personal/mostrarProductos.mjs";
 import { renderDashboardView } from "@views/personal/mostrarDashboard.mjs";
