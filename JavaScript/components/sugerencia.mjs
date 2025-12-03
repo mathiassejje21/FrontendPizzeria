@@ -48,7 +48,6 @@ export async function renderSugerencia() {
     if (tipo === "populares") items = sugerencias.slice(0, 5);
     else if (frecuentes.length > 3) items = frecuentes.slice(0, 5);
     else if (similares.length > 0) items = similares.slice(0, 5);
-    else if (sugerenciasPersonalizadas.length > 0) items = sugerenciasPersonalizadas.slice(0, 5);
 
     const Slider = (title, items) => html`
         <style>
