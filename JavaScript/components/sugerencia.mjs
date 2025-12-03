@@ -168,7 +168,6 @@ export async function renderSugerencia() {
     if (tipo === "populares") title = "Para ti (Populares)";
     else if (frecuentes.length > 3) title = "Tus favoritos";
     else if (similares.length > 0) title = "Te puede gustar";
-    else if (sugerenciasPersonalizadas.length > 0) title = "Según tus gustos";
 
     return Slider(title, items);
 }
