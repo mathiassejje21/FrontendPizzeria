@@ -203,31 +203,29 @@ export async function mostrarPedidos() {
 
                                                 if (!result.isConfirmed) return;
 
-                                                try {
-                                                    const res = await apiPedido.deletePedido(p.id);
+                                                const res = await apiPedido.deletePedido(p.id);
 
-                                                    if (res?.status === 200) {
-                                                        await mensajeAlert({
-                                                        icon: "success",
-                                                        title: "Pedido eliminado",
-                                                        text: "El pedido se ha eliminado correctamente.",
-                                                        timer: 1500
-                                                        });
+                                                if (res?.status !== 200) return null
 
-                                                        location.reload();
-                                                    } else {
-                                                        throw new Error("No autorizado");
+                                                await mensajeAlert({
+                                                    icon: "success",
+                                                    title: "Pedido eliminado",
+                                                    text: "El pedido se ha eliminado correctamente.",
+                                                    timer: 1500
+                                                }).then(() => {
+                                                    const stored = sessionStorage.getItem("last_payment_url");
+
+                                                    if (stored) {
+                                                        const urlObj = JSON.parse(stored);
+                                                        if (urlObj.id_pedido === p.id) {
+                                                            sessionStorage.removeItem("last_payment_url");
+                                                        }
                                                     }
 
-                                                } catch (err) {
-                                                    console.error("DELETE ERROR:", err);
-                                                    mensajeAlert({
-                                                        icon: "error",
-                                                        title: "Error eliminando pedido",
-                                                        text: "El servidor rechazó la operación (403)."
-                                                    });
-                                                }                                                
-                                            }}
+                                                    location.reload(); 
+                                                });                                                 
+                                                }
+                                            }                                                
                                         >Eliminar</button>
                                         ` : ""}
                                     </td>

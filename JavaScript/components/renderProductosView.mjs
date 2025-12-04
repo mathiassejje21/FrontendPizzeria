@@ -55,7 +55,8 @@ export async function renderProductosView(
                     return mensajeAlert({
                       icon: "warning",
                       title: "Pago pendiente",
-                      text: "Tienes un pago pendiente."
+                      text: "Tienes un pago pendiente.",
+                      showConfirmButton: true
                     }).then(() => location.href = "/pizzeria/pedidos");
                   }
 
