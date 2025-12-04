@@ -33,5 +33,10 @@ export class pedidoApi {
         const res = await this.api.put(`/${id}/estado`, body);
         return res.data.pedido;
     }
+
+    async deletePedido(id) {
+        const response = await this.api.delete(`/${id}`);
+        return {status: response.status, ...response.data};
+    }
     
 }

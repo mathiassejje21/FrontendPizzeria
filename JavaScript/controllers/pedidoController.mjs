@@ -32,4 +32,12 @@ export class pedidoController {
         }
     }
 
+    async deletePedido(id) {
+        try {
+            return await this.api.deletePedido(id);
+        } catch {
+            alert("Error eliminando pedido");
+        }
+    }
+
 }

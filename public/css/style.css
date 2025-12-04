@@ -23,25 +23,6 @@ html {
   z-index: 9999998 !important;
 }
 
-.loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(97, 97, 97, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 #contenedor-login {
   position: relative;
   width: 100%;
@@ -187,6 +168,19 @@ html {
   --primary: hsl(var(--hue),90%,55%);
 }
 
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(63, 63, 63, 0.525);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
 .preloader {
   text-align: center;
   max-width: 20em;
@@ -251,173 +245,6 @@ html {
 
 .cart__wheel-stroke {
   animation-name: cartWheelStroke;
-}
-
-.inp{
-  position: relative;
-  margin-bottom: 0.5rem;
-  width: 100%; 
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.inp .label{
-  position: absolute;
-  top: 14px;
-  left: 10px;
-  font-size: 14px;
-  color: rgba(255,255,255,0.6);
-  font-weight: 500;
-  transform-origin: 0 0;
-  transition: all .2s ease;
-  pointer-events: none;
-}
-
-.inp .focus-bg{
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.08);
-  z-index: -1;
-  transform: scaleX(0);
-  transform-origin: left;
-}
-
-.inp input{
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  border: 0;
-  font-family: inherit;
-  padding: 10px 10px 0 10px;
-  height: 42px;                /* ⬅️ REDUCIDO */
-  font-size: 14px;
-  background: rgba(255,255,255,0.05);
-  box-shadow: inset 0 -1px 0 rgba(255,255,255,0.4);
-  color: #ffffff;
-  transition: all .15s ease;
-}
-
-.inp input:hover{
-  background: rgba(255,255,255,0.08);
-  box-shadow: inset 0 -1px 0 rgba(255,255,255,0.7);
-}
-
-.inp input:not(:placeholder-shown) + .label{
-  transform: translate3d(0,-10px,0) scale(.75);
-  color: rgba(255,255,255,0.6);
-}
-
-.inp input:focus{
-  background: rgba(255,255,255,0.1);
-  outline: none;
-  box-shadow: inset 0 -2px 0 #a3a9ab;
-}
-
-.inp input:focus + .label{
-  color: #a3a9ab;
-  transform: translate3d(0,-10px,0) scale(.75);
-}
-
-.inp input:focus + .label + .focus-bg{
-  transform: scaleX(1);
-  transition: all .1s ease;
-}
-
-.select-modern{
-  width: 100%;
-  position: relative;
-}
-
-.select-modern select{
-  width: 100%;
-  padding: 0.6rem 1rem;
-  background: #152033;
-  border: none;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  border-radius: 0.4rem;
-  color: #fff;
-  font-size: 0.9rem;
-  appearance: none;
-  outline: none;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.select-modern select:hover{
-  background: #1a263a;
-  border: none;
-}
-
-.select-modern select:focus{
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.057);
-  border: none;
-}
-
-.select-modern::after{
-  content: "▾";
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.8rem;
-  color: #a6abb0;
-  pointer-events: none;
-}
-
-.select-modern select option{
-  background: #1d283c;
-  color: #fff;
-  border: none;
-}
-
-.radio-group{
-  margin-top: 1rem;
-  margin-bottom: .5rem;
-  display: flex;
-  flex-direction: column;
-  gap: .3rem;
-  border: none;
-}
-
-.radio-title{
-  margin: 0;
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.radio-option{
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  color: #d1d5db;
-  font-size: .85rem;
-  cursor: pointer;
-  user-select: none;
-  transition: .2s;
-}
-
-.radio-option:hover{
-  color: #fff;
-}
-
-.radio-option input{
-  display: none;
-}
-
-.radio-option span{
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid #4ade80;
-  display: inline-block;
-  position: relative;
-  transition: .2s;
-}
-
-.radio-option input:checked + span{
-  background-color: #4ade80;
-  box-shadow: 0 0 10px rgba(74,222,128,0.4);
 }
 
 @keyframes msg {

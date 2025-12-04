@@ -3,6 +3,7 @@ import { productoController } from "@controllers/productoController.mjs";
 import { categoriaController } from "@controllers/categoriaController.mjs";
 import { ingredienteController } from "@controllers/ingredienteController.mjs";
 import { mensajeAlert } from "@components/mensajeAlert.mjs";
+import { filterBasic, paginateBasic, totalPagesBasic } from "@/service/listTools.mjs";
 
 export async function renderProductosView() {
   const apiProducto = new productoController();
@@ -179,7 +180,7 @@ export async function renderProductosView() {
       .map(c => Number(c.value));
 
     if (seleccionados.length === 0) {
-      return mensajeAlert({
+      return mensajeAlert({ 
         icon: "warning",
         title: "Ningún ingrediente",
         text: "Selecciona al menos uno.",
@@ -257,22 +258,21 @@ export async function renderProductosView() {
   };
 
   const getFilteredProducts = () => {
-    return productos.filter(
-      (p) =>
-        p.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.descripcion?.toLowerCase().includes(searchQuery.toLowerCase())
+    return filterBasic(
+      productos,                
+      ["nombre", "descripcion"],
+      searchQuery                
     );
   };
 
   const getPaginatedRows = () => {
     const filtered = getFilteredProducts();
-    const start = (currentPage - 1) * rowsPerPage;
-    return filtered.slice(start, start + rowsPerPage);
+    return paginateBasic(filtered, currentPage, rowsPerPage);
   };
 
   const totalPages = () => {
     const filtered = getFilteredProducts();
-    return Math.ceil(filtered.length / rowsPerPage);
+    return totalPagesBasic(filtered, rowsPerPage);
   };
 
   const prevPage = () => {
@@ -330,7 +330,7 @@ export async function renderProductosView() {
     .main-contenedor{
       padding: 1rem;
       width: 100%;
-      height: 100vh;
+      min-height: 100vh;
       display: grid;
       grid-template-columns: 2fr 1.2fr;
       gap: 1rem;
@@ -357,28 +357,75 @@ export async function renderProductosView() {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 1rem 2rem;
+      padding: 1rem 1.5rem;
     }
 
-    .contenedor-productos .detalle-producto{
+    .detalle-producto{
       width: 100%;
       height: 100%;
+      background: #1d2537;
+      border-radius: 0.6rem;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
+      position: relative;
+      overflow: hidden;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
-      background-color: #5964782d;
-      border-radius: 0.5rem;
+      border: none;
+      gap: .8rem;
     }
 
-    .contenedor-productos .detalle-producto h2{
-      margin-bottom: 1rem;
+    .btn-close-detalle{
+      position: absolute;
+      top: .6rem;
+      right: .6rem;      
+      border: none;
+      background: none;
+      cursor: pointer;
+      transition: .2s all ease;
     }
 
-    .contenedor-productos .detalle-producto p{
-      margin-bottom: 0.5rem;
+    .btn-close-detalle:hover{
+      transform: scale(1.1);
     }
+
+    .detalle-header{
+      display: flex;
+      gap: 0.7rem;
+      height: 150px;
+      width: 100%;
+    }
+
+    .detalle-img{
+      width: 45%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0.4rem;
+      background: #0f172a;
+    }
+
+    .detalle-info{
+      width: 55%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.2rem;
+      font-size: 0.85rem;
+    }
+
+    .detalle-descripcion{
+      width: 100%;
+      flex: 1;
+      background: rgba(0,0,0,.25);
+      border-radius: 0.4rem;
+      padding: 0.6rem;
+      font-size: 0.8rem;
+      line-height: 1.2rem;
+      overflow: hidden;
+    }
+
+
     table{
       border-collapse: collapse;
     }
@@ -487,15 +534,15 @@ export async function renderProductosView() {
 
     .button-crud.edit{
       border: none;
-      border-radius: 0.6rem;
-      background-color: #dabd1aff;
+      border-radius: 0.2rem;
+      background-color: #ffdb0c62;
       transition: all 0.25s ease;      
     }
 
     .button-crud.delete{
       border: none;
-      border-radius: 0.6rem;
-      background-color: #972727ff;
+      border-radius: 0.2rem;
+      background-color: #ad0d0d6d;
       transition: all 0.25s ease;      
     }
 
@@ -508,7 +555,7 @@ export async function renderProductosView() {
       padding: 0.6rem;
       border-radius: 0.4rem;
       border: none;
-      background: #4ade80;
+      background: #949a96ff;
       color: #1d283c;
       font-weight: 700;
       font-size: 0.9rem;
@@ -518,8 +565,176 @@ export async function renderProductosView() {
     }
 
     .btn-submit:hover{
-      background: #6ff29d;
+      background: #23462fc1;
+      color: #fff;
       transform: scale(1.02);
+    }
+
+    .inp{
+      position: relative;
+      margin-bottom: 0.5rem;
+      width: 100%; 
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .inp .label{
+      position: absolute;
+      top: 14px;
+      left: 10px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 500;
+      transform-origin: 0 0;
+      transition: all .2s ease;
+      pointer-events: none;
+    }
+
+    .inp .focus-bg{
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.08);
+      z-index: -1;
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    .inp input{
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      border: 0;
+      font-family: inherit;
+      padding: 10px 10px 0 10px;
+      height: 42px;                /* ⬅️ REDUCIDO */
+      font-size: 14px;
+      background: rgba(255,255,255,0.05);
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.4);
+      color: #ffffff;
+      transition: all .15s ease;
+    }
+
+    .inp input:hover{
+      background: rgba(255,255,255,0.08);
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.7);
+    }
+
+    .inp input:not(:placeholder-shown) + .label{
+      transform: translate3d(0,-10px,0) scale(.75);
+      color: rgba(255,255,255,0.6);
+    }
+
+    .inp input:focus{
+      background: rgba(255,255,255,0.1);
+      outline: none;
+      box-shadow: inset 0 -2px 0 #a3a9ab;
+    }
+
+    .inp input:focus + .label{
+      color: #a3a9ab;
+      transform: translate3d(0,-10px,0) scale(.75);
+    }
+
+    .inp input:focus + .label + .focus-bg{
+      transform: scaleX(1);
+      transition: all .1s ease;
+    }
+
+    .select-modern{
+      width: 100%;
+      position: relative;
+    }
+
+    .select-modern select{
+      width: 100%;
+      padding: 0.6rem 1rem;
+      background: #152033;
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-radius: 0.4rem;
+      color: #fff;
+      font-size: 0.9rem;
+      appearance: none;
+      outline: none;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .select-modern select:hover{
+      background: #1a263a;
+      border: none;
+    }
+
+    .select-modern select:focus{
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.057);
+      border: none;
+    }
+
+    .select-modern::after{
+      content: "▾";
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      color: #a6abb0;
+      pointer-events: none;
+    }
+
+    .select-modern select option{
+      background: #1d283c;
+      color: #fff;
+      border: none;
+    }
+
+    .radio-group{
+      margin-top: 1rem;
+      margin-bottom: .5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+      border: none;
+    }
+
+    .radio-title{
+      margin: 0;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .radio-option{
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: #d1d5db;
+      font-size: .85rem;
+      cursor: pointer;
+      user-select: none;
+      transition: .2s;
+    }
+
+    .radio-option:hover{
+      color: #fff;
+    }
+
+    .radio-option input{
+      display: none;
+    }
+
+    .radio-option span{
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid #4ade80;
+      display: inline-block;
+      position: relative;
+      transition: .2s;
+    }
+
+    .radio-option input:checked + span{
+      background-color: #4ade80;
+      box-shadow: 0 0 10px rgba(74,222,128,0.4);
     }
 
     
@@ -529,10 +744,12 @@ export async function renderProductosView() {
       <div class="contenedor">
         <div class="header" style="display:flex; justify-content: row; gap:1rem">
           <h2>Editar Producto</h2>
-          <button class=" "
-            @click=${() => { modoIngredientes = false, modoEliminarIngrediente = null; actualizarVista(); }}>
-            Volver
-          </button>
+          ${modoIngredientes === true || modoEliminarIngrediente    === true ? html`
+            <button class=" "
+              @click=${() => { modoIngredientes = false, modoEliminarIngrediente = null; actualizarVista(); }}>
+              Volver
+            </button>
+          ` : ""}
           <button class="" @click=${irAIngredientes}>Agregar ingredientes</button>
           <button class="" @click=${irAEliminarIngrediente}>Eliminar ingredientes</button>
           <button class="" @click=${limpiarSeleccion}>X</button>
@@ -652,12 +869,12 @@ export async function renderProductosView() {
                     <button class="button-crud edit" @click=${(e) => {
                       e.stopPropagation();
                       seleccionarProducto(p);}}>
-                      <img src="https://img.icons8.com/?size=100&id=5zgHRe4QDGaa&format=png&color=000000" style="width: 20px; height: 20px;">
+                      <img src="https://img.icons8.com/?size=100&id=A4HETgpouLJn&format=png&color=000000" style="width: 20px; height: 20px;">
                     </button>
                     <button class="button-crud delete" @click=${(e) => {
                       e.stopPropagation();
                       eliminarProducto(p.id)}}>
-                      <img src="https://img.icons8.com/?size=100&id=wYGuaDndspJI&format=png&color=000000" style="width: 20px; height: 20px;">
+                      <img src="https://img.icons8.com/?size=100&id=Ak1nWJFsk3c7&format=png&color=FA5252" style="width: 20px; height: 20px;">
                     </button>
                   </div>
                 </td>
@@ -669,7 +886,7 @@ export async function renderProductosView() {
         <div class="pagination">
           <button class="" @click=${prevPage} ?disabled=${currentPage === 1}>Anterior</button>
           <span>Página ${currentPage} de ${totalPages()}</span>
-          <button class="" @click=${nextPage} ?disabled=${currentPage === totalPages()}>Siguiente</button>
+          <button class="" @click=${nextPage} ?disabled=${currentPage >= totalPages()}>Siguiente</button>
         </div>
       </section>
     
@@ -738,32 +955,34 @@ export async function renderProductosView() {
           <button class="btn-submit" @click=${crearProducto}>Crear</button>
         </form>
 
-
         <div class="detalle-producto">
           ${productoSeleccionadoView ? html`
-            <div class="detalle-header" style="display: flex;">
-              <div width="100%">
-                <img src=${productoSeleccionadoView.imagen_url} class="detalle-img" style="width: 80%;height: 80%; object-fit: cover;" >
-              </div>
+
+            <button class="btn-close-detalle" @click=${() => limpiarSeleccion()}>
+              <img src="https://img.icons8.com/?size=100&id=ZqgesvdZtgAB&format=png&color=000000" style="width:2rem ; height: 2rem;">
+            </button>
+
+            <div class="detalle-header">
+              <img src=${productoSeleccionadoView.imagen_url} class="detalle-img">
+
               <div class="detalle-info">
-                <p>ID: ${productoSeleccionadoView.id}</p>
-                <p>${productoSeleccionadoView.nombre}</p>
-                <p>Precio: S/.${productoSeleccionadoView.precio}</p>
-                <p>Categoría: ${productoSeleccionadoView.categoria.nombre}</p>
+                <p><strong>ID: </strong>${productoSeleccionadoView.id}</p>
+                <p><strong>${productoSeleccionadoView.nombre}</strong></p>
+                <p><strong>Precio:</strong> S/.${productoSeleccionadoView.precio}</p>
+                <p><strong>Categoría: </strong>${productoSeleccionadoView.categoria.nombre}</p>
               </div>
             </div>
 
             <div class="detalle-descripcion">
-              <p>${productoSeleccionadoView.descripcion}</p>
-              <p>${productoSeleccionadoView.personalizable}</p> 
-              <p>${productoSeleccionadoView.activo}</p>
+              <p><strong>Descripción: </strong>${productoSeleccionadoView.descripcion}</p>
+              <p>${productoSeleccionadoView.personalizable ? "Personalizable" : "No personalizable"}</p>
+              <p><strong>Estado: </strong>${productoSeleccionadoView.activo ? "Activo" : "Inactivo"}</p>
             </div>
 
-            <button @click=${() => limpiarSeleccion()}>X</button>
-
-          ` : html`Seleccione un producto`}
+          ` : html`
+            <p>Seleccione un producto</p>
+          `}
         </div>
-
       </section>
     </main>
     `;

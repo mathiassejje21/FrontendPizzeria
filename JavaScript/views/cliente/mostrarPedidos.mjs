@@ -1,50 +1,57 @@
 import { html, render } from "lit-html";
 import { pedidoController } from "@controllers/pedidoController.mjs";
+import { filterBasic, sortBasic, paginateBasic, totalPagesBasic } from "@/service/listTools.mjs";   
+import { mensajeAlert } from "@components/mensajeAlert.mjs";
 
 export async function mostrarPedidos() {
-
     const apiPedido = new pedidoController();
-    const pedidos = await apiPedido.getPedidos();
+    const res = await apiPedido.getPedidos();
+    const pedidos = res.filter(p => p.activo === true);
 
     let currentPage = 1;
-    const rowsPerPage = 7;
+    const rowsPerPage = 8;
     let selectedPedido = null;
     let sortDirection = "desc";
+    let fechaFiltro = "";
 
-    function filterPedidos(fecha) {
-        return pedidos.filter(p => {
-            const fechaPedido = p.fecha_pedido.split("T")[0];
-            return !fecha || fechaPedido === fecha;
-        });
+    const getFilterPedidos = () => {
+        return filterBasic(
+            pedidos,
+            [],
+            "",
+            "fecha_pedido",
+            fechaFiltro
+        );
     }
 
-    function ordenar(data) {
-        return data.sort((a, b) => {
-            const f1 = new Date(a.fecha_pedido);
-            const f2 = new Date(b.fecha_pedido);
-            return sortDirection === "asc" ? f1 - f2 : f2 - f1;
-        });
+    const getSortedPedidos = () => {
+        const filtered = getFilterPedidos();
+        return sortBasic(filtered, "fecha_pedido", sortDirection);
     }
 
-    function paginate(data) {
-        const start = (currentPage - 1) * rowsPerPage;
-        return data.slice(start, start + rowsPerPage);
+    const getPaginatedPedidos = () => {
+        const filtered = getSortedPedidos();
+        return paginateBasic(filtered, currentPage, rowsPerPage);
     }
 
-    function cambiarPagina(n) {
-        currentPage = n;
+    const totalPages = () => {
+        const filtered = getSortedPedidos();
+        return totalPagesBasic(filtered, rowsPerPage);
+    }
+
+    const prevPage = () => {
+        if (currentPage > 1) {
+        currentPage--;
         renderView();
-    }
+        }
+    };
 
-    function seleccionarPedido(p) {
-        selectedPedido = p;
+    const nextPage = () => {
+        if (currentPage < totalPages()) {
+        currentPage++;
         renderView();
-    }
-
-    function cerrarDetalle() {
-        selectedPedido = null;
-        renderView();
-    }
+        }
+    };
 
     function pagarPedido() {
         const raw = sessionStorage.getItem("last_payment_url");
@@ -53,20 +60,7 @@ export async function mostrarPedidos() {
         location.href = data.url_pago;
     }
 
-    function cambiarOrden() {
-        sortDirection = sortDirection === "asc" ? "desc" : "asc";
-        renderView();
-    }
-
     function renderView() {
-        const fechaFiltro = document.getElementById("filtroFecha")?.value || "";
-
-        let filtrados = filterPedidos(fechaFiltro);
-        filtrados = ordenar(filtrados);
-
-        const totalPages = Math.ceil(filtrados.length / rowsPerPage);
-        const paginaActual = paginate(filtrados);
-
         const template = html`
         <style>
             body { background:#f4f6f9; }
@@ -153,12 +147,19 @@ export async function mostrarPedidos() {
                     <div class="filters">
                         <div>
                             <label>Filtrar por fecha</label>
-                            <input type="date" id="filtroFecha" class="form-control" @input=${renderView}>
+                            <input type="date" id="filtroFecha" class="form-control" @input=${(e)=>{
+                                currentPage = 1;
+                                fechaFiltro = e.target.value;
+                                renderView();
+                            }}>
                         </div>
 
                         <div>
                             <label>Ordenar</label><br>
-                            <button class="sort-btn" @click=${cambiarOrden}>
+                            <button class="sort-btn" @click=${()=>{
+                                sortDirection = sortDirection === "asc" ? "desc" : "asc";
+                                renderView();
+                            }}>
                                 Fecha: ${sortDirection === "asc" ? "Ascendente" : "Descendente"}
                             </button>
                         </div>
@@ -172,34 +173,62 @@ export async function mostrarPedidos() {
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Estado</th>
-                                <th>Estado pedido
                                 <th>Total</th>
+                                <th>Accion</th>
                             </tr>
                         </thead>
                         <tbody>
-                            ${paginaActual.map(p => html`
-                                <tr @click=${() => seleccionarPedido(p)}>
+                            ${getPaginatedPedidos().map(p => html`
+                                <tr>
                                     <td>${p.id}</td>
                                     <td>${p.metodoPago.tipo}</td>
                                     <td>${p.fecha_pedido.split("T")[0]}</td>
                                     <td>${p.fecha_pedido.split("T")[1].slice(0,8)}</td>
                                     <td>${p.estadoPedido.nombre}</td>
-                                    <td>${p.activo ? "Activo" : "Cancelado"}</td>
                                     <td>S/ ${p.total}</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" @click=${() => { selectedPedido = p; renderView() }}>Ver</button>
+                                        ${(p.estadoPedido?.id === 1 || p.estadoPedido?.id === 2) ? html`
+                                        <button class="btn btn-danger btn-sm" 
+                                            @click=${async () => {
+                                                const result = await mensajeAlert({
+                                                    icon: "warning",
+                                                    title: "Eliminar pedido",
+                                                    text: "¿Deseas eliminar el pedido?",
+                                                    showConfirmButton: true,
+                                                    confirmButtonText: "Eliminar",
+                                                    showCancelButton: true,
+                                                    cancelButtonText: "Cancelar"
+                                                });
+
+                                                if (!result.isConfirmed) return;
+
+                                                const res = await apiPedido.deletePedido(p.id);
+
+                                                if (res.status === 200) {                                                   
+                                                    await mensajeAlert({
+                                                        icon: "success",
+                                                        title: "Pedido eliminado",
+                                                        text: "El pedido se ha eliminado correctamente.",
+                                                        timer: 1500
+                                                    })
+                                                    sessionStorage.removeItem("last_payment_url"); 
+                                                    location.reload();
+                                                }
+                                                
+                                            }}
+                                        >Eliminar</button>
+                                        ` : ""}
+                                    </td>
                                 </tr>
                             `)}
                         </tbody>
                     </table>
 
                     <div class="paginate mt-2">
-                        ${Array.from({ length: totalPages }, (_, i) => i + 1).map(n => html`
-                            <button 
-                                class="btn btn-${n === currentPage ? 'success' : 'outline-success'}"
-                                @click=${() => cambiarPagina(n)}
-                            >
-                                ${n}
-                            </button>
-                        `)}
+                        <button class="" @click=${prevPage} ?disabled=${currentPage === 1}>Anterior</button>
+                        <span>Página ${currentPage} de ${totalPages()}</span>
+                        <button class="" @click=${nextPage} ?disabled=${currentPage >= totalPages()}>Siguiente</button>
                     </div>
                 </div>
             </section>
@@ -211,7 +240,10 @@ export async function mostrarPedidos() {
 
                             <div style="display:flex; justify-content:space-between; align-items:center;">
                                 <h3 style="margin:0;">Pedido #${selectedPedido.id}</h3>
-                                <button class="btn btn-danger btn-sm" @click=${cerrarDetalle}>X</button>
+                                <button class="btn btn-danger btn-sm" @click=${()=>{
+                                    selectedPedido = null;
+                                    renderView();
+                                }}>x</button>
                             </div>
 
                             <hr>

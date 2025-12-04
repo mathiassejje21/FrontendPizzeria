@@ -1,72 +1,71 @@
 import { html, render } from "lit-html";
 import { pedidoController } from "@controllers/pedidoController.mjs";
 import { estadoController } from "../../controllers/estadoController.mjs";
+import { filterBasic, sortBasic, paginateBasic, totalPagesBasic } from "@/service/listTools.mjs";
 import { router } from "@/router.mjs";
 
 export async function renderPedidosView() {
-
     const estadoApi = new estadoController();
     const apiPedido = new pedidoController();
 
-    const pedidos = await apiPedido.getPedidos();
+    const res = await apiPedido.getPedidos();
+    const pedidos = res.filter(p => p.activo === true);
     const estados = await estadoApi.getEstados();
 
     let currentPage = 1;
     const rowsPerPage = 8;
+    let fechaFiltro = "";
+    let estadoFiltro = null;
     let sortDirection = "desc";
-    let estadoFiltro = "";  
+
 
     function getRowColor(id) {
         if (id === 1) return "#c0c0c0ff"; 
         return "#000";               
     }
 
-    function filterPedidos(fecha, estadoId) {
-        return pedidos.filter(p => {
-            const f = p.fecha_pedido.split("T")[0];
-            const matchFecha = !fecha || f === fecha;
-            const matchEstado = !estadoId || p.estadoPedido.id == estadoId;
-            return matchFecha && matchEstado;
-        });
-    }
-
-    function ordenar(data) {
-        return data.sort((a, b) =>
-            sortDirection === "asc"
-                ? new Date(a.fecha_pedido) - new Date(b.fecha_pedido)
-                : new Date(b.fecha_pedido) - new Date(a.fecha_pedido)
+    const getFilterPedidos = () => {
+        return filterBasic(
+            pedidos,
+            [],
+            "",
+            "fecha_pedido",
+            fechaFiltro,
+            "estadoPedido.id",
+            estadoFiltro
         );
     }
 
-    function paginate(data) {
-        const start = (currentPage - 1) * rowsPerPage;
-        return data.slice(start, start + rowsPerPage);
+    const getSortedPedidos = () => {
+        const filtered = getFilterPedidos();
+        return sortBasic(filtered, "fecha_pedido", sortDirection);
     }
 
-    function cambiarPagina(n) {
-        currentPage = n;
-        renderView();
+    const getPaginatedPedidos = () => {
+        const filtered = getSortedPedidos();
+        return paginateBasic(filtered, currentPage, rowsPerPage);
     }
 
-    function cambiarOrden() {
-        sortDirection = sortDirection === "asc" ? "desc" : "asc";
-        renderView();
+    const totalPages = () => {
+        const filtered = getSortedPedidos();
+        return totalPagesBasic(filtered, rowsPerPage);
     }
 
-    function cambiarEstado(e) {
-        estadoFiltro = e.target.value;
+    const prevPage = () => {
+        if (currentPage > 1) {
+        currentPage--;
         renderView();
-    }
+        }
+    };
+
+    const nextPage = () => {
+        if (currentPage < totalPages()) {
+        currentPage++;
+        renderView();
+        }
+    };
 
     function renderView() {
-        const fechaFiltro = document.getElementById("filtroFecha")?.value || "";
-
-        let filtrados = filterPedidos(fechaFiltro, estadoFiltro);
-        filtrados = ordenar(filtrados);
-
-        const totalPages = Math.ceil(filtrados.length / rowsPerPage);
-        const paginaActual = paginate(filtrados);
-
         const template = html`
         <style>
             body { background:#f4f6f9; }
@@ -179,25 +178,31 @@ export async function renderPedidosView() {
 
                     <div>
                         <label>Filtrar por fecha</label>
-                        <input type="date" id="filtroFecha" @input=${renderView}>
+                        <input type="date" id="filtroFecha" @input=${(e) => { 
+                            currentPage = 1; fechaFiltro = e.target.value; renderView();
+                        }}>
                     </div>
 
                     <div>
                         <label>Ordenar</label>
-                        <button class="sort-btn" @click=${cambiarOrden}>
+                        <button class="sort-btn" @click=${() =>{
+                            sortDirection = sortDirection === "asc" ? "desc" : "asc"; renderView();
+                        }}>
                             Fecha: ${sortDirection === "asc" ? "Asc" : "Desc"}
                         </button>
                     </div>
 
-                    <div>
-                        <label>Filtrar por estado</label>
-                        <select @change=${cambiarEstado}>
-                            <option value="">Todos</option>
-                            ${estados.map(e => html`
-                                <option value="${e.id}">${e.nombre}</option>
-                            `)}
-                        </select>
-                    </div>
+                    <select @change=${ e =>{
+                        currentPage = 1;
+                        estadoFiltro = e.target.value? Number(e.target.value) : null;
+                        renderView();
+                    }}>
+                        <option value="">Todos</option>
+                        ${estados.map(e => html`
+                            <option value="${e.id}">${e.nombre}</option>
+                        `)}
+                    </select>
+
                 </div>
 
                 <table>
@@ -214,7 +219,7 @@ export async function renderPedidosView() {
                     </thead>
 
                     <tbody>
-                        ${paginaActual.map(p => html`
+                        ${getPaginatedPedidos().map(p => html`
                             <tr 
                                 style="color:${getRowColor(p.estadoPedido.id)}; 
                                 font-weight:bold; 
@@ -234,14 +239,9 @@ export async function renderPedidosView() {
                 </table>
 
                 <div class="paginate">
-                    ${Array.from({ length: totalPages }, (_, i) => i + 1).map(n => html`
-                        <button 
-                            class="page-btn ${n === currentPage ? 'active' : ''}"
-                            @click=${() => cambiarPagina(n)}
-                        >
-                            ${n}
-                        </button>
-                    `)}
+                    <button class="" @click=${prevPage} ?disabled=${currentPage === 1}>Anterior</button>
+                    <span>Página ${currentPage} de ${totalPages()}</span>
+                    <button class="" @click=${nextPage} ?disabled=${currentPage >= totalPages()}>Siguiente</button>
                 </div>
 
             </div>

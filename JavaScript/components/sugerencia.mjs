@@ -30,9 +30,10 @@ export async function renderSugerencia() {
                 location.href = "/pizzeria/pedidos";
             });
         }
-
-        const tamano = item.tamanoSeleccionado || tamanios.find(t => t.id === 1);
-
+        let tamano = null;
+        if (item.personalizable === true) {
+            tamano = item.tamanoSeleccionado || tamanios.find(t => t.id === 1);
+        }
         agregarAlCarrito(item, 1, tamano, item.ingredientes);
 
         mensajeAlert({
@@ -121,6 +122,7 @@ export async function renderSugerencia() {
                             align-items: center;
                             margin-top: .8rem;
                         ">
+                        ${item.personalizable === true ? html`
                             <select
                                 style="
                                     padding: .45rem .6rem;
@@ -139,7 +141,7 @@ export async function renderSugerencia() {
                                     </option>
                                 `)}
                             </select>
-
+                        ` : ""}
                             <button style="
                                 background: #ff2d59;
                                 color: white;

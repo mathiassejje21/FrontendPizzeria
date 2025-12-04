@@ -84,7 +84,7 @@ export async function renderProductosView(
                         }).then(() => { location.href = "/pizzeria/pedidos"; });
                       }
                       let tamanio = null;
-                      if (p.categoria?.id === 1) {
+                      if (p.personalizable === true) {
                         const apiTamanio = new tamanioController();
                         const tamanios = await apiTamanio.getTamanios();
                         tamanio = tamanios.find(t => t.id === 2) || null;

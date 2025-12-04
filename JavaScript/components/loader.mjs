@@ -26,7 +26,7 @@ export function showLoader() {
         </svg>
 
         <div class="preloader__text">
-          <p class="preloader__msg">Bringing you the goods…</p>
+          <p class="preloader__msg">Cargando...</p>
           <p class="preloader__msg preloader__msg--last">This is taking long. Something’s wrong.</p>
         </div>
       </div>
