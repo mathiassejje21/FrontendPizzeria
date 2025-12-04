@@ -69,13 +69,14 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
         icon: 'success',
         title: 'Pedido creado',
         text: 'El pedido se ha creado correctamente.',
-        showConfirmButton: true
+        time:1000
       })
 
       sessionStorage.removeItem('carrito')
       sessionStorage.removeItem('carrito_total')
 
       if (isPersonal) {
+        await pedidoApi.updateEstadoPedido(res.pedido.id, 2)
         return location.href = '/personal/pedidos'
       }
 

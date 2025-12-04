@@ -39,7 +39,7 @@ export async function renderSugerencia() {
         mensajeAlert({
             icon: "success",
             title: "¡Agregado al carrito!",
-            showConfirmButton: false,
+            text: "Se agrego correctamente.",
             timer: 1500
         });
     };
