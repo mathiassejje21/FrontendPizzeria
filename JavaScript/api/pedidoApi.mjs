@@ -36,7 +36,10 @@ export class pedidoApi {
 
     async deletePedido(id) {
         const response = await this.api.delete(`/${id}`);
-        return {status: response.status, ...response.data};
+        return {
+            status: response.status,
+            ...response.data,
+        };
     }
     
 }
