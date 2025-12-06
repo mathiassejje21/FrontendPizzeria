@@ -19,4 +19,24 @@ export class categoriaApi {
         const res = await this.api.get('?activo=true');
         return res.data;
     }
+
+    async getCategoriaById($id) {
+        const res = await this.api.get(`/${$id}`);
+        return res.data;
+    }
+
+    async createCategoria(categoria) {
+        const res = await this.api.post('/', categoria);
+        return { status: res.status, ...res.data};
+    }
+
+    async updateCategoria($id, categoria) {
+        const res = await this.api.put(`/${$id}`, categoria);
+        return { status: res.status, ...res.data};
+    }
+
+    async deleteCategoria($id) {
+        const res = await this.api.delete(`/${$id}`);
+        return { status: res.status, ...res.data};
+    }
 }

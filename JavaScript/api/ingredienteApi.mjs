@@ -14,4 +14,24 @@ export class ingredienteApi {
         const res = await this.api.get('/');
         return res.data;
     }
+
+    async getIngredienteById($id) {
+        const res = await this.api.get(`/${$id}`);
+        return res.data;
+    }
+
+    async createIngrediente(ingrediente) {
+        const res = await this.api.post('/', ingrediente);
+        return { status: res.status, ...res.data };
+    }
+
+    async updateIngrediente($id, ingrediente) {
+        const res = await this.api.put(`/${$id}`, ingrediente);
+        return { status: res.status, ...res.data };
+    }
+
+    async deleteIngrediente($id) {
+        const res = await this.api.delete(`/${$id}`);
+        return { status: res.status, ...res.data };
+    }
 }

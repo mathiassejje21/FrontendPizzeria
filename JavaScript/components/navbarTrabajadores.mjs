@@ -174,7 +174,6 @@ export async function renderNavbarTrabajadores(user) {
                 <div id="submenuinventario" class="submenuinventario">
                   <a href="/administrador/inventario/productos" data-route class="menu-item menu-inventario">Productos</a>
                   <a href="/administrador/inventario/categorias" data-route class="menu-item menu-inventario">Categorías</a>
-                  <a href="/administrador/inventario/tamanios" data-route class="menu-item menu-inventario">Tamaños</a>
                   <a href="/administrador/inventario/ingredientes" data-route class="menu-item menu-inventario">Ingredientes</a>
                 </div>
               `

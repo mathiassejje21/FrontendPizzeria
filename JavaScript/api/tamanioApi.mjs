@@ -14,4 +14,24 @@ export class tamanioApi {
         const res = await this.api.get('/');
         return res.data;
     }
+
+    async getTamanioById($id) {
+        const res = await this.api.get(`/${$id}`);
+        return res.data;
+    }
+
+    async updateTamanio($id, tamanio) {
+        const res = await this.api.put(`/${$id}`, tamanio);
+        return { status: res.status, ...res.data };
+    }
+
+    async createTamanio(tamanio) {
+        const res = await this.api.post('/', tamanio);
+        return { status: res.status, ...res.data };
+    }
+
+    async deleteTamanio($id) {
+        const res = await this.api.delete(`/${$id}`);
+        return { status: res.status, ...res.data };
+    }
 }

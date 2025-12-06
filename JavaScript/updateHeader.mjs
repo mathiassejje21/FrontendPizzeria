@@ -5,7 +5,7 @@ let text;
 
 if (path.startsWith('/pizzeria')) {
   urlimg = 'https://img.icons8.com/?size=100&id=503mbwCBW8xP&format=png&color=000000';
-  text = 'Pizzería Don Luigi';
+  text = 'Pizzería Don Mario';
 } else {
   urlimg = 'https://img.icons8.com/?size=100&id=97615&format=png&color=000000';
   text = 'Personal';
