@@ -313,6 +313,7 @@ export async function renderProductosView() {
                     style="width:2.2rem; opacity:.8;">
               </button>
             ` : ""}
+            ${productoSeleccionado?.personalizable? html`
             <button class="btn-extra agregar" @click=${irAIngredientes}>
               <img src="https://img.icons8.com/?size=100&id=37839&format=png&color=000000" 
                   style="width:1.5em; opacity:.8;">
@@ -323,13 +324,14 @@ export async function renderProductosView() {
                   style="width:1.5em; opacity:.8;">
               <p style="margin:0">Ingrediente</p>
             </button>
+            ` : ""}
           </div>
         </div>
 
 
         <div class="modal-body">
 
-          ${modoIngredientes ? html`
+          ${modoIngredientes? html`
             <h3>Ingredientes</h3>
             <div style="display: grid;
               grid-template-columns: repeat(2, 1fr);
@@ -383,7 +385,7 @@ export async function renderProductosView() {
               <span class="focus-bg"></span>
             </label>
             
-            <div style="display:flex; gap:15rem; justify-content: center; align-items: center; ">
+            <div style="display:flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
             <div class="radio-group">
               <p class="radio-title">Personalizable</p>
               <label class="radio-option">

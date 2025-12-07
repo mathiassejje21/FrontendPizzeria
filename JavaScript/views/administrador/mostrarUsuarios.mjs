@@ -291,7 +291,7 @@ export async function renderUsuariosView() {
             <span class="label">Email</span>
           </label>
 
-          <div style="display:flex; gap:0.5rem; wuidth:100%;">
+          <div style="display:flex; gap:0.5rem; width:100%;">
             <label class="inp">
                 <input id="new_password" type="password" placeholder=" ">
                 <span class="label">Contraseña</span>
