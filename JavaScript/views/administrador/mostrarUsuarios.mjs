@@ -274,7 +274,7 @@ export async function renderUsuariosView() {
 
         <form class="form-create">
           <h2>Crear Usuario</h2>
-          <div style="display:flex; gap:0.5rem;">
+          <div style="display:flex; gap:0.5rem; width:100%;">
             <label class="inp">
                 <input id="new_nombre" type="text" placeholder=" ">
                 <span class="label">Nombre</span>
@@ -291,7 +291,7 @@ export async function renderUsuariosView() {
             <span class="label">Email</span>
           </label>
 
-          <div style="display:flex; gap:0.5rem;">
+          <div style="display:flex; gap:0.5rem; wuidth:100%;">
             <label class="inp">
                 <input id="new_password" type="password" placeholder=" ">
                 <span class="label">Contraseña</span>
