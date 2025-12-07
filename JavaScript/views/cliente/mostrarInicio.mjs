@@ -8,7 +8,7 @@ export async function mostrarInicio( user = null ) {
     const categorias = await api.getCategorias();
 
     let sugerencias = html``;
-    if (user) {
+    if (user && user.rol === "cliente") {
         sugerencias = await renderSugerencia();
     }
 

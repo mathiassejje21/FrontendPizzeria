@@ -3,6 +3,12 @@ import { validateSession } from "@/service/validateSession.mjs";
 import { handleUnauthorized } from "@components/handleUnauthorized.mjs";
 
 export const administradorRoutes = (router) => {
+  
+  router.on('/administrador/perfil', async() => {
+    const session = validateSession(["administrador"]);
+    if (!session.ok) return handleUnauthorized(session);
+    await renderHomeView("perfil", session.user);
+  });
 
   router.on('/administrador/dashboard', async() => { 
     const session = validateSession(["administrador"]);
@@ -40,9 +46,33 @@ export const administradorRoutes = (router) => {
     await renderHomeView("atributos", session.user);
   });
 
-  router.on('/administrador/perfil', async() => {
+  router.on('/administrador/reportes/pedidos', async() => {
     const session = validateSession(["administrador"]);
     if (!session.ok) return handleUnauthorized(session);
-    await renderHomeView("perfil", session.user);
+    await renderHomeView("reportesPedidos", session.user);
+  });
+
+  router.on('/administrador/reportes/ventas', async() => {
+    const session = validateSession(["administrador"]);
+    if (!session.ok) return handleUnauthorized(session);
+    await renderHomeView("reportesVentas", session.user);
+  });
+
+  router.on("/administrador/reportes/productos", async() => {
+    const session = validateSession(["administrador"]);
+    if (!session.ok) return handleUnauthorized(session); 
+    await renderHomeView("reportesProductos", session.user);
+  });
+
+  router.on("/administrador/reportes/inventario-categorias", async() => {
+    const session = validateSession(["administrador"]);
+    if (!session.ok) return handleUnauthorized(session); 
+    await renderHomeView("reportesInventario-categorias", session.user);
+  });
+
+  router.on("/administrador/reportes/clientes", async() => {
+    const session = validateSession(["administrador"]);
+    if (!session.ok) return handleUnauthorized(session); 
+    await renderHomeView("clientes", session.user);
   });
 };

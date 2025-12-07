@@ -11,9 +11,10 @@ import { renderCarritoView } from "@components/renderCarritoView.mjs";
 export async function renderHomeView(selection = null, user = null) {
   if (!user) {
     const stored = sessionStorage.getItem("user");
-    user = stored ? JSON.parse(stored) : null;
-  }
+    const parsed = stored ? JSON.parse(stored) : null;
 
+    user = parsed?.rol?.nombre === "cliente" ? parsed : null;
+  }
   await renderNavbarClientes(user);
 
   let template;

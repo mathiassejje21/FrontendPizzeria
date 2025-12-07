@@ -5,8 +5,9 @@
     display: grid;
     grid-template-columns: 2fr 1.2fr;
     gap: 1rem;
-    background-color: #101827;
+    background-color: #020617;
     color: #fff;
+    padding: 2rem;
 }
 
 .main-contenedor .contenedor-create{

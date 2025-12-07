@@ -41,15 +41,15 @@ export async function renderNavbarTrabajadores(user) {
         left: 0;
         width: 18%;
         height: 100vh;
-        background: #ffffff;
-        border-right: 1px solid #e5e5e5;
+        background: #020617;
         padding: 2rem 1.2rem;
         display: flex;
         flex-direction: column;
         gap: 2rem;
         font-family: "Inter", sans-serif;
         z-index: 1500;
-        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
+        box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+        color: #e5e7eb;
       }
 
       a {
@@ -60,23 +60,24 @@ export async function renderNavbarTrabajadores(user) {
       .sidebar-title {
         font-size: 1.45rem;
         font-weight: 700;
-        color: #0a3a17;
+        color: #4ade80;
         text-align: center;
       }
 
       .user-box {
-        background: #f7f7f7;
+        background: #0f172a;
         padding: 1rem;
         border-radius: 0.6rem;
         text-align: center;
-        border: 1px solid #e2e2e2;
+        border: 1px solid rgba(255,255,255,0.08);
         font-size: 0.9rem;
+        color: #94a3b8;
       }
       .user-box strong {
         display: block;
         margin-top: 0.4rem;
         font-size: 1rem;
-        color: #0a3a17;
+        color: #e2e8f0;
       }
 
       .menu {
@@ -90,30 +91,32 @@ export async function renderNavbarTrabajadores(user) {
         border-radius: 0.45rem;
         font-weight: 500;
         font-size: 0.98rem;
-        color: #333;
+        color: #cbd5e1;
         cursor: pointer;
         transition: 0.25s ease;
         display: block;
       }
 
       .menu-item:hover {
-        background: #ececec;
+        background: #111827;
         transform: translateX(4px);
+        color: #f8fafc;
       }
 
       .menu-item.active,
       #btnInventario.active,
       #btnReportes.active {
-        background: #0a3a17;
-        color: #ffffff;
+        background: #1e293b;
+        color: #4ade80;
         font-weight: 600;
+        border-left: 3px solid #4ade80;
       }
 
       .logout {
         margin-top: auto;
         padding: 0.85rem 1rem;
         border-radius: 0.45rem;
-        background: #b30000;
+        background: #7f1d1d;
         color: white;
         text-align: center;
         font-weight: 600;
@@ -122,13 +125,14 @@ export async function renderNavbarTrabajadores(user) {
       }
 
       .logout:hover {
-        background: #8a0000;
+        background: #991b1b;
       }
 
       #contenedor {
         margin-left: 18%;
         width: calc(100% - 18%);
         height: 100%;
+        background: #020617;
       }
 
       .submenuinventario,
@@ -138,7 +142,6 @@ export async function renderNavbarTrabajadores(user) {
         gap: 0.4rem;
         margin-left: 1rem;
         padding-left: 0.5rem;
-        border-left: 3px solid #0a3a17;
       }
 
       .submenuinventario.active,
@@ -148,9 +151,15 @@ export async function renderNavbarTrabajadores(user) {
 
       .menu-inventario.active,
       .menu-reporte.active {
-        background: #0a3a17;
-        color: #ffffff;
+        background: #1e293b;
+        color: #4ade80;
         font-weight: 600;
+      }
+
+      .menu-inventario:hover,
+      .menu-reporte:hover {
+        background: #111827;
+        color: #4ade80;
       }
     </style>
 
@@ -187,8 +196,7 @@ export async function renderNavbarTrabajadores(user) {
                   <a href="/administrador/reportes/pedidos" data-route class="menu-item menu-reporte">Pedidos</a>
                   <a href="/administrador/reportes/ventas" data-route class="menu-item menu-reporte">Ventas</a>
                   <a href="/administrador/reportes/productos" data-route class="menu-item menu-reporte">Productos</a>
-                  <a href="/administrador/reportes/categorias" data-route class="menu-item menu-reporte">Categorías</a>
-                  <a href="/administrador/reportes/ingredientes" data-route class="menu-item menu-reporte">Ingredientes</a>
+                  <a href="/administrador/reportes/inventario-categorias" data-route class="menu-item menu-reporte">Inventario </a>
                   <a href="/administrador/reportes/clientes" data-route class="menu-item menu-reporte">Clientes</a>
                 </div>
               `

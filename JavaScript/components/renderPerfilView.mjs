@@ -205,7 +205,8 @@ async function actualizarPerfil() {
   sessionStorage.setItem("user", JSON.stringify(res.usuario))
 
   mensajeAlert({ icon:"success", title:"Actualizado", timer:1000 })
-    .then(() => location.reload())
+
+  location.reload()
 }
 
 async function cambiarPassword() {

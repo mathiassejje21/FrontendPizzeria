@@ -234,7 +234,7 @@ export async function renderAtributosView() {
         display: grid;
         grid-template-rows: 1fr 1fr;
         gap: 1rem;
-        background-color: #000;
+        background-color: #020617;
         color: #fff;
       }
 
@@ -335,7 +335,7 @@ export async function renderAtributosView() {
 
       <section class="fila-first">
         <section style="display:flex; flex-direction:column; width:100%; height:100%; padding: 0 2rem 1rem 2rem;;
-        border-bottom-right-radius:1rem; background-color: #101827;
+        border-bottom-right-radius:1rem; background-color: #020617;
         box-shadow:
         6px 0 14px -3px rgba(255, 255, 255, 0.20),
         0 6px 14px -3px rgba(255, 255, 255, 0.20);">
@@ -381,7 +381,7 @@ export async function renderAtributosView() {
 
       <section class="fila-second" >
         <section class="contenedor-create" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center;">
-          <form class="form-create" style="width:60%; justify-content:center; background-color:#000; padding:1rem";>
+          <form class="form-create" style="width:60%; justify-content:center; padding:1rem";>
             <h2>Crear Estado</h2>
 
             <label class="inp">
@@ -393,7 +393,7 @@ export async function renderAtributosView() {
           </form>
         </section>
         <section style="display:flex; flex-direction:column;width:100%; height:100%; padding: 0 1rem 1rem 1rem; 
-        border-top-left-radius:1rem; background-color: #101827;
+        border-top-left-radius:1rem; background-color: #020617;
         box-shadow:
         -6px 0 14px -3px rgba(255, 255, 255, 0.20),
         0 -6px 14px -3px rgba(255, 255, 255, 0.20);">
