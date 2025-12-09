@@ -34,7 +34,7 @@ export async function renderProductosView(
   };
 
   const renderProductosFiltrados = () => html`
-    <div class="row g-4 mt-4 px-2">
+    <div class="row g-4 px-2">
       ${getProductosFilter().map(p => html`
         <div class="col-md-4 col-sm-6 col-lg-3 p-2">
           <div class="card product-card" 
@@ -86,9 +86,7 @@ export async function renderProductosView(
     const mainTemplate = html`
       <style>
         .productos-wrapper {
-          padding: 2rem;
-          margin: 2rem 2.5rem;
-          background:#f8f9fa;
+          padding: 8rem 2rem;
           min-height: 85vh;
           border-radius: 1rem;
         }

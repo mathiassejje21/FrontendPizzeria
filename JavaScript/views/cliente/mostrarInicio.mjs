@@ -15,7 +15,7 @@ export async function mostrarInicio( user = null ) {
     return html`
     <style>
         .subtitle {
-          padding: 3rem 0 1rem;
+          padding: rem 0 1rem;
           color: #0a3a17;
           font-size: 42px;
           font-weight: 800;
@@ -53,10 +53,6 @@ export async function mostrarInicio( user = null ) {
           font-weight: 700;
         }
 
-        .about-section img {
-          border-radius: 12px;
-          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
 
         .philosophy {
           background-color: #efefef;
@@ -87,22 +83,13 @@ export async function mostrarInicio( user = null ) {
           letter-spacing: 1px;
         }
       </style>
-      <section id="nav-slogan">
-        <p>Las mejores pizzas de la ciudad</p>
-        <div>
-            <img src="https://cdn-icons-png.flaticon.com/512/854/854853.png" alt="icono de pizza" />
-            <p>¡Comienza tu pedido!</p>
-            <strong>Elige tu dirección</strong>
-        </div>
-      </section>
-      <div id="nav-separator">
-        <p>Delivery <strong>GRATIS</strong> de Lunes a Miércoles desde <strong>s/.20</strong> EXCLUSIVO POR WEB</p>
-      </div>
-
-      </div>
-      ${sugerencias} 
       ${renderCarrousel()}
-      <h1 class="subtitle">🍕 ¡Bienvenido a Pizzería Don Warrion!</h1>
+      ${sugerencias} 
+
+      <div>
+        <img src="https://cdn.pixabay.com/photo/2024/03/29/19/47/ai-generated-8663536_1280.png" alt="Logo de la pizzeria" class="mx-auto d-block" height="200" width="200">
+        <h1 class="subtitle">¡Bienvenido a Pizzería Don Mario!</h1>
+      </div>
       <p class="description">
         La tradición italiana llega a tu mesa con el sabor único de nuestras pizzas artesanales.  
         Ingredientes seleccionados, masa fresca y el amor por la cocina que nos caracteriza.
@@ -117,15 +104,38 @@ export async function mostrarInicio( user = null ) {
         </div>
         <div class="row row-cols-1 row-cols-md-3 g-4">
         ${categorias.map(categoria => html`
-          <a href="/pizzeria/productos" data-route style="text-decoration: none; cursor: pointer;" class="col">
-            <div class="card h-100" >
-              <div class="card-body">
-                <h5 class="card-title fw-bold" style=" text-align: center;" >${categoria.nombre}</h5>
+          <a href="/pizzeria/productos" 
+            data-route 
+            style="text-decoration: none; cursor: pointer;" 
+            class="col">
+
+            <div style="position: relative; margin-top: 7rem;">
+
+              <img 
+                src="${categoria.imagen_url}" 
+                alt="..."
+                style="
+                  position: absolute;
+                  top: -100px;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  width: 220px;
+                  height: 150px;
+                  object-fit: cover;
+                  z-index: 1;
+                "
+              >
+
+              <div class="card h-100" style="padding-top: 3rem; border-radius: 18px;">
+                <div class="card-body">
+                  <h5 class="card-title fw-bold" style="text-align: center;">${categoria.nombre}</h5>
+                </div>
+
+                <div class="card-footer" style="text-align: center;">
+                  <small class="text-body-primary font-weight-bold">${categoria.descripcion}</small>
+                </div>
               </div>
-              <img src="${categoria.imagen_url}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="...">
-              <div class="card-footer " style=" text-align: center;" >
-                <small class="text-body-primary font-weight-bold" >${categoria.descripcion}</small>
-              </div>
+
             </div>
           </a>
         `)}
@@ -172,7 +182,7 @@ export async function mostrarInicio( user = null ) {
       <section class="about-section container my-5">
         <div class="row align-items-center">
           <div class="col-md-6">
-            <img src="https://cdn.pixabay.com/photo/2025/02/18/21/14/sea-onion-9416402_1280.jpg" alt="Sobre nosotros" class="img-fluid">
+            <img src="https://cdn.pixabay.com/photo/2025/07/02/11/58/ai-generated-9692232_1280.png" alt="Sobre nosotros" class="img-fluid">
           </div>
           <div class="col-md-6">  
             <h2>Sobre Nosotros</h2>

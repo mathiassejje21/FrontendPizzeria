@@ -13,9 +13,17 @@ export async function renderPerfilView(user) {
     renderView()
   }
 
-  const renderView = () => {
-    const template = html`
+  const getIniciales = (nombre) => {
+    if (!nombre) return "U";
+    const partes = nombre.trim().split(" ");
+    if (partes.length === 1) return partes[0][0].toUpperCase();
+    return (partes[0][0] + partes[1][0]).toUpperCase();
+  };
 
+  const renderView = () => {
+    const u = user;
+    const iniciales = getIniciales(u.nombre);
+    const template = html`  
       <style>
 
         .perfil-wrapper {
@@ -196,7 +204,7 @@ export async function renderPerfilView(user) {
 
           <div class="perfil-header">
             <div class="perfil-user">
-              <div class="avatar">${user.nombre[0].toUpperCase()}</div>
+              <div class="avatar">${iniciales}</div>
               <div class="perfil-header-title">
                 <h2>${user.nombre}</h2>
                 <p>${user.email}</p>

@@ -51,118 +51,166 @@ export async function renderSugerencia() {
     else if (similares.length > 0) items = similares.slice(0, 5);
 
     const Slider = (title, items) => html`
-        <style>
-            .slider-sugerencias::-webkit-scrollbar {
-                display: none;
-            }
-        </style>
+    <style>
+        .sugerencia-wrapper {
+            margin: 2rem auto;
+            text-align: center;
+            max-width: 1000px;
+        }
 
-        <section style="margin: 2rem 0;">
-            <h2 style="
-                font-weight: 700;
-                font-size: 1.35rem;
-                margin-bottom: 1rem;
-                color: #0a3a17;
-                text-align: center;
-            ">${title}</h2>
+        .sugerencia-title {
+            font-weight: 700;
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: #FFFFFF;
+            letter-spacing: 1px;
+        }
 
-            <div
-                class="slider-sugerencias"
-                style="
-                    display: flex;
-                    gap: 1.5rem;
-                    overflow-x: auto;
-                    padding: 1rem .5rem;
-                    scroll-behavior: smooth;
-                    scrollbar-width: none;
-                    -ms-overflow-style: none;
-                "
-            >
-                ${items.map(item => html`
-                    <div style="
-                        min-width: 260px;
-                        background: white;
-                        border-radius: 16px;
-                        box-shadow: 0 6px 20px rgba(0,0,0,.1);
-                        padding: 1.2rem 1rem;
-                        text-align: center;
-                        flex-shrink: 0;
-                        transition: .25s;
-                    "
-                    @mouseover=${e => e.currentTarget.style.transform = "translateY(-6px)"}
-                    @mouseout=${e => e.currentTarget.style.transform = "translateY(0)"}
-                    >
-                        <div style="
-                            width: 110px;
-                            height: 110px;
-                            margin: 0 auto 1rem;
-                            border-radius: 50%;
-                            overflow: hidden;
-                            border: 4px solid #f5f5f5;
-                        ">
-                            <img src="${item.imagen_url}" 
-                                style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
+        .slider-sugerencias {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
 
-                        <h4 style="font-size: 1.1rem; margin: 0 0 .4rem;">
-                            ${item.nombre}
-                        </h4>
+        .slider-sugerencias::-webkit-scrollbar {
+            display: none;
+        }
 
-                        <p style="font-size: .88rem; color: #666; margin: 0 0 .8rem;">
-                            ${item.descripcion || ""}
-                        </p>
+        .sugerencia-card {
+            min-width: 270px;
+            background: #1A1E24;
+            border-radius: 20px;
+            padding: 1.5rem 1.2rem;
+            flex-shrink: 0;
+            transition: .25s;
+            box-shadow: 0px 10px 28px rgba(0,0,0,0.45);
+        }
 
-                        <p style="font-size: 1rem; margin-bottom: .9rem; color: #0a3a17; font-weight: 600;">
-                            S/. ${Number(item.precioReal || item.precio).toFixed(2)}
-                        </p>
+        .sugerencia-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0px 14px 35px rgba(0,0,0,0.55);
+        }
 
-                        <div style="
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-                            margin-top: .8rem;
-                        ">
+        .sugerencia-img-box {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #0B0D10;
+        }
+
+        .sugerencia-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sugerencia-card h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            margin: .5rem 0 .4rem;
+        }
+
+        .sugerencia-desc {
+            font-size: .9rem;
+            color: #E5E5E5;
+            margin-bottom: .9rem;
+            min-height: 38px;
+        }
+
+        .sugerencia-price {
+            color: #FFC933;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .sugerencia-actions {
+            display: flex;
+            justify-content: center;
+            gap: .8rem;
+            margin-top: .5rem;
+        }
+
+        .sugerencia-select {
+            padding: .45rem .6rem;
+            border-radius: 8px;
+            background: #14171C;
+            border: 1px solid #333;
+            color: #FFF;
+            font-size: .9rem;
+        }
+
+        .sugerencia-btn {
+            background: #2ECC71;
+            color: white;
+            border: none;
+            padding: .6rem 1.3rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: .2s;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .sugerencia-btn:hover {
+            background: #25B862;
+        }
+    </style>
+
+    <section class="sugerencia-wrapper">
+        <h2 class="sugerencia-title">${title}</h2>
+
+        <div class="slider-sugerencias">
+            ${items.map(item => html`
+                <div class="sugerencia-card">
+
+                    <div class="sugerencia-img-box">
+                        <img src="${item.imagen_url}">
+                    </div>
+
+                    <h4>${item.nombre}</h4>
+
+                    <p class="sugerencia-desc">
+                        ${item.descripcion || ""}
+                    </p>
+
+                    <p class="sugerencia-price">
+                        S/. ${Number(item.precioReal || item.precio).toFixed(2)}
+                    </p>
+
+                    <div class="sugerencia-actions">
                         ${item.personalizable === true ? html`
                             <select
-                                style="
-                                    padding: .45rem .6rem;
-                                    border-radius: 8px;
-                                    border: 1px solid #ccc;
-                                    font-size: .9rem;
-                                "
+                                class="sugerencia-select"
                                 @change=${e => {
                                     const idSel = Number(e.target.value);
                                     item.tamanoSeleccionado = tamanios.find(t => t.id === idSel);
                                 }}
                             >
                                 ${tamanios.map(t => html`
-                                    <option value="${t.id}" ?selected=${t.id === 1}>
-                                        ${t.nombre}
-                                    </option>
+                                    <option value="${t.id}" ?selected=${t.id === 1}>${t.nombre}</option>
                                 `)}
                             </select>
                         ` : ""}
-                            <button style="
-                                background: #ff2d59;
-                                color: white;
-                                border: none;
-                                padding: .6rem 1.2rem;
-                                border-radius: 20px;
-                                cursor: pointer;
-                                transition: .2s;
-                                white-space: nowrap;
-                            "
+
+                        <button 
+                            class="sugerencia-btn"
                             @click=${() => hundlerAgregarAlCarrito(item)}
-                            @mouseover=${e => e.currentTarget.style.opacity = ".8"}
-                            @mouseout=${e => e.currentTarget.style.opacity = "1"}
-                            >
-                                Agregar
-                            </button>
-                        </div>
+                        >
+                            Agregar
+                        </button>
                     </div>
-                `)}
-            </div>
-        </section>
+
+                </div>
+            `)}
+        </div>
+    </section>
     `;
 
     let title = "Recomendaciones";

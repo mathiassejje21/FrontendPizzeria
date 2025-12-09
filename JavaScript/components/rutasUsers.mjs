@@ -1,14 +1,14 @@
 export const menuClienteNoLogeado = [
-  { ruta: "/pizzeria", texto: "Home" },
-  { ruta: "/pizzeria/productos", texto: "Productos" },
-  { ruta: "/pizzeria/carrito", texto: "Carrito" },
+  { ruta: "/pizzeria", texto: "Inicio", img: "https://img.icons8.com/?size=100&id=s7mPVCB5sKGa&format=png&color=FFFFFF" },
+  { ruta: "/pizzeria/productos", texto: "Productos", img: "https://img.icons8.com/?size=100&id=vklQ0DbWLL1v&format=png&color=FFFFFF" },
+  { ruta: "/pizzeria/carrito", texto: "Carrito" , img: "https://img.icons8.com/?size=100&id=JWjjFaN1ezzm&format=png&color=FFFFFF" },
 ];
 
 export const menuClienteLogeado = [
-  { ruta: "/pizzeria", texto: "Home" },
-  { ruta: "/pizzeria/productos", texto: "Productos" },
-  { ruta: "/pizzeria/carrito", texto: "Carrito" },
-  { ruta: "/pizzeria/pedidos", texto: "Mis Pedidos" },
+  { ruta: "/pizzeria", texto: "Home", img: "https://img.icons8.com/?size=100&id=s7mPVCB5sKGa&format=png&color=FFFFFF"  },
+  { ruta: "/pizzeria/productos", texto: "Productos", img: "https://img.icons8.com/?size=100&id=vklQ0DbWLL1v&format=png&color=FFFFFF"  },
+  { ruta: "/pizzeria/carrito", texto: "Carrito", img: "https://img.icons8.com/?size=100&id=JWjjFaN1ezzm&format=png&color=FFFFFF" },
+  { ruta: "/pizzeria/pedidos", texto: "Historial", img: "https://img.icons8.com/?size=100&id=40317&format=png&color=FFFFFF"  },
 ];
 
 export const menuAdmin = [
