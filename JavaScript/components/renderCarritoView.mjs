@@ -217,11 +217,17 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
 
       <div class="carrito-side">
         <div class="side-title">Pago</div>
-
-        <div class="pago-box">
-          <div class="pago-label">Pasarela de Pago</div>
-          <p style="margin:0; color:#444;">Tu compra será completada mediante una pasarela segura.</p>
-        </div>
+        ${user?.rol === 'cliente' ? html`
+          <div class="pago-box">
+            <div class="pago-label">Pasarela de Pago</div>
+            <p style="margin:0; color:#444;">Tu compra será completada mediante una pasarela segura.</p>
+          </div>
+        ` : html`
+          <div class="pago-box">
+            <div class="pago-label">Pago en Tienda</div>
+            <p style="margin:0; color:#444;">Pedido a pagar en tienda, puedes pagar en efectivo o con tarjeta de credito. </p>
+          </div>
+          `}
 
         <div>
           <div class="side-title">Total a pagar</div>

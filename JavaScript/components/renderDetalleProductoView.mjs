@@ -33,81 +33,102 @@ export async function renderDetalleProductoView(idProducto) {
     const apiIngrediente = new ingredienteController();
     tamanios = await apiTamanio.getTamanios();
     ingredientes = await apiIngrediente.getIngredientes();
-
     tamanioSeleccionado = tamanios.find(t => t.nombre.toLowerCase() === "individual") || null;
   }
 
   const recalcularPrecio = () => {
     let precioBase = Number(producto.precio);
-
     const extraIng = ingredientesSeleccionados.reduce(
       (acc, ing) => acc + Number(ing.costo_extra),
       0
     );
-
-    if( ingredientesSeleccionados ){
-      precioBase = precioBase + extraIng;
-    }
-
+    precioBase = precioBase + extraIng;
     if (tamanioSeleccionado) {
       precioBase = precioBase * Number(tamanioSeleccionado.factor_precio);
     }
-
-
-    const total = (precioBase) * cantidadSeleccionada;
-
+    const total = precioBase * cantidadSeleccionada;
     const pfinal = document.getElementById("detalle-precio-final");
     if (pfinal) pfinal.innerHTML = `S/. ${total.toFixed(2)}`;
   };
 
   const template = html`
   <style>
-  #contenedor {
-    display: flex;
-    justify-content: center;
-  }
+    #contenedor {
+      display: flex;
+      justify-content: center;
+    }
 
-  .detalle-wrapper {
-    margin: 6rem auto;
-    padding: 2rem;
-    border-radius: 1.5rem;
-    background: #ffffff;
+    .detalle-wrapper {
+      margin: 4rem auto;
+      padding: 2rem;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(8px);
+      border-radius: 1.5rem;
+      display: grid;
+      grid-template-columns: 420px 1fr 260px;
+      gap: 2.5rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      width: 100%;
+      max-width: 1200px;
+    }
 
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
-    column-gap: 2rem;
+    .detalle-img {
+      width: 100%;
+      height: 100%;
+    }
 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    .detalle-img img {
+      width: 100%;
+      height: 100%;
+      max-height: 560px;
+      object-fit: cover;
+      border-radius: 1.3rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
 
-    justify-content: center;
-    align-items: start;
-  }
+    .detalle-info h2 {
+      font-size: 30px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
 
+    .detalle-info p {
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
 
-  .detalle-img img {
-    width: 100%;
-    height: 350px;
-    object-fit: cover;
-    border-radius: 1.2rem;
-  }
+    .precio-final {
+      font-size: 30px;
+      font-weight: bold;
+      color: #a80000;
+      margin-top: 14px;
+    }
 
-  .precio-final {
-    font-size: 25px;
-    font-weight: bold;
-    color: #b30000;
-    margin-top: 15px;
-  }
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 1rem;
+    }
 
-  .detalle-ingredientes {
-    border-left: 2px solid #ddd;
-    padding-left: 1rem;
-  }
+    .detalle-ingredientes {
+      border-left: 2px dashed #d3d3d3;
+      padding-left: 1.3rem;
+    }
 
-  .ingrediente-item {
-    margin-bottom: 8px;
-  }
-</style>
+    .ingrediente-item {
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .ingrediente-item label input {
+      margin-right: 5px;
+    }
+
+    .form-select, .form-control {
+      margin-top: 5px;
+    }
+  </style>
+
   <section class="detalle-wrapper">
     <div class="detalle-img">
       <img src="${producto.imagen_url}" alt="${producto.nombre}">
@@ -127,10 +148,8 @@ export async function renderDetalleProductoView(idProducto) {
               recalcularPrecio();
             }}>
             ${tamanios.map(t => html`
-              <option 
-                value='${JSON.stringify(t)}'
-                ?selected=${t.nombre.toLowerCase() === "individual"}
-              >
+              <option value='${JSON.stringify(t)}'
+                ?selected=${t.nombre.toLowerCase() === "individual"}>
                 ${t.nombre} (x ${t.factor_precio})
               </option>
             `)}
@@ -149,15 +168,14 @@ export async function renderDetalleProductoView(idProducto) {
           @input=${e => {
             cantidadSeleccionada = Number(e.target.value || 1);
             recalcularPrecio();
-          }}
-        >
+          }}>
       </div>
 
       <div class="precio-final" id="detalle-precio-final">
         S/. ${Number(producto.precio).toFixed(2)}
       </div>
 
-      <div class="actions mt-3">
+      <div class="actions">
         <button class="btn btn-danger" @click=${() => agregar()}>
           Agregar al carrito
         </button>
@@ -173,13 +191,10 @@ export async function renderDetalleProductoView(idProducto) {
         <h4>Ingredientes</h4>
 
         ${ingredientes.map(i => {
-          
           const yaIncluido = producto.ingredientes?.some(pIng => pIng.id === i.id);
-
           if (yaIncluido && !ingredientesSeleccionados.some(x => x.id === i.id)) {
             ingredientesSeleccionados.push(i);
           }
-
           return html`
             <div class="ingrediente-item">
               <label>
@@ -195,8 +210,7 @@ export async function renderDetalleProductoView(idProducto) {
                       ingredientesSeleccionados = ingredientesSeleccionados.filter(x => x.id !== ing.id);
                     }
                     recalcularPrecio();
-                  }}
-                >
+                  }}>
                 ${i.nombre} (+ S/.${Number(i.costo_extra).toFixed(2)})
               </label>
             </div>
@@ -219,9 +233,8 @@ export async function renderDetalleProductoView(idProducto) {
         location.href = "/pizzeria/pedidos";
       });
     }
-    
-    const cantidad = Number(cantidadSeleccionada);
 
+    const cantidad = Number(cantidadSeleccionada);
     if (cantidad <= 0) {
       return mensajeAlert({
         icon: "warning",
