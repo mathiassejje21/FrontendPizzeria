@@ -8,12 +8,64 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
 
   if (carrito.length === 0) {
     return render(html`
-      <div style="padding-top:7rem; text-align:center; color:white;">
-        <h2>Carrito vacío</h2>
-        <button @click=${() => window.history.back()}
-          style="margin-top:1rem; padding:.8rem 1.5rem; border-radius:10px; background:#ff7b4a; color:white; border:none;">
-          Volver
-        </button>
+      <style>
+        #contenedor {
+          width: 100%;
+          min-height: 100vh;
+          padding-top: 5rem;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          color:white !important;
+        }
+
+        .empty-box {
+          text-align:center;
+          padding:3rem;
+          background:rgba(255,255,255,0.10);
+          backdrop-filter:blur(12px);
+          border-radius:20px;
+          box-shadow:0 10px 30px rgba(0,0,0,0.3);
+          color:white;
+          width:90%;
+          max-width:450px;
+        }
+
+        .empty-box h2 {
+          font-size:2rem;
+          margin-bottom:1rem;
+          font-weight:800;
+          color:#FFD65A;
+        }
+
+        .empty-box p {
+          opacity:.85;
+          margin-bottom:1.5rem;
+          font-size:1.1rem;
+        }
+
+        .empty-btn {
+          padding:.9rem 1.8rem;
+          background:#ff7b4a;
+          border:none;
+          border-radius:12px;
+          font-size:1.1rem;
+          font-weight:700;
+          color:white;
+          cursor:pointer;
+          transition:.2s;
+        }
+
+        .empty-btn:hover {
+          background:#e96d39;
+          transform:translateY(-2px);
+        }
+      </style>
+
+      <div class="empty-box">
+        <h2>Tu carrito está vacío</h2>
+        <p>Aún no has agregado ningún producto.<br>¡Explora nuestras pizzas y promos!</p>
+        <button class="empty-btn" @click=${() => window.history.back()}>Volver</button>
       </div>
     `, contenedor)
   }
@@ -42,21 +94,12 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
         if (!p.personalizable) return { id_producto: p.id, cantidad: p.cantidad }
 
         const personalizaciones = {}
-
         if (p.tamanio?.id) personalizaciones.id_tamano = p.tamanio.id
-
         if (Array.isArray(p.ingredientes) && p.ingredientes.length > 0) {
-          personalizaciones.ingredientes = p.ingredientes.map(ing => ({
-            id_ingrediente: ing.id,
-            cantidad: 1
-          }))
+          personalizaciones.ingredientes = p.ingredientes.map(ing => ({ id_ingrediente: ing.id, cantidad: 1 }))
         }
 
-        return {
-          id_producto: p.id,
-          cantidad: p.cantidad,
-          personalizaciones
-        }
+        return { id_producto: p.id, cantidad: p.cantidad, personalizaciones }
       })
     }
 
@@ -78,11 +121,7 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
         return location.href = '/personal/pedidos'
       }
 
-      const data = {
-        id_pedido: res.pedido.id,
-        url_pago: res.pedido.pedido_url
-      }
-
+      const data = { id_pedido: res.pedido.id, url_pago: res.pedido.pedido_url }
       sessionStorage.setItem("last_payment_url", JSON.stringify(data))
       location.href = res.pedido.pedido_url
     }
@@ -91,7 +130,7 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
   const template = html`
   <style>
     #contenedor {
-      padding-top: 7rem;
+      padding-top:7rem;
       width:100%;
       min-height:100vh;
       display:flex;
@@ -101,7 +140,7 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
 
     .carrito-wrapper {
       width:100%;
-      max-width:1400px;
+      max-width:1300px;
       display:flex;
       padding:2rem;
       gap:2.5rem;
@@ -109,79 +148,72 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
 
     .carrito-left,
     .carrito-right {
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(10px);
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(12px);
       border-radius:14px;
       padding:2rem;
-      box-shadow:0 8px 20px rgba(0,0,0,0.35);
+      box-shadow:0 8px 25px rgba(0,0,0,0.35);
     }
 
-    .carrito-left {
-      flex:2.5;
-      height:fit-content;
-    }
-
-    .carrito-right {
-      flex:1;
-      display:flex;
-      flex-direction:column;
-      gap:1.5rem;
-      height:fit-content;
-    }
+    .carrito-left { flex:2.5; overflow:hidden; }
+    .carrito-right { flex:1; display:flex; flex-direction:column; gap:1.5rem; }
 
     .title {
       font-size:2rem;
-      font-weight:800;
+      font-weight:900;
       color:#FFD65A;
-      margin-bottom:1rem;
+      margin-bottom:1.2rem;
     }
 
     .tabla-responsive {
       width:100%;
       overflow-x:auto;
       scrollbar-width:none;
-      -ms-overflow-style:none;
     }
-
-    .tabla-responsive::-webkit-scrollbar {
-      display:none;
-    }
+    .tabla-responsive::-webkit-scrollbar { display:none; }
 
     table {
       width:100%;
-      min-width:900px;
-      color:white;
+      min-width:950px;
       border-collapse:collapse;
+      color:white;
     }
 
     thead {
-      background:#2d5d2a;
-      color:white;
+      background:#1d1d1d;
+      color:#FFD65A;
     }
 
-    th, td {
-      padding:.9rem .6rem;
-      vertical-align:middle;
+    th {
+      padding:1rem .7rem;
+      font-size:1rem;
+      font-weight:700;
+      border-bottom:2px solid rgba(255,255,255,0.15);
+      text-align:left;
+    }
+
+    td {
+      padding:1rem .7rem;
       border-bottom:1px solid rgba(255,255,255,0.08);
+      font-size:0.95rem;
     }
 
     tbody tr {
-      background:rgba(255,255,255,0.06);
-      transition: .2s;
+      background:rgba(255,255,255,0.05);
+      transition:.2s;
     }
 
     tbody tr:hover {
-      background:rgba(255,255,255,0.1);
+      background:rgba(255,255,255,0.12);
     }
 
     table img {
-      width:70px;
-      height:70px;
+      width:75px;
+      height:75px;
       border-radius:10px;
       object-fit:cover;
     }
 
-    /* Lado derecho */
     .side-section-title {
       font-size:1.4rem;
       font-weight:700;
@@ -189,15 +221,15 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
     }
 
     .pago-box {
-      background:rgba(255,255,255,0.08);
-      padding:1rem 1.3rem;
+      background:rgba(255,255,255,0.10);
+      padding:1.1rem 1.4rem;
       border-radius:12px;
-      border-left:4px solid #FFD65A;
+      border-left:4px solid #ff7b4a;
       color:#eee;
     }
 
     .total-final {
-      font-size:2rem;
+      font-size:2.2rem;
       font-weight:900;
       text-align:center;
       color:#ff7b4a;
@@ -205,41 +237,29 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
 
     .finalizar-btn {
       width:100%;
-      padding:1rem;
+      padding:1.1rem;
       background:#ff7b4a;
       color:white;
       border:none;
-      border-radius:12px;
+      border-radius:14px;
       font-size:1.2rem;
       font-weight:700;
       cursor:pointer;
-      transition:.2s;
+      transition:.25s;
     }
 
     .finalizar-btn:hover {
-      background:#e36434;
-      transform:translateY(-2px);
+      background:#e96d39;
+      transform:translateY(-3px);
     }
 
     @media(max-width:900px){
-      .carrito-wrapper {
-        flex-direction:column;
-        padding:1rem;
-      }
+      .carrito-wrapper { flex-direction:column; padding:1rem; }
 
-      table img {
-        width:50px;
-        height:50px;
-      }
-
-      th, td {
-        padding:.6rem .4rem;
-        font-size:.85rem;
-      }
-
-      .title {
-        font-size:1.6rem;
-      }
+      th, td { padding:.7rem .4rem; font-size:.82rem; }
+      table img { width:55px; height:55px; }
+      .title { font-size:1.6rem; }
+      p{color:white !important; font-size:1rem !important;}
     }
   </style>
 
@@ -270,17 +290,15 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
               return html`
                 <tr>
                   <td><img src="${p.imagen_url}" /></td>
-
-                  <td><strong>${p.nombre}</strong><br /><small>${p.descripcion ?? ''}</small></td>
-
+                  <td><strong>${p.nombre}</strong><br/><small>${p.descripcion ?? ''}</small></td>
                   <td>${p.tamanio ? p.tamanio.nombre : '-'}</td>
-
                   <td>
                     ${(p.ingredientes?.length ?? 0) > 0
-                      ? html`<ul style="padding-left:1rem; margin:0;">${p.ingredientes.map(i => html`<li>${i.nombre}</li>`)}</ul>`
+                      ? html`<ul style="padding-left:1rem; margin:0;">
+                          ${p.ingredientes.map(i => html`<li>${i.nombre}</li>`)}
+                        </ul>`
                       : '-'}
                   </td>
-
                   <td>${p.cantidad}</td>
                   <td>S/. ${precioUnit.toFixed(2)}</td>
                   <td>S/. ${(precioUnit * p.cantidad).toFixed(2)}</td>
@@ -295,11 +313,9 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
     <div class="carrito-right">
       <div class="side-section-title">Pago</div>
 
-      ${user?.rol === 'cliente' || user === null ? html`
-        <div class="pago-box">Compra con pasarela de pago segura.</div>
-      ` : html`
-        <div class="pago-box">Pago en tienda (efectivo o tarjeta).</div>
-      `}
+      ${user?.rol === 'cliente' || user === null
+        ? html`<div class="pago-box">Compra con pasarela de pago segura.</div>`
+        : html`<div class="pago-box">Pago en tienda (efectivo o tarjeta).</div>`}
 
       <div>
         <div class="side-section-title">Total</div>
