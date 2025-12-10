@@ -59,14 +59,14 @@
 #nav-container #nav-logo a div h6{
   font-family: "Luckiest Guy", cursive;
   color: #fff;
-  font-size: 1rem;
+  font-size: 1.2rem;
   margin: 0;
 } 
 
 #nav-container #nav-logo a div p, #nav-container #nav-logo a div span{
   font-family: "Lobster", sans-serif; 
   color: #fff;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   margin: 0;
 }
 
@@ -108,7 +108,7 @@
   font-family: "Kanit", sans-serif;
   font-weight: 300;
   font-style: normal;
-  font-size: 1rem;
+  font-size: 1.1rem;
   text-align: center;
   color: #fff;
   text-shadow: 0 2px 8px rgba(0,0,0,0.7);
@@ -341,24 +341,26 @@
 }
 
 #panel-carrito footer button {
-  background: #3FAF52;
-  color: #FFFFFF;
+  background: #FFC933;
+  color: #000;
   border: none;
   border-radius: 10px;
   padding: 0.65rem 1.2rem;
   cursor: pointer;
   font-weight: 700;
-  transition: 0.3s;
+  transition: 0.3s all ease;
   box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
 
 #panel-carrito footer button:hover {
-  background: #2D8A3F;
+  background: #ffc93338;
+  color: #fff;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
   transform: translateY(-2px);
 }
 
 #contenedor {
-  background-color: #393533;
+  background:linear-gradient(220deg,#494440 0%,#262524 40%,#3f3932 100%);
   width: 100%;
   height: 100%;
 }
