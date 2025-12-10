@@ -170,7 +170,7 @@ export async function renderDetalleProductoView(idProducto) {
     font-size:1.05rem;
     border-radius:12px;
     border:none;
-    background:#ff7b4a;
+    background: #ff7b4a;
     color:white;
     font-weight:700;
   }
@@ -204,7 +204,7 @@ export async function renderDetalleProductoView(idProducto) {
 
   .ingred-item input {
     width:18px; height:18px;
-    accent-color:#ff7b4a;
+    accent-color: #ff7b4a;
   }
 
   @media(max-width:768px){
