@@ -104,6 +104,8 @@ export async function mostrarPedidos() {
         overflow-x: auto;
         border-radius: 0.9rem;
         background: rgba(255,255,255,0.05) !important;
+        scrollbar-width: none;
+        color: #fff !important;
       }
       table {
         width: 100%;
