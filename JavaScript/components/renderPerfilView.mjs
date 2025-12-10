@@ -170,7 +170,7 @@ export async function renderPerfilView(user) {
 
       .inp input {
         width: 100%;
-        padding: .8rem;
+        padding: 1.6rem .7rem;
         background: rgba(255,255,255,0.08);
         border: 1px solid rgba(255,255,255,0.15);
         border-radius: 10px;
@@ -342,8 +342,7 @@ async function actualizarPerfil() {
   }
   const res = await userApi.updateProfile(data)
   sessionStorage.setItem("user", JSON.stringify(res.usuario))
-  mensajeAlert({ icon: "success", title: "Actualizado", timer: 1000 })
-  location.reload()
+  mensajeAlert({ icon: "success", title: "Actualizado", text: "Actualizado correctamente.", timer: 1000 }).then(() => location.reload())
 }
 
 async function cambiarPassword() {
@@ -352,11 +351,11 @@ async function cambiarPassword() {
   const p2 = document.getElementById("repeat-password").value
 
   if (!p1 || !p2)
-    return mensajeAlert({ icon: "warning", title: "Campos vacíos" })
+    return mensajeAlert({ icon: "warning", title: "Campos vacíos", text: "Los campos no pueden estar vacíos.", showConfirmButton: true })
 
   if (p1 !== p2)
-    return mensajeAlert({ icon: "warning", title: "No coinciden" })
+    return mensajeAlert({ icon: "warning", title: "No coinciden", text: "Las contraseña no coinciden.", showConfirmButton: true })
 
   await userApi.updateProfile({ password: p1 })
-  mensajeAlert({ icon: "success", title: "Contraseña cambiada", timer: 1000 })
+  mensajeAlert({ icon: "success", title: "Contraseña cambiada",text: "La contraseña ha sido cambiada correctamente.", timer: 1000 })
 }
