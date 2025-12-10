@@ -9,51 +9,96 @@ export async function renderProductos(user) {
 
   const template = html`
     <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html, body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        background: #020617;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      #contenedor {
+        width: 100%;
+        min-height: 100vh;
+        background: #020617;
+        color: #f9fafb;
+      }
+
       #nav {
         width: 100%;
         display: flex;
         justify-content: center;
-        background: #ffffff;
+        background: #020617;
         padding: 1rem 0;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: 1px solid rgba(148,163,184,0.35);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.45);
       }
 
       #nav .tab-buttons {
         display: flex;
-        gap: 1.5rem;
-        background: #f7f7f7;
-        padding: 0.5rem;
-        border-radius: 12px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        gap: 0.75rem;
+        background: #0b1220;
+        padding: 0.4rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148,163,184,0.5);
       }
 
       #nav .tab-btn {
-        font-size: 1.05rem;
+        font-size: 0.95rem;
         font-weight: 600;
         text-decoration: none;
-        color: #555;
-        padding: 0.6rem 1.5rem;
-        border-radius: 10px;
-        transition: all 0.25s ease;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-width: 120px;
+        color: #e5e7eb;
+        padding: 0.55rem 1.4rem;
+        border-radius: 999px;
+        transition: 0.25s ease;
+        min-width: 110px;
         text-align: center;
+        cursor: pointer;
+        background: transparent;
       }
 
       #nav .tab-btn:hover {
-        background: #eaeaea;
+        background: #1f2937;
       }
 
       #nav .tab-btn.active {
-        background: #2ecc71;
-        color: white;
-        box-shadow: 0 3px 8px rgba(46, 204, 113, 0.35);
+        background: #22c55e;
+        color: #020617;
+        box-shadow: 0 0 18px rgba(34,197,94,0.65);
       }
 
+      #main-content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 0 1.5rem 3rem;
+      }
+
+      #vista-dinamica {
+        width: 100%;
+        max-width: 1320px;
+        margin: 2.5rem auto 0 auto;
+      }
+
+      @media (max-width: 768px) {
+        #main-content {
+          padding: 0 1rem 3rem;
+        }
+
+        #vista-dinamica {
+          margin-top: 2rem;
+        }
+      }
     </style>
-    <div class="nav" id="nav">
+    <section >
+    <div id="nav">
       <div class="tab-buttons">
         <a id="btn-productos" data-route class="tab-btn active" href="#productos">Productos</a>
         <a id="btn-carrito" data-route class="tab-btn" href="#carrito">Carrito</a>
@@ -91,7 +136,6 @@ export async function renderProductos(user) {
   const carritoBtn = document.getElementById("carrito-flotante")
   const panel = document.getElementById("panel-carrito")
   const cerrarBtn = document.getElementById("cerrar-carrito")
-  const detalleBtn = document.getElementById("btn-detalle")
   const content = document.getElementById("main-content")
 
   function activarProductos() {

@@ -11,12 +11,12 @@ export async function renderDetallePedidosView(id) {
     renderDetallePedidosView(id);
   };
 
-  let estadoColor = "#dcdcdc";
-  if (pedido.id_estado === 2) estadoColor = "#ffe1e1";
-  else if (pedido.id_estado === 3) estadoColor = "#faefbd";
-  else if (pedido.id_estado === 4) estadoColor = "#2e2e2ea8";
-  else if (pedido.id_estado === 5) estadoColor = "#b1ffbaff";
-  else if (pedido.id_estado === 6) estadoColor = "#d9d9d9";
+  let estadoColor = "#e2e8f0";
+  if (pedido.id_estado === 2) estadoColor = "#fee2e2";
+  else if (pedido.id_estado === 3) estadoColor = "#fef9c3";
+  else if (pedido.id_estado === 4) estadoColor = "#e2e8f0";
+  else if (pedido.id_estado === 5) estadoColor = "#dcfce7";
+  else if (pedido.id_estado === 6) estadoColor = "#f1f5f9";
 
   const fecha = new Date(pedido.fecha_pedido).toLocaleString("es-PE", {
     dateStyle: "short",
@@ -25,91 +25,161 @@ export async function renderDetallePedidosView(id) {
 
   const template = html`
     <style>
-      .pedido-card {
+      body {
+        background: #f8fafc;
+        font-family: "Inter", sans-serif;
+      }
+
+      .container-section {
+        max-width: 1050px;
+        margin: auto;
+        padding: 1rem;
+      }
+
+      .card {
+        background: white;
         border-radius: 14px;
-        padding: 1.5rem;
-        background: #ffffff;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+        border: 1px solid #e5e7eb;
+        margin-bottom: 2rem;
       }
 
-      .btn-aceptar {
-        background: linear-gradient(135deg, #ff5858, #ff2e2e);
+      .btn-back {
+        background: #1e293b;
         color: white;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 10px;
-        font-size: 0.95rem;
-        cursor: pointer;
-        letter-spacing: 0.5px;
-        font-weight: bold;
-        transition: 0.25s;
-      }
-
-      .btn-aceptar:hover {
-        transform: translateY(-2px) scale(1.03);
-        box-shadow: 0px 6px 16px rgba(255, 80, 80, 0.5);
-      }
-
-      .btn-volver {
-        background: #4b4b4b;
-        color: white;
-        border: none;
         padding: 10px 18px;
-        border-radius: 10px;
-        font-size: 0.9rem;
+        border-radius: 8px;
+        font-weight: 600;
+        border: none;
         cursor: pointer;
-        transition: 0.2s;
+        transition: .2s ease;
       }
 
-      .btn-volver:hover {
-        background: #2f2f2f;
-        transform: scale(1.05);
+      .btn-back:hover {
+        background: #334155;
+        transform: translateY(-2px);
       }
 
-      .estado-box {
+      .btn-primary {
+        background: #4f46e5;
+        color: white;
+        padding: 12px 22px;
+        border-radius: 10px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: .25s;
+      }
+
+      .btn-primary:hover {
+        background: #4338ca;
+        transform: translateY(-1px);
+      }
+
+      .estado-pill {
+        background: ${estadoColor};
+        padding: .9rem;
         border-radius: 12px;
-        color: #333;
-        font-weight: bold;
+        text-align:center;
+        font-weight: 700;
+        color:#1e293b;
+        margin-bottom: 2rem;
+        border: 1px solid #cbd5e1;
+        font-size: 1.1rem;
       }
 
-      .detalle-table {
-        border-radius: 12px;
-        overflow: hidden;
+      h2 {
+        color: #1e293b;
+        font-size: 1.7rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
       }
 
-      .detalle-table thead {
-        background: #000;
-        color: #fff;
+      h4 {
+        color: #1e293b;
+        font-weight: 700;
+        margin-top: 1.5rem;
+      }
+
+      strong {
+        color: #1e293b;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+        margin-top: 1rem;
+      }
+
+      thead {
+        background: #1e293b;
+        color: white;
+      }
+
+      thead th {
+        padding: 1rem;
+        font-size: .9rem;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+      }
+
+      tbody tr {
+        background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        transition: .2s;
+      }
+
+      tbody tr:hover {
+        background: #f1f5f9;
+      }
+
+      tbody td {
+        padding: 1rem;
+        border-bottom: 1px solid #e5e7eb;
+        font-weight: 500;
+        color: #334155;
+      }
+
+      ul {
+        padding-left: 18px;
+      }
+
+      .text-muted {
+        color: #94a3b8 !important;
       }
     </style>
 
-    <div class="container py-3">
+    <div class="container-section">
 
-      <button class="btn-volver mb-3" @click=${() => window.history.back()}>
+      <button class="btn-back mb-3" @click=${() => window.history.back()}>
         ← Volver
       </button>
 
-      <div class="pedido-card mb-4">
-        <h2 style="font-weight:900; margin-bottom:0.8rem;">Pedido #${pedido.id}</h2>
+      <div class="card">
+        <h2>Pedido #${pedido.id}</h2>
 
-        <div class="row mb-2">
+        <div class="row mb-3">
           <div class="col"><strong>Cliente:</strong> ${pedido.cliente?.nombre}</div>
           <div class="col"><strong>Repartidor:</strong> ${pedido.repartidor?.nombre || "Sin asignar"}</div>
         </div>
 
-        <div class="row mb-2">
+        <div class="row mb-3">
           <div class="col"><strong>Método de pago:</strong> ${pedido.metodoPago?.tipo}</div>
           <div class="col"><strong>Fecha:</strong> ${fecha}</div>
         </div>
 
         <div class="row mb-4">
-          <div class="col"><strong>Total:</strong> S/. ${pedido.total}</div>
+          <div class="col">
+            <strong>Total:</strong> S/. ${pedido.total}
+          </div>
 
           ${
             pedido.id_estado === 2
               ? html`
-                  <div class="col ">
-                    <button class="btn-aceptar" @click=${() => actualizarEstado(3)}>
+                  <div class="col">
+                    <button class="btn-primary" @click=${() => actualizarEstado(3)}>
                       ✔ Aceptar Pedido
                     </button>
                   </div>
@@ -119,20 +189,13 @@ export async function renderDetallePedidosView(id) {
         </div>
       </div>
 
-      <div class="estado-box"
-        style="background-color: ${estadoColor};
-        padding: 0.7rem;
-        text-align: center;
-        margin-bottom: 1.5rem;
-        font-size: 1.25rem;
-        border-radius: 10px;
-        font-family: 'Anton', sans-serif;">
+      <div class="estado-pill">
         Estado: ${pedido.estadoPedido?.nombre}
       </div>
 
-      <h4 style="font-weight: 800;">Detalles del Pedido</h4>
+      <h4 style="margin-top: 2rem; color: #fff;">Detalles del Pedido</h4>
 
-      <table class="table detalle-table table-hover mt-3">
+      <table>
         <thead>
           <tr>
             <th>Producto</th>
@@ -142,17 +205,19 @@ export async function renderDetallePedidosView(id) {
             <th>Subtotal</th>
           </tr>
         </thead>
+
         <tbody>
           ${pedido.detalles.map(det => html`
             <tr>
               <td>${det.producto.nombre}</td>
               <td>${det.cantidad}</td>
               <td>S/. ${det.precio_unitario}</td>
+
               <td>
                 ${det.personalizaciones.length === 0
                   ? html`<span class="text-muted">Ninguna</span>`
                   : html`
-                      <ul class="mb-0 ps-3">
+                      <ul>
                         ${det.personalizaciones.map(p => html`
                           <li>
                             ${p.tamano ? `Tamaño: ${p.tamano.nombre}` : ""}
@@ -162,11 +227,13 @@ export async function renderDetallePedidosView(id) {
                       </ul>
                     `}
               </td>
+
               <td>S/. ${det.subtotal}</td>
             </tr>
           `)}
         </tbody>
       </table>
+
     </div>
   `;
 

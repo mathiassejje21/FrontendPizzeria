@@ -4,26 +4,17 @@ import { menuAdmin, menuPersonal } from "./rutasUsers.mjs";
 
 export async function renderNavbarTrabajadores(user) {
   const root = document.getElementById("main");
-
   let collapsed = sessionStorage.getItem("navbar-collapsed") === "true";
 
   const rol = user.rol?.nombre || user.rol;
   const menu = rol === "administrador" ? menuAdmin : menuPersonal;
 
   const getIniciales = (nombre) => {
-    if (!nombre) return "U";
     const p = nombre.trim().split(" ");
     return p.length === 1 ? p[0][0].toUpperCase() : (p[0][0] + p[1][0]).toUpperCase();
   };
 
   const iniciales = getIniciales(user.nombre);
-
-  const activarItem = (e) => {
-    document.querySelectorAll(".menu-link").forEach((el) =>
-      el.classList.remove("active")
-    );
-    e.currentTarget.classList.add("active");
-  };
 
   const logout = async () => {
     const auth = new authController();
@@ -36,128 +27,146 @@ export async function renderNavbarTrabajadores(user) {
     renderView();
   };
 
+  const activarItem = (e) => {
+    document.querySelectorAll(".menu-item, .submenu-link").forEach(el => el.classList.remove("active"));
+    e.currentTarget.classList.add("active");
+  };
+
+  const toggleInventario = (e) => {
+    e.preventDefault();
+    document.getElementById("submenuinventario").classList.toggle("active");
+  };
+
+  const toggleReportes = (e) => {
+    e.preventDefault();
+    document.getElementById("submenureportes").classList.toggle("active");
+  };
+
   const renderView = () => {
     const template = html`
+
       <style>
         * {
-          text-decoration: none !important;
           font-family: Inter, sans-serif;
+          color: inherit;
+        }
+
+        a {
+          text-decoration: none;
+          color: inherit;
         }
 
         :root {
-          --nav-bg: #0f172a;
-          --nav-hover: #1e293b;
-          --nav-active: #334155;
+          --bg: #0f172a;
+          --hover: #1e293b;
+          --active: #334155;
+          --accent: #38bdf8;
           --text: #e2e8f0;
           --text-dim: #94a3b8;
-          --accent: #4ade80;
+        }
+
+        .active {
+          background: var(--active) !important;
+          color: var(--accent) !important;
+          border-left: 3px solid var(--accent);
         }
 
         .sidebar {
           position: fixed;
           top: 0;
           left: 0;
+          width: ${collapsed ? "80px" : "250px"};
           height: 100vh;
-          width: ${collapsed ? "78px" : "240px"};
-          background: var(--nav-bg);
-          border-right: 1px solid #1e293b;
-          transition: width 0.25s ease;
+          background: var(--bg);
+          padding: 1.5rem 1rem;
           display: flex;
           flex-direction: column;
-          padding: 1.5rem 0.8rem 1rem;
-          z-index: 2000;
+          align-items: center;
+          border-right: 1px solid #1e293b;
+          transition: .25s ease;
+          z-index: 3000;
         }
 
         .toggle-btn {
           position: absolute;
-          right: -20px;
-          top: 10px;
-          width: 45px;
-          height: 45px;
+          right: -18px;
+          top: 20px;
+          width: 40px;
+          height: 40px;
           background: var(--accent);
           border-radius: 50%;
-          box-shadow: 0 6px 18px #4ade8060;
           display: flex;
           justify-content: center;
           align-items: center;
           cursor: pointer;
-          z-index: 5000;
+          box-shadow: 0 4px 12px #38bdf890;
         }
 
         .toggle-btn img {
-          width: 22px;
+          width: 20px;
           filter: invert(1);
         }
 
-        #contenedor {
-          margin-left: ${collapsed ? "78px" : "240px"};
-          width: calc(100% - ${collapsed ? "78px" : "240px"});
-          min-height: 100vh;
-          background: #020617;
-          color: white;
-          transition: margin-left 0.25s ease;
+        .avatar-box {
+          margin-top: 60px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          cursor: pointer;
         }
 
-        .nav-user-box {
-          margin-top: 4rem;
-          text-align: center;
-          margin-bottom: 1.8rem;
-        }
-
-        .nav-avatar {
-          width: ${collapsed ? "40px" : "55px"};
-          height: ${collapsed ? "40px" : "55px"};
-          border-radius: 50%;
+        .avatar {
+          width: ${collapsed ? "48px" : "68px"};
+          height: ${collapsed ? "48px" : "68px"};
           background: var(--accent);
+          border-radius: 50%;
           display: flex;
           justify-content: center;
           align-items: center;
           color: white;
-          font-size: ${collapsed ? "0.9rem" : "1.2rem"};
-          font-weight: bold;
-          margin: auto;
-          transition: width 0.2s ease, height 0.2s ease, font-size 0.2s ease;
+          font-weight: 700;
+          font-size: ${collapsed ? "1rem" : "1.4rem"};
+          transition: .25s ease;
         }
 
-        .nav-username {
-          margin-top: 0.55rem;
-          color: var(--text);
-          font-size: 0.95rem;
-          font-weight: 600;
+        .username {
+          margin-top: .6rem;
           display: ${collapsed ? "none" : "block"};
+          font-weight: 600;
+          font-size: .95rem;
+          text-align: center;
+          color: var(--text);
         }
 
-        .menu {
+        nav {
+          width: 100%;
+          margin-top: 2rem;
           display: flex;
           flex-direction: column;
-          gap: 0.35rem;
+          gap: .4rem;
         }
 
-        .menu-link {
-          padding: ${collapsed ? "1rem 0" : "0.75rem 1rem"};
-          border-radius: 8px;
+        .menu-item {
+          padding: .8rem 1rem;
           display: flex;
           align-items: center;
-          justify-content: ${collapsed ? "center" : "flex-start"};
           gap: ${collapsed ? "0" : "12px"};
-          color: var(--text-dim);
+          justify-content: ${collapsed ? "center" : "flex-start"};
           cursor: pointer;
+          border-radius: 8px;
+          color: var(--text-dim);
+          transition: .25s ease;
+          width: 100%;
         }
 
-        .menu-link:hover {
-          background: var(--nav-hover);
+        .menu-item:hover {
+          background: var(--hover);
           color: var(--text);
-        }
-
-        .menu-link.active {
-          background: var(--nav-active);
-          color: var(--accent);
-          border-left: ${collapsed ? "none" : "3px solid var(--accent)"};
         }
 
         .menu-icon {
-          width: ${collapsed ? "28px" : "22px"};
-          height: ${collapsed ? "28px" : "22px"};
+          width: 22px;
           filter: brightness(0) invert(1);
         }
 
@@ -165,69 +174,130 @@ export async function renderNavbarTrabajadores(user) {
           display: ${collapsed ? "none" : "inline"};
         }
 
+        .submenu {
+          display: none;
+          flex-direction: column;
+          gap: .4rem;
+          width: 100%;
+          padding-left: ${collapsed ? "0" : "1.6rem"};
+        }
+
+        .submenu.active {
+          display: flex;
+        }
+
+        .submenu-link {
+          padding: .6rem .9rem;
+          background: #111827;
+          border-radius: 8px;
+          cursor: pointer;
+          color: #cbd5e1;
+        }
+
+        .submenu-link:hover {
+          background: #1e293b;
+          color: var(--accent);
+        }
+
+        .submenu-link.active {
+          background: var(--active);
+          color: var(--accent);
+          border-left: 3px solid var(--accent);
+        }
+
         .logout {
           margin-top: auto;
-          padding: 0.9rem;
+          padding: .9rem 1rem;
+          width: 100%;
           background: #b91c1c;
           border-radius: 8px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 0.7rem;
+          text-align: center;
+          font-weight: 700;
           cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: ${collapsed ? "center" : "flex-start"};
+          gap: ${collapsed ? "0" : "10px"};
+        }
+
+        .logout:hover {
+          background: #991b1b;
         }
 
         .logout-text {
-          color: white;
-          font-family: "Anton", sans-serif;
           display: ${collapsed ? "none" : "inline"};
+          color: white;
         }
 
-        @media (max-width: 768px) {
-          .sidebar {
-            width: ${collapsed ? "78px" : "240px"};
-            position: fixed;
-            z-index: 5000;
-          }
+        .logout-icon {
+          width: 22px;
+          filter: brightness(0) invert(1);
+        }
 
-          #contenedor {
-            margin-left: ${collapsed ? "78px" : "0"};
-            width: ${collapsed ? "calc(100% - 78px)" : "100%"};
-          }
+        #contenedor {
+          margin-left: ${collapsed ? "80px" : "250px"};
+          width: calc(100% - ${collapsed ? "80px" : "250px"});
+          min-height: 100vh;
+          background: #020617;
+          transition: .25s ease;
         }
       </style>
 
       <aside class="sidebar">
 
         <div class="toggle-btn" @click=${toggle}>
-          <img
-            src="${
-              collapsed
-                ? "https://img.icons8.com/?size=100&id=3220&format=png&color=FFFFFF"
-                : "https://img.icons8.com/?size=100&id=113406&format=png&color=FFFFFF"
-            }"
-          />
+          <img src="${collapsed
+            ? "https://img.icons8.com/?id=3220&format=png&color=FFFFFF"
+            : "https://img.icons8.com/?id=113406&format=png&color=FFFFFF"}"/>
         </div>
 
-        <a class="nav-user-box" href="/${rol.toLowerCase()}/perfil" data-route>
-          <div class="nav-avatar">${iniciales}</div>
-          <div class="nav-username">${user.nombre}</div>
+        <a href="/${rol.toLowerCase()}/perfil" data-route class="avatar-box">
+          <div class="avatar">${iniciales}</div>
+          <div class="username">${user.nombre}</div>
         </a>
 
-        <nav class="menu">
-          ${menu.map(
-            (op) => html`
-              <a class="menu-link" href="${op.ruta}" data-route @click=${activarItem}>
-                <img class="menu-icon" src="${op.img}" />
-                <span class="menu-text">${op.texto}</span>
-              </a>
-            `
+        <nav>
+          ${menu.map(op =>
+            op.texto === "Inventario" && rol.toLowerCase() === "administrador"
+              ? html`
+                  <div class="menu-item" @click=${toggleInventario}>
+                    <img class="menu-icon" src="${op.img}">
+                    <span class="menu-text">Inventario ▾</span>
+                  </div>
+
+                  <div id="submenuinventario" class="submenu">
+                    <a class="submenu-link" href="/administrador/inventario/productos" data-route @click=${activarItem}>Productos</a>
+                    <a class="submenu-link" href="/administrador/inventario/categorias" data-route @click=${activarItem}>Categorías</a>
+                    <a class="submenu-link" href="/administrador/inventario/ingredientes" data-route @click=${activarItem}>Ingredientes</a>
+                  </div>
+                `
+              : op.texto === "Reportes" && rol.toLowerCase() === "administrador"
+              ? html`
+                  <div class="menu-item" @click=${toggleReportes}>
+                    <img class="menu-icon" src="${op.img}">
+                    <span class="menu-text">Reportes ▾</span>
+                  </div>
+
+                  <div id="submenureportes" class="submenu">
+                    <a class="submenu-link" href="/administrador/reportes/pedidos" data-route @click=${activarItem}>Pedidos</a>
+                    <a class="submenu-link" href="/administrador/reportes/ventas" data-route @click=${activarItem}>Ventas</a>
+                    <a class="submenu-link" href="/administrador/reportes/productos" data-route @click=${activarItem}>Productos</a>
+                    <a class="submenu-link" href="/administrador/reportes/inventario-categorias" data-route @click=${activarItem}>Inventario</a>
+                    <a class="submenu-link" href="/administrador/reportes/clientes" data-route @click=${activarItem}>Clientes</a>
+                  </div>
+                `
+              : html`
+                  <a class="menu-item" href="${op.ruta}" data-route @click=${activarItem}>
+                    <img class="menu-icon" src="${op.img}">
+                    <span class="menu-text">${op.texto}</span>
+                  </a>
+                `
           )}
         </nav>
 
         <div class="logout" @click=${logout}>
-          <img
-            class="menu-icon"
+          <img 
+            class="logout-icon" 
             src="https://img.icons8.com/?size=100&id=59817&format=png&color=FFFFFF"
           />
           <span class="logout-text">Cerrar sesión</span>
