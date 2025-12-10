@@ -7,15 +7,15 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
   const total = Number(sessionStorage.getItem('carrito_total')) || 0
 
   if (carrito.length === 0) {
-    const empty = html`
-      <div class="container py-4">
+    return render(html`
+      <div style="padding-top:7rem; text-align:center; color:white;">
         <h2>Carrito vacío</h2>
-        <button class="btn btn-secondary mt-3" @click=${() => window.history.back()}>
+        <button @click=${() => window.history.back()}
+          style="margin-top:1rem; padding:.8rem 1.5rem; border-radius:10px; background:#ff7b4a; color:white; border:none;">
           Volver
         </button>
       </div>
-    `
-    return render(empty, contenedor)
+    `, contenedor)
   }
 
   async function hundleCheckout () {
@@ -39,9 +39,7 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
       id_cliente: userId,
       id_metodo_pago: metodoPagoID,
       detalles: carrito.map(p => {
-        if (!p.personalizable) {
-          return { id_producto: p.id, cantidad: p.cantidad }
-        }
+        if (!p.personalizable) return { id_producto: p.id, cantidad: p.cantidad }
 
         const personalizaciones = {}
 
@@ -69,7 +67,7 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
         icon: 'success',
         title: 'Pedido creado',
         text: 'El pedido se ha creado correctamente.',
-        time:1000
+        timer:1000
       })
 
       sessionStorage.removeItem('carrito')
@@ -91,85 +89,168 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
   }
 
   const template = html`
-    <style>
-      .carrito-main {
-        max-width: 95%;
-        margin: 2rem auto;
-        display: flex;
-        gap: 2rem;
-        animation: fade .3s ease-in-out;
-      }
+  <style>
+    #contenedor {
+      padding-top: 7rem;
+      width:100%;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      color:white;
+    }
 
-      @keyframes fade {
-        from { opacity: 0; transform: translateY(6px); }
-        to   { opacity: 1; transform: translateY(0); }
-      }
+    .carrito-wrapper {
+      width:100%;
+      max-width:1400px;
+      display:flex;
+      padding:2rem;
+      gap:2.5rem;
+    }
 
-      .carrito-box, .carrito-side {
-        background: #fff;
-        padding: 2rem;
-        border-radius: 1rem;
-        box-shadow: 0 5px 22px rgba(0,0,0,0.10);
-        height: fit-content;
-      }
+    .carrito-left,
+    .carrito-right {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border-radius:14px;
+      padding:2rem;
+      box-shadow:0 8px 20px rgba(0,0,0,0.35);
+    }
 
-      .carrito-box {
-        flex: 2.5;
-      }
+    .carrito-left {
+      flex:2.5;
+      height:fit-content;
+    }
 
-      .carrito-side {
-        flex: 0.8;
-        display: flex;
-        flex-direction: column;
-        gap: 1.2rem;
+    .carrito-right {
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:1.5rem;
+      height:fit-content;
+    }
+
+    .title {
+      font-size:2rem;
+      font-weight:800;
+      color:#FFD65A;
+      margin-bottom:1rem;
+    }
+
+    .tabla-responsive {
+      width:100%;
+      overflow-x:auto;
+      scrollbar-width:none;
+      -ms-overflow-style:none;
+    }
+
+    .tabla-responsive::-webkit-scrollbar {
+      display:none;
+    }
+
+    table {
+      width:100%;
+      min-width:900px;
+      color:white;
+      border-collapse:collapse;
+    }
+
+    thead {
+      background:#2d5d2a;
+      color:white;
+    }
+
+    th, td {
+      padding:.9rem .6rem;
+      vertical-align:middle;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+
+    tbody tr {
+      background:rgba(255,255,255,0.06);
+      transition: .2s;
+    }
+
+    tbody tr:hover {
+      background:rgba(255,255,255,0.1);
+    }
+
+    table img {
+      width:70px;
+      height:70px;
+      border-radius:10px;
+      object-fit:cover;
+    }
+
+    /* Lado derecho */
+    .side-section-title {
+      font-size:1.4rem;
+      font-weight:700;
+      color:#FFD65A;
+    }
+
+    .pago-box {
+      background:rgba(255,255,255,0.08);
+      padding:1rem 1.3rem;
+      border-radius:12px;
+      border-left:4px solid #FFD65A;
+      color:#eee;
+    }
+
+    .total-final {
+      font-size:2rem;
+      font-weight:900;
+      text-align:center;
+      color:#ff7b4a;
+    }
+
+    .finalizar-btn {
+      width:100%;
+      padding:1rem;
+      background:#ff7b4a;
+      color:white;
+      border:none;
+      border-radius:12px;
+      font-size:1.2rem;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s;
+    }
+
+    .finalizar-btn:hover {
+      background:#e36434;
+      transform:translateY(-2px);
+    }
+
+    @media(max-width:900px){
+      .carrito-wrapper {
+        flex-direction:column;
+        padding:1rem;
       }
 
       table img {
-        width: 70px;
-        height: 70px;
-        object-fit: cover;
-        border-radius: .5rem;
+        width:50px;
+        height:50px;
       }
 
-      .side-title {
-        font-size: 20px;
-        font-weight: 700;
-        color: #0a3a17;
+      th, td {
+        padding:.6rem .4rem;
+        font-size:.85rem;
       }
 
-      .pago-box {
-        background: #f3f7f4;
-        border-radius: .8rem;
-        padding: 1rem;
-        border-left: 5px solid #0a3a17;
+      .title {
+        font-size:1.6rem;
       }
+    }
+  </style>
 
-      .pago-label {
-        font-size: 18px;
-        font-weight: 600;
-        color: #0a3a17;
-      }
+  <div class="carrito-wrapper">
 
-      .total-final {
-        font-size: 26px;
-        font-weight: bold;
-        color: #d40000;
-        text-align: center;
-      }
+    <div class="carrito-left">
+      <div class="title">Detalle del Carrito</div>
 
-      .finalizar-btn {
-        padding: 1rem;
-        font-size: 18px;
-        font-weight: 600;
-      }
-    </style>
-
-    <div class="carrito-main">
-      <div class="carrito-box">
-        <h2 style="color:#0a3a17; font-weight:800;">Detalle del Carrito</h2>
-
-        <table class="table mt-3">
-          <thead style="background:#0a3a17; color:white;">
+      <div class="tabla-responsive">
+        <table>
+          <thead>
             <tr>
               <th>Imagen</th>
               <th>Producto</th>
@@ -183,15 +264,12 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
 
           <tbody>
             ${carrito.map(p => {
-              const extraIng = (p.ingredientes || [])
-                .reduce((acc, ing) => acc + Number(ing.costo_extra), 0)
-
-              const precioUnit =
-                Number(p.precioReal) * (p.tamanio?.factor_precio ?? 1) + extraIng
+              const extraIng = (p.ingredientes || []).reduce((acc, ing) => acc + Number(ing.costo_extra), 0)
+              const precioUnit = Number(p.precioReal) * (p.tamanio?.factor_precio ?? 1) + extraIng
 
               return html`
                 <tr>
-                  <td><img src="${p.imagen_url}" alt="${p.nombre}" /></td>
+                  <td><img src="${p.imagen_url}" /></td>
 
                   <td><strong>${p.nombre}</strong><br /><small>${p.descripcion ?? ''}</small></td>
 
@@ -199,9 +277,7 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
 
                   <td>
                     ${(p.ingredientes?.length ?? 0) > 0
-                      ? html`<ul style="padding-left:1rem; margin:0;">
-                          ${p.ingredientes.map(i => html`<li>${i.nombre}</li>`)}
-                        </ul>`
+                      ? html`<ul style="padding-left:1rem; margin:0;">${p.ingredientes.map(i => html`<li>${i.nombre}</li>`)}</ul>`
                       : '-'}
                   </td>
 
@@ -214,31 +290,26 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
           </tbody>
         </table>
       </div>
-
-      <div class="carrito-side">
-        <div class="side-title">Pago</div>
-        ${user?.rol === 'cliente' || user=== null ? html`
-          <div class="pago-box">
-            <div class="pago-label">Pasarela de Pago</div>
-            <p style="margin:0; color:#444;">Tu compra será completada mediante una pasarela segura.</p>
-          </div>
-        ` : html`
-          <div class="pago-box">
-            <div class="pago-label">Pago en Tienda</div>
-            <p style="margin:0; color:#444;">Pedido a pagar en tienda, puedes pagar en efectivo o con tarjeta de credito. </p>
-          </div>
-          `}
-
-        <div>
-          <div class="side-title">Total a pagar</div>
-          <div class="total-final">S/. ${total.toFixed(2)}</div>
-        </div>
-
-        <button class="btn btn-danger finalizar-btn" @click=${hundleCheckout}>
-          Ir a pagar
-        </button>
-      </div>
     </div>
+
+    <div class="carrito-right">
+      <div class="side-section-title">Pago</div>
+
+      ${user?.rol === 'cliente' || user === null ? html`
+        <div class="pago-box">Compra con pasarela de pago segura.</div>
+      ` : html`
+        <div class="pago-box">Pago en tienda (efectivo o tarjeta).</div>
+      `}
+
+      <div>
+        <div class="side-section-title">Total</div>
+        <div class="total-final">S/. ${total.toFixed(2)}</div>
+      </div>
+
+      <button class="finalizar-btn" @click=${hundleCheckout}>Ir a pagar</button>
+    </div>
+
+  </div>
   `
 
   render(template, contenedor)
