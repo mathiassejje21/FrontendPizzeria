@@ -11,13 +11,15 @@ export async function renderSugerencia() {
     const apiTamanio = new tamanioController();
     const tamanios = await apiTamanio.getTamanios();
 
-    const tamanoMediano = tamanios.find(t => t.nombre?.toLowerCase().includes("mediano")) || null;
+    const tamanoMediano =
+        tamanios.find(t => t.nombre?.toLowerCase().includes("mediano")) ||
+        tamanios.find(t => t.id === 2) ||
+        null;
 
     const getBaseTamano = (item) =>
         item.tamanoSeleccionado ||
-        tamanios.find((t) => t.id === data?.preferencia?.tamanoFavorito) ||
         tamanoMediano ||
-        tamanios.find((t) => t.id === 2) ||
+        tamanios[0] ||
         null;
 
     const calcularPrecio = (item) => {
@@ -163,9 +165,6 @@ export async function renderSugerencia() {
     border:none;
     font-size:.9rem;
 }
-.sugerencia-btn:hover{
-    background:#319143;
-}
 
 @media(max-width:768px){
     .sugerencia-card{
@@ -204,7 +203,7 @@ export async function renderSugerencia() {
 
     <div class="slider-sugerencias">
         ${items.map(item => {
-            item.tamanoSeleccionado = getBaseTamano(item);
+            item.tamanoSeleccionado = tamanoMediano;
 
             return html`
             <div class="sugerencia-card">
@@ -235,8 +234,8 @@ export async function renderSugerencia() {
                             }}
                         >
                             ${tamanios.map(t=>html`
-                                <option value="${t.id}" 
-                                    ?selected=${t.id === (tamanoMediano?.id || 2)}>
+                                <option value="${t.id}"
+                                    ?selected=${item.tamanoSeleccionado?.id === t.id}>
                                     ${t.nombre}
                                 </option>
                             `)}
