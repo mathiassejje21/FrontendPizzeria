@@ -246,12 +246,12 @@ export async function renderProductosView(
   }
 
   .add-btn{
-    background:#3FAF52;
+    background: #52e53fff;
+    color: #000;
     width:45px;
     height:45px;
     border-radius:50%;
     border:none;
-    color:white;
     font-size:23px;
     cursor:pointer;
     transition:.25s;
@@ -261,7 +261,8 @@ export async function renderProductosView(
   }
 
   .add-btn:hover{
-    background:#329244;
+    background:#24b24fff;
+    color:white;
     transform:translateY(-2px);
   }
 
