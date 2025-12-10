@@ -140,10 +140,10 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
 
     .carrito-wrapper {
       width:100%;
-      max-width:1300px;
+      max-width:1400px;
       display:flex;
       padding:2rem;
-      gap:2.5rem;
+      gap:1.5rem;
     }
 
     .carrito-left,
@@ -153,9 +153,10 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
       border-radius:14px;
       padding:2rem;
       box-shadow:0 8px 25px rgba(0,0,0,0.35);
+      height:fit-content;
     }
 
-    .carrito-left { flex:2.5; overflow:hidden; }
+    .carrito-left { flex:2.5; }
     .carrito-right { flex:1; display:flex; flex-direction:column; gap:1.5rem; }
 
     .title {
@@ -285,7 +286,7 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
           <tbody>
             ${carrito.map(p => {
               const extraIng = (p.ingredientes || []).reduce((acc, ing) => acc + Number(ing.costo_extra), 0)
-              const precioUnit = Number(p.precioReal) * (p.tamanio?.factor_precio ?? 1) + extraIng
+              const precioUnit = (Number(p.precio) + extraIng ) * (p.tamanio?.factor_precio ?? 1) 
 
               return html`
                 <tr>

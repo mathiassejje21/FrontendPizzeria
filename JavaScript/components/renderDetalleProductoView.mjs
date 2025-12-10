@@ -62,7 +62,7 @@ export async function renderDetalleProductoView(idProducto) {
   .layout {
     display:flex;
     width:100%;
-    max-width:1250px;
+    max-width:1400px;
     margin:auto;
     padding:2rem 1rem;
     gap:3rem;
