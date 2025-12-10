@@ -28,122 +28,155 @@ export async function renderInventarioView() {
         gap: 3rem;
         padding: 2rem;
         font-family: "Inter", sans-serif;
+        background: #020617;
+        color: white;
       }
 
       .categoria-title {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
         font-weight: 700;
-        color: #0a3a17;
+        color: #4ade80;
         margin-bottom: 1rem;
-        border-left: 6px solid #2ecc71;
-        padding-left: 10px;
+        padding-left: 12px;
+        border-left: 4px solid #22c55e;
       }
 
       .categorias-wrapper {
         display: flex;
         gap: 1rem;
         overflow-x: auto;
-        padding-bottom: 0.5rem;
+        padding-bottom: .5rem;
       }
+
       .categorias-wrapper::-webkit-scrollbar { display: none; }
 
       .categoria-chip {
-        min-width: 180px;
+        min-width: 190px;
         padding: 1rem;
-        background: #ffffff;
-        border-radius: 14px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        border-radius: 16px;
+        background: linear-gradient(145deg, #0f172a, #1e293b);
+        border: 1px solid rgba(74, 222, 128, 0.25);
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: .45rem;
         cursor: pointer;
-        transition: 0.25s ease;
+        transition: 0.3s ease;
+        color: white;
       }
 
       .categoria-chip:hover {
         transform: translateY(-6px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        box-shadow: 0 0 18px rgba(34, 197, 94, 0.35);
       }
 
       .categoria-chip img {
-        width: 70px;
-        height: 70px;
-        border-radius: 12px;
+        width: 72px;
+        height: 72px;
+        border-radius: 14px;
         object-fit: cover;
-        margin-bottom: 0.6rem;
+        border: 2px solid rgba(74,222,128,.4);
       }
 
       .categoria-chip h4 {
         margin: 0;
         font-size: 1rem;
         font-weight: 700;
-        color: #0a3a17;
-        margin-bottom: 0.3rem;
+        color: #4ade80;
+        text-align: center;
       }
 
       .categoria-chip p {
         margin: 0;
-        font-size: 0.85rem;
-        opacity: 0.7;
+        font-size: .8rem;
+        opacity: .7;
+        text-align: center;
       }
 
       .grid-3 {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
         gap: 1.4rem;
       }
 
       .item-card {
-        background: #ffffff;
+        background: #0f172a;
         border-radius: 14px;
         padding: 1rem;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-        border: 1px solid #e5e5e5;
-        transition: 0.25s ease;
+        border: 1px solid rgba(148,163,184,0.25);
+        box-shadow: 0 0 18px rgba(15,23,42,0.45);
+        transition: .25s ease;
         display: flex;
         flex-direction: column;
-        gap: .6rem;
+        gap: .7rem;
       }
 
       .item-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        border-color: rgba(74,222,128,.5);
+        box-shadow: 0 0 20px rgba(34,197,94,0.25);
       }
 
       .item-card img {
         width: 100%;
-        height: 180px;
+        height: 170px;
         object-fit: cover;
         border-radius: 12px;
+        border: 1px solid rgba(148,163,184,0.3);
       }
 
       .item-info h3 {
         margin: 0;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         font-weight: 700;
-        color: #0a3a17;
+        color: #4ade80;
       }
 
       .item-info p {
         margin: 0;
-        font-size: .95rem;
-        color: #444;
+        font-size: .9rem;
+        opacity: .85;
       }
 
-      .estado-activo { color: #27ae60; font-weight: 700; }
-      .estado-inactivo { color: #e74c3c; font-weight: 700; }
+      .estado-activo {
+        color: #22c55e;
+        font-weight: 700;
+      }
+
+      .estado-inactivo {
+        color: #ef4444;
+        font-weight: 700;
+      }
 
       .precio-tag {
         font-size: 1rem;
+        color: #facc15;
         font-weight: 700;
         margin-top: 4px;
+      }
+
+      @media (max-width: 768px) {
+        #contenedor-inventario { padding: 1rem; gap: 2rem; }
+
+        .categoria-chip {
+          min-width: 150px;
+          padding: .8rem;
+        }
+
+        .grid-3 {
+          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        }
+
+        .item-card img {
+          height: 140px;
+        }
       }
     </style>
 
     <section id="contenedor-inventario">
 
       <section>
-        <p class="categoria-title" align="center">Categorias Disponibles</p>
+        <p class="categoria-title" align="center">Categorías Disponibles</p>
         <div class="categorias-wrapper">
           ${categorias.map(cat => html`
             <div class="categoria-chip">
