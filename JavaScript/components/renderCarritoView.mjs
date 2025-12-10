@@ -217,7 +217,7 @@ export async function renderCarritoView(user, contenedor = document.getElementBy
 
       <div class="carrito-side">
         <div class="side-title">Pago</div>
-        ${user?.rol === 'cliente' ? html`
+        ${user?.rol === 'cliente' || user=== null ? html`
           <div class="pago-box">
             <div class="pago-label">Pasarela de Pago</div>
             <p style="margin:0; color:#444;">Tu compra será completada mediante una pasarela segura.</p>

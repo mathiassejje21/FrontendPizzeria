@@ -57,15 +57,24 @@ export const agregarAlCarrito = (producto, cantidad, tamanio = null, ingrediente
 
   const esPizza = producto.categoria?.id === 1;
 
-  let index = carrito.findIndex(p =>
-    esPizza
-      ? (
-        p.id == producto.id &&
-        (p.tamanio?.id ?? null) == (tamanio?.id ?? null) &&
-        JSON.stringify(p.ingredientes || []) == JSON.stringify(ingredientes || [])
-      )
-      : p.id == producto.id
-  );
+  const normalizarIngredientes = (arr = []) =>
+    arr
+      .map(i => ({ id: i.id, costo_extra: Number(i.costo_extra || 0) }))
+      .sort((a, b) => a.id - b.id); // evitar diferencias por orden
+
+  const ingNorm = normalizarIngredientes(ingredientes);
+
+  let index = carrito.findIndex(p => {
+    if (!esPizza) return p.id === producto.id;
+
+    const pIngNorm = normalizarIngredientes(p.ingredientes);
+
+    return (
+      p.id === producto.id &&
+      (p.tamanio?.id ?? null) === (tamanio?.id ?? null) &&
+      JSON.stringify(pIngNorm) === JSON.stringify(ingNorm)
+    );
+  });
 
   if (index !== -1) {
     carrito[index].cantidad += cantidad;
@@ -84,6 +93,7 @@ export const agregarAlCarrito = (producto, cantidad, tamanio = null, ingrediente
   updateTotal();
   refrescarVistaCarrito();
 };
+
 
 export const renderCarrito = () => {
   const panel = document.querySelector('#panel-carrito .contenido');

@@ -67,19 +67,19 @@ if (!window.__dataRouteDelegated) {
     if (hash) tryScrollTo(hash);
   });
 
- window.updateActiveLinkGlobal = () => {
-  const currentPath = window.location.pathname;
+  window.updateActiveLinkGlobal = () => {
+    const currentPath = window.location.pathname;
 
-  document.querySelectorAll("[data-route]").forEach(link => {
-    const linkPath = (link.getAttribute("href") || "").split("#")[0];
+    document.querySelectorAll('#nav-menu .nav-link').forEach(link => {
+      const linkPath = (link.getAttribute("href") || "").split("#")[0];
+      const isActive = linkPath === currentPath;
 
-    const isActive = linkPath === currentPath;
-    link.classList.toggle("active", isActive);
+      link.classList.toggle("active", isActive);
 
-    const div = link.closest("section").querySelector("div");
-    div.classList.toggle("active", isActive);
-  });
-};
+      const dot = link.parentElement.querySelector(".nav-dot");
+      if (dot) dot.classList.toggle("active", isActive);
+    });
+  };
 
   window.updateActiveLinkGlobal();    
 }

@@ -13,7 +13,7 @@
   transform: translateX(-50%);
   width: 88%;
   height: 72px;
-  padding: 0 2rem;
+  padding: 0 1rem;
   background: rgba(66, 66, 66, 0.3);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -56,7 +56,7 @@
   height: 40px;
 }
 
-#nav-container #nav-logo a h6{
+#nav-container #nav-logo a div h6{
   font-family: "Luckiest Guy", cursive;
   color: #fff;
   font-size: 1rem;
@@ -80,52 +80,52 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 1rem;
+  gap: 1.1rem;
 }
 
-#nav-container #nav-menu ul section {
+#nav-container #nav-menu ul .nav-item {
+  padding: 0.5rem auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-
-#nav-container #nav-menu ul li {
-  width: 100px;
-  padding: 3px auto;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
 }
 
-#nav-container #nav-menu ul li a {
+#nav-container #nav-menu ul .nav-item .nav-link {
   text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+
+}
+
+#nav-container #nav-menu .nav-item .nav-link p{
+  margin: 0;
   font-family: "Kanit", sans-serif;
   font-weight: 300;
   font-style: normal;
   font-size: 1rem;
   text-align: center;
-  display: block;
   color: #fff;
-  transition: all 0.3s ease;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.7);
 }
 
-#nav-container #nav-menu ul div{
+#nav-container #nav-menu ul .nav-dot{
   height: 10px;
   width: 10px;
   border-radius: 50%;
 }
 
-#nav-container #nav-menu ul li a.active {
+#nav-container #nav-menu ul .nav-item .nav-link.active p{
   transform: scale(1.05);
-  font-weight: 500;
+  font-weight: 600;
 }
 
-#nav-container #nav-menu ul section div.active {
+#nav-container #nav-menu ul .nav-item .nav-dot.active {
   background-color: #fff;
 }
 
@@ -160,6 +160,19 @@
   padding-left: 1rem;
 }
 
+#nav-container #nav-user .btn-user a .user-img{
+  width:38px; 
+  height:38px; 
+  border-radius:50%;
+  background:#0a3a17;
+  color:white;
+  font-weight:700;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:1rem;
+}
+
 #nav-container #nav-user .btn-user a .user-name{
   display: flex;
   flex-direction: column;
@@ -184,7 +197,7 @@
 
 #login-btn p{
   margin: 0;
-  color: #fff;
+  color: #fff !important;
   font-size: 1rem;
   font-family: "Luckiest Guy", cursive;
   font-weight: 300;
@@ -222,7 +235,9 @@
   right: 3rem;
   width: 4rem;
   height: 4rem;
-  background-color: #fff;
+  background: rgba(240, 240, 240, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: 50%;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   display: flex;
@@ -242,7 +257,6 @@
 }
 
 #carrito-flotante #carrito-contador {
-  font-family: "Anton", sans-serif;
   color: #ff0000;
   font-size: 1.2rem;
 }
@@ -250,21 +264,23 @@
 #carrito-flotante:hover {
   background-color: #a4a4a490;
   transform: scale(1.07);
-  color: #ff0000;
 }
 
 #panel-carrito {
   position: fixed;
   top: 0;
-  right: -400px;
-  width: 400px;
+  right: -420px;
+  width: 420px;
   height: 100%;
-  background-color: white;
-  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
+  background: rgba(28, 26, 24, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: -6px 0 22px rgba(0, 0, 0, 0.55);
   transition: right 0.4s ease;
   z-index: 10000;
   display: flex;
   flex-direction: column;
+  border-left: 2px solid rgba(255, 201, 51, 0.25);
 }
 
 #panel-carrito.active {
@@ -272,59 +288,140 @@
 }
 
 #panel-carrito header {
-  background-color: #0a3a17;
-  color: white;
-  padding: 1rem;
+  background: linear-gradient(90deg, #FFC933, #E3B027);
+  color: #1C1A18;
+  padding: 1rem 1.3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-weight: 800;
+  border-bottom: 2px solid rgba(255,255,255,0.15);
 }
 
 #panel-carrito header h2 {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
+  text-transform: uppercase;
 }
 
 #panel-carrito header button {
   background: none;
   border: none;
-  color: white;
-  font-size: 1.3rem;
+  color: #1C1A18;
+  font-size: 1.4rem;
+  font-weight: 700;
   cursor: pointer;
+  transition: 0.2s;
+}
+
+#panel-carrito header button:hover {
+  transform: scale(1.2);
 }
 
 #panel-carrito .contenido {
   flex: 1;
-  padding: 1rem;
+  padding: 1rem 1.3rem;
   overflow-y: auto;
+  color: #FFEEDB;
+  font-size: 1rem;
 }
 
 #panel-carrito footer {
-  padding: 1rem;
-  border-top: 1px solid #ccc;
+  padding: 1.2rem 1.3rem;
+  border-top: 2px solid rgba(255,255,255,0.15);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #FFC933;
+  font-size: 1.1rem;
 }
 
 #panel-carrito footer button {
-  background-color: #cfeb0c;
-  color: #0a3a17;
+  background: #3FAF52;
+  color: #FFFFFF;
   border: none;
-  border-radius: 8px;
-  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  padding: 0.65rem 1.2rem;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   transition: 0.3s;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
 
 #panel-carrito footer button:hover {
-  background-color: #a98b40ff;
-  color: #fff;
+  background: #2D8A3F;
+  transform: translateY(-2px);
 }
 
 #contenedor {
-  background-color: #5f2b25;
+  background-color: #393533;
   width: 100%;
   height: 100%;
+}
+
+@media (max-width: 768px) {
+  #nav-container{
+    padding: 0.5rem;
+  }
+  #nav-container.scrolled{
+    padding: 0.5rem;
+  }
+
+  #nav-container #nav-logo a div{
+    display: none;
+  }
+
+  #nav-container #nav-menu .nav-item .nav-link p{
+    display: none;
+  }
+
+  #nav-container #nav-menu ul .nav-dot{
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+  }
+
+  #login-btn{
+    width: 6rem;  
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #login-btn img{
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  #login-btn p{
+    font-size: 0.7rem;
+    font-family: "Luckiest Guy", cursive;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #nav-container #nav-user .btn-user a .user-name{
+    display: none;
+  }
+
+  #logout-btn, #nav-container #nav-user .btn-user a .user-img{
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.7rem
+  }
+
+  #panel-carrito {
+    width: 100%;
+    right: -100%;
+  }
+  #panel-carrito.active {
+    right: 0;
+  }
 }

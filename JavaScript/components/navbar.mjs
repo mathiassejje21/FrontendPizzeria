@@ -39,16 +39,16 @@ export function renderNavbarClientes(user) {
       <section id="nav-menu">
         <ul>
           ${menu.map(op => html`
-            <section>
-              <li>
-                <img src="${op.img}" width="15px" height="15px" />
-                <a class="active" href="${op.ruta}" data-route>${op.texto}</a>
-              </li>
-              <div class="active"></div>
-            </section>
+            <li class="nav-item">
+              <a href="${op.ruta}" data-route class="nav-link">
+                <img src="${op.img}" width="18" height="18" />
+                <p>${op.texto}</p>
+              </a>
+              <div class="nav-dot"></div>
+            </li>
           `)}
         </ul>
-      </section> 
+      </section>
 
       <section id="nav-user">
         ${user ?
@@ -63,23 +63,10 @@ export function renderNavbarClientes(user) {
                 <button id="logout-btn"
                   @click=${() => authApi.logout()}
                 >
-                  <img src="https://img.icons8.com/?size=100&id=59781&format=png&color=FFFFFF" style="width:20px; height:20px; object-fit:cover" />
+                  <img src="https://img.icons8.com/?size=100&id=jJeAVECU49Zs&format=png&color=FFFFFF" style="width:20px; height:20px; object-fit:cover" />
                 </button>
                 <a href="/pizzeria/perfil" data-route">
-                  <div 
-                    style="
-                      width:38px; 
-                      height:38px; 
-                      border-radius:50%;
-                      background:#0a3a17;
-                      color:white;
-                      font-weight:700;
-                      display:flex;
-                      justify-content:center;
-                      align-items:center;
-                      font-size:1rem;
-                    "
-                  >
+                  <div class="user-img">
                     ${iniciales}
                   </div>
                   <div class="user-name">
